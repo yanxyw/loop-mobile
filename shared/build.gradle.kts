@@ -24,10 +24,26 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         commonMain.dependencies {
-            // put your Multiplatform dependencies here
+            implementation(libs.coroutines.core)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.auth)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.json)
+            implementation(libs.ktor.client.websockets)
+            implementation(libs.koin.core)
+        }
+        androidMain.dependencies {
+            implementation(libs.compose.ui)
+            implementation(libs.compose.material)
+            implementation(libs.compose.tooling)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.activity)
+            implementation(libs.koin.android)
+            implementation(libs.koin.compose)
         }
     }
 }
