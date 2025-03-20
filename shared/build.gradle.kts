@@ -35,9 +35,7 @@ kotlin {
             implementation(libs.ktor.serialization.json)
             implementation(libs.ktor.client.websockets)
             implementation(libs.koin.core)
-        }
-        androidMain.dependencies {
-            implementation(libs.koin.android)
+            implementation(libs.koin.compose)
         }
     }
 }

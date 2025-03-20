@@ -5,8 +5,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.material3.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -35,9 +35,10 @@ fun SearchScreen(viewModel: SearchViewModel) {
             )
         )
 
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
         ) {
             OutlinedTextField(
                 value = state.query,
@@ -56,14 +57,16 @@ fun SearchScreen(viewModel: SearchViewModel) {
                 keyboardOptions = KeyboardOptions.Default,
                 keyboardActions = KeyboardActions(
                     onDone = { focusManager.clearFocus() }
-                )
+                ),
+                singleLine = true
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = { viewModel.onIntent(SearchAction.OnSearch) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors()
             ) {
                 Text("Search")
             }
@@ -71,7 +74,10 @@ fun SearchScreen(viewModel: SearchViewModel) {
             Spacer(modifier = Modifier.height(16.dp))
 
             if (state.isLoading) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                    modifier = Modifier.padding(16.dp),
+                    color = MaterialTheme.colorScheme.primary
+                )
             } else {
                 state.results.forEach { result ->
                     Text(result, modifier = Modifier.padding(8.dp))
