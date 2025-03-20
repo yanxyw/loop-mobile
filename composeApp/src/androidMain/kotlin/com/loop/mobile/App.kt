@@ -9,17 +9,17 @@ import androidx.compose.ui.Modifier
 
 import com.loop.mobile.presentation.search.SearchScreen
 import com.loop.mobile.presentation.search.SearchViewModel
+import org.koin.compose.koinInject
 
 @Composable
 fun App() {
     MaterialTheme {
-        val viewModel = remember { SearchViewModel() }
-
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            SearchScreen(viewModel = viewModel)
+            val searchViewModel: SearchViewModel = koinInject()
+            SearchScreen(viewModel = searchViewModel)
         }
     }
 }
