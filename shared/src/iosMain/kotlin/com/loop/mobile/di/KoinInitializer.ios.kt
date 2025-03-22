@@ -6,7 +6,7 @@ import org.koin.core.component.inject
 import org.koin.core.context.startKoin
 
 @Suppress("unused")
-fun initKoinIOS() {
+fun initKoin() {
     startKoin {
         modules(commonModules())
     }

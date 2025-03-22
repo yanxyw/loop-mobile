@@ -6,7 +6,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
     ) -> Bool {
-        KoinIOSKt.doInitKoinIOS()
+        KoinInitializer_iosKt.doInitKoin()
         return true
     }
 }

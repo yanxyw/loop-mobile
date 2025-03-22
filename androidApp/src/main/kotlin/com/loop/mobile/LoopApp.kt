@@ -1,11 +1,14 @@
 package com.loop.mobile
 
 import android.app.Application
-import com.loop.mobile.di.initKoinAndroid
+import com.loop.mobile.di.initKoin
+import org.koin.android.ext.koin.androidContext
 
 class LoopApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        initKoinAndroid()
+        initKoin {
+            androidContext(this@LoopApp)
+        }
     }
 }
