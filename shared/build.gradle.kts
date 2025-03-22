@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    id("org.jetbrains.kotlin.native.cocoapods")
 }
 
 kotlin {
@@ -13,15 +14,27 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "Shared"
-            isStatic = true
+            baseName = "shared"
+            isStatic = false
+        }
+    }
+
+    cocoapods {
+        summary = "Some description for the Shared Module"
+        homepage = "Link to the Shared Module homepage"
+        version = "1.0"
+        ios.deploymentTarget = "16.0"
+        podfile = project.file("../iosApp/Podfile")
+        framework {
+            baseName = "shared"
+            isStatic = false
         }
     }
 
@@ -35,6 +48,8 @@ kotlin {
             implementation(libs.ktor.serialization.json)
             implementation(libs.ktor.client.websockets)
             implementation(libs.koin.core)
+        }
+        androidMain.dependencies {
             implementation(libs.koin.compose)
         }
     }

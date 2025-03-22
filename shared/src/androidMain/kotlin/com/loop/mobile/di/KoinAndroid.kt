@@ -2,8 +2,8 @@ package com.loop.mobile.di
 
 import org.koin.core.context.startKoin
 
-fun initKoin() {
+fun initKoinAndroid() {
     startKoin {
-        modules(appModule)
+        modules(commonModules())
     }
 }

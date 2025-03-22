@@ -6,20 +6,17 @@ struct SearchScreen: View {
 
     var body: some View {
         VStack {
-            TextField("Search", text: Binding(
-                get: { viewModelWrapper.state.query },
-                set: { viewModelWrapper.onIntent(SearchAction.OnQueryChange(query: $0)) }
-            ))
+            TextField("Search", text: $viewModelWrapper.query)
             .textFieldStyle(.roundedBorder)
 
             Button("Search") {
-                viewModelWrapper.onIntent(SearchAction.OnSearch())
+                viewModelWrapper.search()
             }
 
-            if viewModelWrapper.state.isLoading {
+            if viewModelWrapper.searchState.isLoading {
                 ProgressView()
             } else {
-                List(viewModelWrapper.state.results, id: \.self) {
+                List(viewModelWrapper.searchState.results, id: \.self) {
                     Text($0)
                 }
             }
