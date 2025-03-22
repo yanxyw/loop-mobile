@@ -10,19 +10,8 @@ local.properties
 captures
 .externalNativeBuild
 .cxx
-*.xcodeproj/*
-!*.xcodeproj/project.pbxproj
-!*.xcodeproj/xcshareddata/
-!*.xcodeproj/project.xcworkspace/
-!*.xcworkspace/contents.xcworkspacedata
-**/xcshareddata/WorkspaceSettings.xcsettings
 
 # CocoaPods
 iosApp/Pods/
 iosApp/Podfile.lock
-iosApp/iosApp.xcworkspace
-
-# Xcode
-iosApp/iosApp.xcodeproj/project.xcworkspace/
-iosApp/iosApp.xcodeproj/xcuserdata/
 ~/Library/Developer/Xcode/DerivedData/
