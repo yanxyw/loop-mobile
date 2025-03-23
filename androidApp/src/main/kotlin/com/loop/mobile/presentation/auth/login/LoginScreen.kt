@@ -44,7 +44,6 @@ fun LoginScreen(viewModel: LoginViewModel) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val interactionSource = remember { MutableInteractionSource() }
 
-    val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -66,7 +65,7 @@ fun LoginScreen(viewModel: LoginViewModel) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Login", style = MaterialTheme.typography.headlineMedium)
+            Text("Welcome Back!", style = MaterialTheme.typography.headlineMedium)
 
             Spacer(modifier = Modifier.height(32.dp))
 
