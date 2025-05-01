@@ -1,6 +1,6 @@
 package com.loop.mobile.presentation.auth.login
 
-import com.loop.mobile.domain.repositories.AuthRepository
+import com.loop.mobile.domain.usecases.LoginUseCase
 import com.loop.mobile.domain.validation.AuthInputValidator
 import com.loop.mobile.presentation.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val authRepository: AuthRepository
+    private val loginUseCase: LoginUseCase
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(LoginState())
@@ -75,7 +75,7 @@ class LoginViewModel(
                 _state.update { it.copy(isLoading = true, error = null) }
 
                 scope.launch {
-                    val result = authRepository.login(email, password)
+                    val result = loginUseCase(email, password)
 
                     result.fold(
                         onSuccess = {

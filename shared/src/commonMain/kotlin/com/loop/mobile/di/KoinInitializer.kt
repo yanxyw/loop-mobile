@@ -1,10 +1,14 @@
 package com.loop.mobile.di
 
+import com.loop.mobile.data.local.TokenStorage
+import com.loop.mobile.data.local.provideTokenStorage
 import com.loop.mobile.data.mappers.AuthMapper
 import com.loop.mobile.data.remote.services.AuthService
 import com.loop.mobile.data.remote.services.AuthServiceImpl
 import com.loop.mobile.data.repositories.AuthRepositoryImpl
+import com.loop.mobile.domain.auth.AuthStateManager
 import com.loop.mobile.domain.repositories.AuthRepository
+import com.loop.mobile.domain.usecases.LoginUseCase
 import com.loop.mobile.presentation.auth.login.LoginViewModel
 import com.loop.mobile.presentation.search.SearchViewModel
 import io.ktor.client.HttpClient
@@ -19,7 +23,6 @@ import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-// Network module for HTTP client and API services
 val networkModule = module {
     // HTTP Client with JSON serialization support
     single {
@@ -44,20 +47,32 @@ val networkModule = module {
     single<AuthService> { AuthServiceImpl(get(), get(named("baseUrl"))) }
 }
 
-// Mappers module
 val mapperModule = module {
     single { AuthMapper() }
 }
 
-// Repositories module
 val repositoriesModule = module {
     single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
 }
 
-// ViewModels module
 val viewModelModule = module {
     factory { SearchViewModel() }
-    factory { LoginViewModel(get()) } // Update to inject AuthRepository
+    factory { LoginViewModel(get()) }
+}
+
+val useCaseModule = module {
+    single {
+        LoginUseCase(
+            authRepository = get(),
+            tokenStorage = get(),
+            authStateManager = get()
+        )
+    }
+}
+
+val storageModule = module {
+    single<TokenStorage> { provideTokenStorage() }
+    single { AuthStateManager() }
 }
 
 fun commonModules(): List<Module> {
@@ -65,6 +80,8 @@ fun commonModules(): List<Module> {
         networkModule,
         mapperModule,
         repositoriesModule,
+        storageModule,
+        useCaseModule,
         viewModelModule
     )
 }
