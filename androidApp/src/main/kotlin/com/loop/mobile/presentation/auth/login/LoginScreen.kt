@@ -23,7 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -46,6 +48,8 @@ fun LoginScreen(viewModel: LoginViewModel) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val interactionSource = remember { MutableInteractionSource() }
     val passwordFocusRequester = remember { FocusRequester() }
+    var emailWasFocused by remember { mutableStateOf(false) }
+    var passwordWasFocused by remember { mutableStateOf(false) }
 
     // Handle successful login (without navigation for now)
     LaunchedEffect(state.isSuccess) {
@@ -85,13 +89,20 @@ fun LoginScreen(viewModel: LoginViewModel) {
                 value = state.email,
                 onValueChange = { viewModel.onIntent(LoginAction.OnEmailChange(it)) },
                 label = { Text("Email") },
+                isError = state.emailTouched && state.emailError != null,
+                supportingText = {
+                    if (state.emailTouched && state.emailError != null) {
+                        Text(state.emailError!!, color = MaterialTheme.colorScheme.error)
+                    }
+                },
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
                     .onFocusChanged { focusState ->
-                        if (focusState.isFocused) {
-                            keyboardController?.show()
+                        if (emailWasFocused && !focusState.isFocused) {
+                            viewModel.onIntent(LoginAction.OnEmailBlur)
                         }
+                        emailWasFocused = focusState.isFocused
                     },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Email,
@@ -108,15 +119,22 @@ fun LoginScreen(viewModel: LoginViewModel) {
                 value = state.password,
                 onValueChange = { viewModel.onIntent(LoginAction.OnPasswordChange(it)) },
                 label = { Text("Password") },
+                isError = state.passwordTouched && state.passwordError != null,
+                supportingText = {
+                    if (state.passwordTouched && state.passwordError != null) {
+                        Text(state.passwordError!!, color = MaterialTheme.colorScheme.error)
+                    }
+                },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(passwordFocusRequester)
                     .onFocusChanged { focusState ->
-                        if (focusState.isFocused) {
-                            keyboardController?.show()
+                        if (passwordWasFocused && !focusState.isFocused) {
+                            viewModel.onIntent(LoginAction.OnPasswordBlur)
                         }
+                        passwordWasFocused = focusState.isFocused
                     },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Password,
@@ -125,7 +143,6 @@ fun LoginScreen(viewModel: LoginViewModel) {
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.clearFocus()
-                        // Optionally trigger login when Done is pressed
                         viewModel.onIntent(LoginAction.OnLogin)
                     }
                 )
