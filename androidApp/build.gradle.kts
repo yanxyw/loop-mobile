@@ -57,5 +57,6 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
+    implementation(libs.navigation.compose)
 }
 

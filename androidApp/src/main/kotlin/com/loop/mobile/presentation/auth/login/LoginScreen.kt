@@ -39,10 +39,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.loop.mobile.presentation.navigation.Screen
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun LoginScreen(viewModel: LoginViewModel) {
+fun LoginScreen(navController: NavController) {
+    val viewModel: LoginViewModel = koinInject()
     val state by viewModel.state.collectAsState()
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -51,14 +55,16 @@ fun LoginScreen(viewModel: LoginViewModel) {
     var emailWasFocused by remember { mutableStateOf(false) }
     var passwordWasFocused by remember { mutableStateOf(false) }
 
-    // Handle successful login (without navigation for now)
     LaunchedEffect(state.isSuccess) {
         if (state.isSuccess) {
             // Clear focus and hide keyboard on success
             focusManager.clearFocus()
             keyboardController?.hide()
 
-            // We'll add navigation later
+            navController.navigate(Screen.Home.route) {
+                popUpTo(Screen.Login.route) { inclusive = true }
+                launchSingleTop = true
+            }
         }
     }
 
