@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlin.serialization)
     id("org.jetbrains.kotlin.native.cocoapods")
 }
 
@@ -40,17 +41,29 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            // Coroutines
             implementation(libs.coroutines.core)
+
+            // Ktor
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.auth)
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.json)
             implementation(libs.ktor.client.websockets)
+
+            // Koin
             implementation(libs.koin.core)
+
+            // Add explicit kotlinx-serialization-json dependency
+            implementation(libs.kotlinx.serialization.json)
         }
         androidMain.dependencies {
+            implementation(libs.ktor.client.android)
             implementation(libs.koin.compose)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
     }
 }

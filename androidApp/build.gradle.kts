@@ -14,6 +14,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:8080/api/v1\"")
     }
     buildFeatures {
         compose = true
@@ -25,9 +26,21 @@ android {
         }
     }
     buildTypes {
-        getByName("release") {
+        debug {
             isMinifyEnabled = false
+            buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:8080/api/v1\"")
         }
+        release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            buildConfigField("String", "API_BASE_URL", "\"https://api.production.com/api/v1\"")
+        }
+    }
+    buildFeatures {
+        buildConfig = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

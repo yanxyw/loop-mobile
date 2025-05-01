@@ -1,13 +1,15 @@
 package com.loop.mobile.presentation.auth.login
 
+import com.loop.mobile.domain.repositories.AuthRepository
 import com.loop.mobile.presentation.BaseViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class LoginViewModel : BaseViewModel() {
+class LoginViewModel(
+    private val authRepository: AuthRepository
+) : BaseViewModel() {
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state
 
@@ -30,16 +32,29 @@ class LoginViewModel : BaseViewModel() {
                 _state.update { it.copy(isLoading = true, error = null) }
 
                 scope.launch {
-                    // Simulate network delay
-                    delay(1500)
+                    val result = authRepository.login(
+                        _state.value.email,
+                        _state.value.password
+                    )
 
-                    // Placeholder success
-                    val success = true
-                    if (success) {
-                        _state.update { it.copy(isLoading = false, isSuccess = true) }
-                    } else {
-                        _state.update { it.copy(isLoading = false, error = "Login failed") }
-                    }
+                    result.fold(
+                        onSuccess = { authResult ->
+                            _state.update {
+                                it.copy(
+                                    isLoading = false,
+                                    isSuccess = true
+                                )
+                            }
+                        },
+                        onFailure = { error ->
+                            _state.update {
+                                it.copy(
+                                    isLoading = false,
+                                    error = error.message
+                                )
+                            }
+                        }
+                    )
                 }
             }
         }

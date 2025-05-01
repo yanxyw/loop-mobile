@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -19,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -43,8 +45,18 @@ fun LoginScreen(viewModel: LoginViewModel) {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val interactionSource = remember { MutableInteractionSource() }
-
     val passwordFocusRequester = remember { FocusRequester() }
+
+    // Handle successful login (without navigation for now)
+    LaunchedEffect(state.isSuccess) {
+        if (state.isSuccess) {
+            // Clear focus and hide keyboard on success
+            focusManager.clearFocus()
+            keyboardController?.hide()
+
+            // We'll add navigation later
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         // Click outside to clear focus
@@ -79,8 +91,6 @@ fun LoginScreen(viewModel: LoginViewModel) {
                     .onFocusChanged { focusState ->
                         if (focusState.isFocused) {
                             keyboardController?.show()
-                        } else {
-                            keyboardController?.hide()
                         }
                     },
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -106,8 +116,6 @@ fun LoginScreen(viewModel: LoginViewModel) {
                     .onFocusChanged { focusState ->
                         if (focusState.isFocused) {
                             keyboardController?.show()
-                        } else {
-                            keyboardController?.hide()
                         }
                     },
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -115,7 +123,11 @@ fun LoginScreen(viewModel: LoginViewModel) {
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(
-                    onDone = { focusManager.clearFocus() }
+                    onDone = {
+                        focusManager.clearFocus()
+                        // Optionally trigger login when Done is pressed
+                        viewModel.onIntent(LoginAction.OnLogin)
+                    }
                 )
             )
 
@@ -143,6 +155,8 @@ fun LoginScreen(viewModel: LoginViewModel) {
                             .padding(end = 8.dp),
                         strokeWidth = 2.dp
                     )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Logging In...")
                 } else {
                     Text("Log In")
                 }
@@ -150,7 +164,11 @@ fun LoginScreen(viewModel: LoginViewModel) {
 
             if (state.isSuccess) {
                 Spacer(modifier = Modifier.height(16.dp))
-                Text("Login successful! ✅", color = Color.Green)
+                Text(
+                    "Login successful! ✅",
+                    color = Color.Green,
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
     }
