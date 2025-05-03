@@ -3,6 +3,7 @@ package com.loop.mobile.di
 import com.loop.mobile.data.local.TokenStorage
 import com.loop.mobile.data.local.provideTokenStorage
 import com.loop.mobile.data.mappers.AuthMapper
+import com.loop.mobile.data.remote.network.installApiAuth
 import com.loop.mobile.data.remote.services.AuthService
 import com.loop.mobile.data.remote.services.AuthServiceImpl
 import com.loop.mobile.data.repositories.AuthRepositoryImpl
@@ -24,19 +25,31 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val networkModule = module {
-    // HTTP Client with JSON serialization support
     single {
         HttpClient {
+            // Get token storage from DI
+            val tokenStorage = get<TokenStorage>()
+
             install(ContentNegotiation) {
                 json(Json {
                     ignoreUnknownKeys = true
                     isLenient = true
                 })
             }
+
             install(Logging) {
                 logger = Logger.DEFAULT
                 level = LogLevel.HEADERS
             }
+
+            installApiAuth(
+                baseUrl = get<String>(named("baseUrl")),
+                tokenProvider = { tokenStorage.getAccessToken() },
+                refreshTokenProvider = { tokenStorage.getRefreshToken() },
+                onTokensRefreshed = { accessToken, refreshToken ->
+                    tokenStorage.saveTokens(accessToken, refreshToken)
+                }
+            )
         }
     }
 
