@@ -5,18 +5,23 @@ import com.loop.mobile.data.local.provideTokenStorage
 import com.loop.mobile.data.remote.network.installApiAuth
 import com.loop.mobile.data.remote.services.auth.AuthService
 import com.loop.mobile.data.remote.services.auth.AuthServiceImpl
+import com.loop.mobile.data.remote.services.profile.ProfileService
+import com.loop.mobile.data.remote.services.profile.ProfileServiceImpl
 import com.loop.mobile.data.repositories.AuthRepositoryImpl
+import com.loop.mobile.data.repositories.UserRepositoryImpl
 import com.loop.mobile.domain.auth.AuthStateManager
 import com.loop.mobile.domain.repositories.AuthRepository
+import com.loop.mobile.domain.repositories.UserRepository
 import com.loop.mobile.domain.usecases.LoginUseCase
 import com.loop.mobile.presentation.auth.login.LoginViewModel
+import com.loop.mobile.presentation.profile.ProfileViewModel
 import com.loop.mobile.presentation.search.SearchViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.core.module.Module
@@ -37,8 +42,8 @@ val networkModule = module {
             }
 
             install(Logging) {
-                logger = Logger.DEFAULT
-                level = LogLevel.HEADERS
+                logger = Logger.SIMPLE
+                level = LogLevel.ALL
             }
 
             installApiAuth(
@@ -57,15 +62,18 @@ val networkModule = module {
 
     // API Services - use the named qualifier to get the baseUrl
     single<AuthService> { AuthServiceImpl(get(), get(named("baseUrl"))) }
+    single<ProfileService> { ProfileServiceImpl(get(), get(named("baseUrl"))) }
 }
 
 val repositoriesModule = module {
     single<AuthRepository> { AuthRepositoryImpl(get()) }
+    single<UserRepository> { UserRepositoryImpl(get()) }
 }
 
 val viewModelModule = module {
     factory { SearchViewModel() }
     factory { LoginViewModel(get()) }
+    factory { ProfileViewModel(get()) }
 }
 
 val useCaseModule = module {

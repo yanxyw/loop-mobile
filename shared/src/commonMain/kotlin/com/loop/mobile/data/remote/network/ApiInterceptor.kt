@@ -35,7 +35,7 @@ val ApiInterceptor = createClientPlugin("ApiInterceptor", ::ApiInterceptorConfig
     val tokenProvider = pluginConfig.tokenProvider
 
     onRequest { request, _ ->
-        if (request.url.encodedPath.startsWith("/users/")) {
+        if ("/users/" in request.url.encodedPath) {
             val token = runBlocking { tokenProvider() }
             if (token != null) {
                 request.headers.append(HttpHeaders.Authorization, "Bearer $token")
