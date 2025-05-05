@@ -1,4 +1,4 @@
-package com.loop.mobile.data.remote.services
+package com.loop.mobile.data.remote.services.auth
 
 import com.loop.mobile.data.remote.dto.LoginRequestDto
 import com.loop.mobile.data.remote.dto.LoginResponseDto

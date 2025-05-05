@@ -2,10 +2,9 @@ package com.loop.mobile.di
 
 import com.loop.mobile.data.local.TokenStorage
 import com.loop.mobile.data.local.provideTokenStorage
-import com.loop.mobile.data.mappers.AuthMapper
 import com.loop.mobile.data.remote.network.installApiAuth
-import com.loop.mobile.data.remote.services.AuthService
-import com.loop.mobile.data.remote.services.AuthServiceImpl
+import com.loop.mobile.data.remote.services.auth.AuthService
+import com.loop.mobile.data.remote.services.auth.AuthServiceImpl
 import com.loop.mobile.data.repositories.AuthRepositoryImpl
 import com.loop.mobile.domain.auth.AuthStateManager
 import com.loop.mobile.domain.repositories.AuthRepository
@@ -60,12 +59,8 @@ val networkModule = module {
     single<AuthService> { AuthServiceImpl(get(), get(named("baseUrl"))) }
 }
 
-val mapperModule = module {
-    single { AuthMapper() }
-}
-
 val repositoriesModule = module {
-    single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
+    single<AuthRepository> { AuthRepositoryImpl(get()) }
 }
 
 val viewModelModule = module {
@@ -91,7 +86,6 @@ val storageModule = module {
 fun commonModules(): List<Module> {
     return listOf(
         networkModule,
-        mapperModule,
         repositoriesModule,
         storageModule,
         useCaseModule,
