@@ -1,9 +1,11 @@
 package com.loop.mobile.data.remote.network
 
 import com.loop.mobile.data.remote.dto.LoginResponseDto
+import com.loop.mobile.utils.PlatformLogger
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpResponseValidator
+import io.ktor.client.plugins.ResponseException
 import io.ktor.client.plugins.api.createClientPlugin
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
@@ -11,6 +13,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.request
 import io.ktor.client.request.takeFrom
 import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
@@ -29,6 +32,8 @@ class ApiInterceptorConfig {
 
 // Define our custom exception for retrying requests with a new response
 class RetryRequestException(val response: HttpResponse) : Throwable()
+
+val platformLogger = PlatformLogger()
 
 // Create the plugin using the createClientPlugin API
 val ApiInterceptor = createClientPlugin("ApiInterceptor", ::ApiInterceptorConfig) {
@@ -62,13 +67,22 @@ fun HttpClientConfig<*>.installApiAuth(
     // Use the HttpResponseValidator correctly
     HttpResponseValidator {
         val mutex = Mutex()
+        platformLogger.log("calling response validator")
 
         // Handle response exceptions
         handleResponseExceptionWithRequest { exception, request ->
+
+            platformLogger.log("Exception in response validator: ${exception::class.simpleName}")
+            if (exception is ResponseException) {
+                platformLogger.log("Response status: ${exception.response.status.value} - ${exception.response.status.description}")
+            }
+
             // Check if it's a 401 Unauthorized error
             if (exception is ClientRequestException &&
                 exception.response.status == HttpStatusCode.Unauthorized
             ) {
+                val responseBody = exception.response.bodyAsText()
+                platformLogger.log("Request URL: $responseBody")
 
                 // Try to refresh token by calling the refresh endpoint
                 val refreshed = runBlocking {
