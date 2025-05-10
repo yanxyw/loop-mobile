@@ -16,12 +16,12 @@ import com.loop.mobile.domain.usecases.LoginUseCase
 import com.loop.mobile.presentation.auth.login.LoginViewModel
 import com.loop.mobile.presentation.profile.ProfileViewModel
 import com.loop.mobile.presentation.search.SearchViewModel
+import com.loop.mobile.utils.PlatformLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.core.module.Module
@@ -33,6 +33,8 @@ val networkModule = module {
         HttpClient {
             // Get token storage from DI
             val tokenStorage = get<TokenStorage>()
+            val platformLogger: PlatformLogger = get()
+            platformLogger.log("Creating HttpClient")
 
             install(ContentNegotiation) {
                 json(Json {
@@ -42,7 +44,11 @@ val networkModule = module {
             }
 
             install(Logging) {
-                logger = Logger.SIMPLE
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        platformLogger.log("HTTP: $message")
+                    }
+                }
                 level = LogLevel.ALL
             }
 
@@ -52,7 +58,9 @@ val networkModule = module {
                 refreshTokenProvider = { tokenStorage.getRefreshToken() },
                 onTokensRefreshed = { accessToken, refreshToken ->
                     tokenStorage.saveTokens(accessToken, refreshToken)
-                }
+                    platformLogger.log("Tokens refreshed: $accessToken")
+                },
+                logger = platformLogger
             )
         }
     }
@@ -91,12 +99,17 @@ val storageModule = module {
     single { AuthStateManager() }
 }
 
+val loggingModule = module {
+    single { PlatformLogger() }
+}
+
 fun commonModules(): List<Module> {
     return listOf(
         networkModule,
         repositoriesModule,
         storageModule,
         useCaseModule,
-        viewModelModule
+        viewModelModule,
+        loggingModule,
     )
 }

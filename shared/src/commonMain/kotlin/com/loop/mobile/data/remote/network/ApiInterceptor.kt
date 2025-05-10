@@ -2,154 +2,189 @@ package com.loop.mobile.data.remote.network
 
 import com.loop.mobile.data.remote.dto.LoginResponseDto
 import com.loop.mobile.utils.PlatformLogger
+import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
+import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpResponseValidator
-import io.ktor.client.plugins.ResponseException
 import io.ktor.client.plugins.api.createClientPlugin
-import io.ktor.client.request.HttpRequestBuilder
-import io.ktor.client.request.headers
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.post
 import io.ktor.client.request.request
+import io.ktor.client.request.setBody
 import io.ktor.client.request.takeFrom
 import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.http.encodedPath
+import io.ktor.http.isSuccess
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.serialization.json.Json
 
 class ApiInterceptorConfig {
     var tokenProvider: suspend () -> String? = { null }
     var refreshTokenProvider: suspend () -> String? = { null }
     var baseUrl: String = ""
     var onTokensRefreshed: suspend (accessToken: String, refreshToken: String) -> Unit = { _, _ -> }
+    var logger: PlatformLogger? = null
 }
 
-// Define our custom exception for retrying requests with a new response
-class RetryRequestException(val response: HttpResponse) : Throwable()
-
-val platformLogger = PlatformLogger()
-
-// Create the plugin using the createClientPlugin API
-val ApiInterceptor = createClientPlugin("ApiInterceptor", ::ApiInterceptorConfig) {
+fun createAuthPlugin() = createClientPlugin("AuthPlugin", ::ApiInterceptorConfig) {
     val tokenProvider = pluginConfig.tokenProvider
+    val logger = pluginConfig.logger
 
+    // Add auth headers on every request
     onRequest { request, _ ->
-        if ("/users/" in request.url.encodedPath) {
-            val token = runBlocking { tokenProvider() }
-            if (token != null) {
-                request.headers.append(HttpHeaders.Authorization, "Bearer $token")
-            }
+        logger?.log("Auth plugin - Request: ${request.url}")
+
+        // Skip if it is a refresh request
+        if (request.url.encodedPath.contains("/auth/refresh")) {
+            logger?.log("Skipping Authorization for refresh request")
+            return@onRequest
+        }
+
+        // Add Bearer token, ensuring only one header exists
+        request.headers.remove(HttpHeaders.Authorization)
+        val token = tokenProvider()
+        if (token != null) {
+            request.headers.append(HttpHeaders.Authorization, "Bearer $token")
+            logger?.log("Added Bearer token to request")
         }
     }
 }
 
-// Extension function to install the plugin
+class RetrySuccessException(val response: HttpResponse) : Exception()
+
 fun HttpClientConfig<*>.installApiAuth(
     baseUrl: String,
     tokenProvider: suspend () -> String?,
     refreshTokenProvider: suspend () -> String?,
-    onTokensRefreshed: suspend (accessToken: String, refreshToken: String) -> Unit
+    onTokensRefreshed: suspend (accessToken: String, refreshToken: String) -> Unit,
+    logger: PlatformLogger
 ) {
-    // Install our plugin for adding auth headers
-    install(ApiInterceptor) {
+    // Install the auth plugin
+    install(createAuthPlugin()) {
         this.baseUrl = baseUrl
         this.tokenProvider = tokenProvider
         this.refreshTokenProvider = refreshTokenProvider
         this.onTokensRefreshed = onTokensRefreshed
+        this.logger = logger
     }
 
-    // Use the HttpResponseValidator correctly
+    // Configure response validation directly in HttpClient config
+    expectSuccess = true
+
+    // Configure HttpResponseValidator within HttpClient config
     HttpResponseValidator {
-        val mutex = Mutex()
-        platformLogger.log("calling response validator")
-
-        // Handle response exceptions
         handleResponseExceptionWithRequest { exception, request ->
-
-            platformLogger.log("Exception in response validator: ${exception::class.simpleName}")
-            if (exception is ResponseException) {
-                platformLogger.log("Response status: ${exception.response.status.value} - ${exception.response.status.description}")
-            }
-
+            
             // Check if it's a 401 Unauthorized error
             if (exception is ClientRequestException &&
                 exception.response.status == HttpStatusCode.Unauthorized
             ) {
-                val responseBody = exception.response.bodyAsText()
-                platformLogger.log("Request URL: $responseBody")
+                logger.log("Handling 401 Unauthorized error")
 
-                // Try to refresh token by calling the refresh endpoint
-                val refreshed = runBlocking {
-                    mutex.withLock {
-                        try {
-                            // Get the refresh token
-                            val refreshToken = refreshTokenProvider() ?: return@withLock false
+                // Skip refresh for the refresh endpoint itself
+                if (request.url.encodedPath.contains("/auth/refresh")) {
+                    logger.log("Refresh endpoint returned 401, not retrying")
+                    throw exception
+                }
 
-                            // Get the client from the call property
-                            val client = exception.response.call.client
+                // Try to refresh token
+                val refreshToken = runBlocking { refreshTokenProvider() }
+                if (refreshToken == null) {
+                    logger.log("No refresh token available")
+                    throw exception
+                }
 
-                            // Call refresh endpoint using handleApiCall
-                            val result: ApiResult<LoginResponseDto> = handleApiCall {
-                                client.post("$baseUrl/auth/refresh") {
-                                    contentType(ContentType.Application.Json)
-                                    headers {
-                                        append(HttpHeaders.Authorization, "Bearer $refreshToken")
-                                    }
-                                }
-                            }
-
-                            // Use fold to handle both success and error cases
-                            result.fold(
-                                onSuccess = { data ->
-                                    // Store the new tokens
-                                    onTokensRefreshed(data.accessToken, data.refreshToken)
-                                    true
-                                },
-                                onFailure = { error ->
-                                    // Log the error if needed
-                                    println("Token refresh failed: ${error.message}")
-                                    false
-                                }
-                            )
-                        } catch (e: Exception) {
-                            // If anything goes wrong during refresh, return false
-                            println("Exception during token refresh: ${e.message}")
-                            return@withLock false
-                        }
+                // Create a new client for refresh to avoid circular dependency
+                val refreshClient = HttpClient {
+                    install(ContentNegotiation) {
+                        json(Json {
+                            ignoreUnknownKeys = true
+                            isLenient = true
+                        })
                     }
                 }
 
-                if (refreshed) {
-                    // Get new token after refresh
-                    val newToken = runBlocking { tokenProvider() }
-
-                    // Create a new request with the updated token
-                    val newRequest = HttpRequestBuilder().apply {
-                        takeFrom(request)
-                        headers.remove(HttpHeaders.Authorization)
-                        if (newToken != null) {
-                            headers.append(HttpHeaders.Authorization, "Bearer $newToken")
+                try {
+                    logger.log("Making refresh request")
+                    val refreshResponse = runBlocking {
+                        refreshClient.post("$baseUrl/auth/refresh") {
+                            contentType(ContentType.Application.Json)
+                            setBody(mapOf("refreshToken" to refreshToken))
                         }
                     }
 
-                    // Get the client from the call property
-                    val client = exception.response.call.client
+                    if (refreshResponse.status.isSuccess()) {
+                        val apiResponse: ApiResponse<LoginResponseDto> =
+                            runBlocking { refreshResponse.body() }
+                        val data = apiResponse.data
 
-                    runBlocking {
-                        val newResponse = client.request(newRequest)
-                        throw RetryRequestException(newResponse)
+                        if (data != null) {
+                            runBlocking { onTokensRefreshed(data.accessToken, data.refreshToken) }
+                            logger.log("Tokens refreshed successfully")
+
+                            // Retry the original request with new token
+                            val newToken = runBlocking { tokenProvider() }
+                            if (newToken != null) {
+                                logger.log("Retrying the original request with new token")
+
+                                // Create a fresh client to retry the request
+                                val retryClient = HttpClient {
+                                    install(ContentNegotiation) {
+                                        json(Json {
+                                            ignoreUnknownKeys = true
+                                            isLenient = true
+                                        })
+                                    }
+                                }
+
+                                val retryResponse = runBlocking {
+                                    retryClient.request {
+                                        takeFrom(request)
+                                        headers.remove(HttpHeaders.Authorization)
+                                        headers.append(
+                                            HttpHeaders.Authorization,
+                                            "Bearer $newToken"
+                                        )
+                                    }
+                                }
+
+                                if (retryResponse.status.isSuccess()) {
+                                    logger.log("Retried request successful: ${retryResponse.status}")
+                                    throw RetrySuccessException(retryResponse)
+                                } else {
+                                    logger.log("Retried request failed: ${retryResponse.status}")
+                                    throw exception
+                                }
+                            } else {
+                                logger.log("New token is null, cannot retry")
+                                throw exception
+                            }
+                        } else {
+                            logger.log("Refresh response data is null")
+                            throw exception
+                        }
+                    } else {
+                        logger.log("Refresh failed with status: ${refreshResponse.status}")
+                        throw exception
                     }
+                } catch (e: RetrySuccessException) {
+                    logger.log("Returning successful retry response")
+                    throw e // This will be caught and the response used directly
+                } catch (e: Exception) {
+                    logger.log("Error during token refresh: ${e.message}")
+                    throw exception
+                } finally {
+                    refreshClient.close()
                 }
             }
 
-            // For other exceptions, just rethrow
-            throw exception
+            throw exception  // For other types of exceptions, rethrow
         }
     }
 }

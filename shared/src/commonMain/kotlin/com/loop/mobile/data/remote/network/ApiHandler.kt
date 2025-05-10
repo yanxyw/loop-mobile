@@ -28,6 +28,8 @@ suspend inline fun <reified T> handleApiCall(
     return try {
         val response = call()
         response.toApiResult()
+    } catch (e: RetrySuccessException) {
+        e.response.toApiResult<T>()
     } catch (e: ResponseException) {
         ApiResult.Error(
             code = e.response.status.value,
