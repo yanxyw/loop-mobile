@@ -32,4 +32,15 @@ object JwtUtils {
             profileUrl = payload["profileUrl"]?.jsonPrimitive?.contentOrNull
         )
     }
+    
+    fun isTokenExpired(token: String): Boolean {
+        val payload = decodePayload(token) ?: return true // If no payload, consider it expired
+        val exp = payload["exp"]?.jsonPrimitive?.longOrNull
+            ?: return true // If no 'exp' field, assume expired
+
+        // Compare the expiration time with the current time (in seconds)
+        return getCurrentTimeInSeconds() > exp
+    }
 }
+
+expect fun getCurrentTimeInSeconds(): Long

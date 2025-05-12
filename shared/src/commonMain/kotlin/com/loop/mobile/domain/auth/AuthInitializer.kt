@@ -8,8 +8,15 @@ suspend fun restoreAuthState(
     authStateManager: AuthStateManager
 ) {
     val accessToken = tokenStorage.getAccessToken()
+
     if (!accessToken.isNullOrBlank()) {
-        val decodedUser = JwtUtils.decodeUser(accessToken)
-        authStateManager.setUser(decodedUser)
+        if (JwtUtils.isTokenExpired(accessToken)) {
+            authStateManager.setUser(null)
+        } else {
+            val decodedUser = JwtUtils.decodeUser(accessToken)
+            authStateManager.setUser(decodedUser)
+        }
+    } else {
+        authStateManager.setUser(null)
     }
 }
