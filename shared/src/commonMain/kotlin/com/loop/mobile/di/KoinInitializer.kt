@@ -81,7 +81,7 @@ val repositoriesModule = module {
 val viewModelModule = module {
     factory { SearchViewModel() }
     factory { LoginViewModel(get()) }
-    factory { ProfileViewModel(get()) }
+    factory { ProfileViewModel(get(), get()) }
 }
 
 val useCaseModule = module {

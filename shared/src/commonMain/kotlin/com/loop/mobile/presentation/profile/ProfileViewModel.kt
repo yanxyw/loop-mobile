@@ -1,5 +1,7 @@
 package com.loop.mobile.presentation.profile
 
+import com.loop.mobile.data.mappers.toDecodedUser
+import com.loop.mobile.domain.auth.AuthStateManager
 import com.loop.mobile.domain.repositories.UserRepository
 import com.loop.mobile.presentation.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,7 +10,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val authStateManager: AuthStateManager
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(ProfileState())
@@ -31,7 +34,9 @@ class ProfileViewModel(
                 onSuccess = { user ->
                     _state.update {
                         it.copy(isLoading = false, user = user)
+
                     }
+                    authStateManager.setUser(user.toDecodedUser())
                 },
                 onFailure = { error ->
                     _state.update {

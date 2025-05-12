@@ -28,11 +28,11 @@ object JwtUtils {
             userId = payload["sub"]?.jsonPrimitive?.longOrNull ?: return null,
             email = payload["email"]?.jsonPrimitive?.contentOrNull ?: return null,
             username = payload["username"]?.jsonPrimitive?.contentOrNull ?: return null,
-            isAdmin = payload["isAdmin"]?.jsonPrimitive?.booleanOrNull ?: false,
+            admin = payload["isAdmin"]?.jsonPrimitive?.booleanOrNull ?: false,
             profileUrl = payload["profileUrl"]?.jsonPrimitive?.contentOrNull
         )
     }
-    
+
     fun isTokenExpired(token: String): Boolean {
         val payload = decodePayload(token) ?: return true // If no payload, consider it expired
         val exp = payload["exp"]?.jsonPrimitive?.longOrNull
