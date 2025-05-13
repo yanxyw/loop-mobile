@@ -23,4 +23,12 @@ class AuthServiceImpl(
             }
         }
     }
+
+    override suspend fun logout(): ApiResult<String> {
+        return handleApiCall {
+            httpClient.post("$baseUrl/auth/logout") {
+                contentType(ContentType.Application.Json)
+            }
+        }
+    }
 }

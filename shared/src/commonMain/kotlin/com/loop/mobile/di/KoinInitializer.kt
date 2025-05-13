@@ -14,6 +14,7 @@ import com.loop.mobile.domain.repositories.AuthRepository
 import com.loop.mobile.domain.repositories.UserRepository
 import com.loop.mobile.domain.usecases.LoginUseCase
 import com.loop.mobile.presentation.auth.login.LoginViewModel
+import com.loop.mobile.presentation.auth.logout.LogoutViewModel
 import com.loop.mobile.presentation.profile.ProfileViewModel
 import com.loop.mobile.presentation.search.SearchViewModel
 import com.loop.mobile.utils.PlatformLogger
@@ -74,13 +75,14 @@ val networkModule = module {
 }
 
 val repositoriesModule = module {
-    single<AuthRepository> { AuthRepositoryImpl(get()) }
+    single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
     single<UserRepository> { UserRepositoryImpl(get()) }
 }
 
 val viewModelModule = module {
     factory { SearchViewModel() }
     factory { LoginViewModel(get()) }
+    factory { LogoutViewModel(get()) }
     factory { ProfileViewModel(get(), get()) }
 }
 

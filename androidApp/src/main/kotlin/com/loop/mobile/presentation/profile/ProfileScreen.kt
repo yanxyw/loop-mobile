@@ -23,17 +23,31 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.loop.mobile.presentation.auth.logout.LogoutViewModel
 import org.koin.compose.koinInject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    navController: NavController
+) {
     val viewModel: ProfileViewModel = koinInject()
+    val logoutViewModel: LogoutViewModel = koinInject()
     val state by viewModel.state.collectAsState()
+    val logoutState by logoutViewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.onIntent(ProfileAction.LoadProfile)
+    }
+
+    LaunchedEffect(logoutState.isSuccess) {
+        if (logoutState.isSuccess) {
+            navController.navigate("login") {
+                popUpTo("profile") { inclusive = true }
+            }
+        }
     }
 
     Column(
@@ -76,13 +90,17 @@ fun ProfileScreen() {
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(onClick = {
-                // TODO: Add logout functionality
+                logoutViewModel.logout()
             }) {
                 Text("Logout")
             }
         }
 
-        state.error?.let { errorMessage ->
+        if (logoutState.isLoading) {
+            CircularProgressIndicator()
+        }
+
+        logoutState.error?.let { errorMessage ->
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = errorMessage,

@@ -5,4 +5,6 @@ import com.loop.mobile.domain.entities.AuthResult
 
 interface AuthRepository {
     suspend fun login(email: String, password: String): ApiResult<AuthResult>
+
+    suspend fun logout(): ApiResult<String>
 }

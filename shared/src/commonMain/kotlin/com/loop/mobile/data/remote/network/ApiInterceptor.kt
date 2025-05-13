@@ -34,24 +34,30 @@ class ApiInterceptorConfig {
 
 fun createAuthPlugin() = createClientPlugin("AuthPlugin", ::ApiInterceptorConfig) {
     val tokenProvider = pluginConfig.tokenProvider
+    val refreshTokenProvider = pluginConfig.refreshTokenProvider
     val logger = pluginConfig.logger
 
-    // Add auth headers on every request
     onRequest { request, _ ->
         logger?.log("Auth plugin - Request: ${request.url}")
 
-        // Skip if it is a refresh request
-        if (request.url.encodedPath.contains("/auth/refresh")) {
-            logger?.log("Skipping Authorization for refresh request")
-            return@onRequest
-        }
-
-        // Add Bearer token, ensuring only one header exists
-        request.headers.remove(HttpHeaders.Authorization)
-        val token = tokenProvider()
-        if (token != null) {
-            request.headers.append(HttpHeaders.Authorization, "Bearer $token")
-            logger?.log("Added Bearer token to request")
+        if (request.url.encodedPath.startsWith("/users")) {
+            // Add Bearer token (Access Token) for /users requests
+            request.headers.remove(HttpHeaders.Authorization)
+            val accessToken = tokenProvider()
+            if (accessToken != null) {
+                request.headers.append(HttpHeaders.Authorization, "Bearer $accessToken")
+                logger?.log("Added Bearer access token to /users request")
+            }
+        } else if (request.url.encodedPath.contains("/auth/logout")) {
+            // Add Bearer token (Refresh Token) for /auth/logout
+            request.headers.remove(HttpHeaders.Authorization)
+            val refreshToken = refreshTokenProvider()
+            if (refreshToken != null) {
+                request.headers.append(HttpHeaders.Authorization, "Bearer $refreshToken")
+                logger?.log("Added Bearer refresh token to /auth/logout request")
+            }
+        } else {
+            logger?.log("No Bearer token added for this request")
         }
     }
 }
@@ -80,7 +86,7 @@ fun HttpClientConfig<*>.installApiAuth(
     // Configure HttpResponseValidator within HttpClient config
     HttpResponseValidator {
         handleResponseExceptionWithRequest { exception, request ->
-            
+
             // Check if it's a 401 Unauthorized error
             if (exception is ClientRequestException &&
                 exception.response.status == HttpStatusCode.Unauthorized

@@ -5,4 +5,6 @@ import com.loop.mobile.data.remote.network.ApiResult
 
 interface AuthService {
     suspend fun login(email: String, password: String): ApiResult<LoginResponseDto>
+
+    suspend fun logout(): ApiResult<String>
 }

@@ -21,7 +21,7 @@ fun NavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
         composable(Screen.Home.route) { HomeScreen(navController) }
         composable(Screen.Search.route) { SearchScreen() }
         composable(Screen.Library.route) { LibraryScreen() }
-        composable(Screen.Profile.route) { ProfileScreen() }
+        composable(Screen.Profile.route) { ProfileScreen(navController) }
         composable(Screen.Login.route) { LoginScreen(navController) }
     }
 }
