@@ -28,5 +28,6 @@ dependencyResolutionManagement {
     }
 }
 
-include(":androidApp")
+include(":androidapp")
+project(":androidapp").projectDir = File(rootDir, "androidapp")
 include(":shared")
