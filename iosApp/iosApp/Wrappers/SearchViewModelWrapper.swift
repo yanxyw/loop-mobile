@@ -2,7 +2,6 @@ import shared
 
 @MainActor
 class SearchViewModelWrapper: ObservableObject {
-    private var tasks: [Task<Void, Never>] = []
     private let viewModel: SearchViewModel
     private var isObserving = false
 
@@ -39,14 +38,11 @@ class SearchViewModelWrapper: ObservableObject {
         isObserving = true
 
         viewModel.observeState { state in
-            DispatchQueue.main.async {
-                self.searchState = state
-            }
+            self.searchState = state
         }
     }
 
     deinit {
-        tasks.forEach { $0.cancel() }
         viewModel.clear()
     }
 }
