@@ -9,12 +9,15 @@ import com.loop.mobile.data.local.initTokenStorage
 import com.loop.mobile.domain.auth.AuthStateManager
 import com.loop.mobile.domain.auth.restoreAuthState
 import com.loop.mobile.domain.repositories.UserRepository
+import com.loop.mobile.presentation.theme.AppTheme
+import com.loop.mobile.presentation.theme.ThemeProvider
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.getKoin
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val themeProvider = ThemeProvider(applicationContext)
 
         initTokenStorage(this)
 
@@ -25,7 +28,9 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             restoreAuthState(tokenStorage, userRepository, authStateManager)
             setContent {
-                App()
+                AppTheme(themeProvider = themeProvider) {
+                    App()
+                }
             }
         }
     }
