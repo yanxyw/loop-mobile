@@ -2,19 +2,20 @@ package com.loop.mobile.presentation.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 
 @Composable
 fun AppTheme(
-    themeProvider: ThemeProvider,
+    themeManager: ThemeManager,
     content: @Composable () -> Unit
 ) {
-    val appColorScheme = themeProvider.getCurrentColorScheme()
-    val isDark = themeProvider.isDarkMode()
-
+    val overrideDarkMode by themeManager.overrideDarkMode.collectAsState()
+    val isDark = overrideDarkMode ?: themeManager.isDarkMode()
     val colorScheme = if (isDark) {
-        appColorScheme.toDarkColorScheme()
+        AppTheme.darkColors.toDarkColorScheme()
     } else {
-        appColorScheme.toLightColorScheme()
+        AppTheme.lightColors.toLightColorScheme()
     }
 
     MaterialTheme(

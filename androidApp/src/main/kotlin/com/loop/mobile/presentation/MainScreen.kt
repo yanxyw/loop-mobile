@@ -13,9 +13,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.loop.mobile.presentation.navigation.NavGraph
 import com.loop.mobile.presentation.navigation.Screen
+import com.loop.mobile.presentation.theme.ThemeManager
 
 @Composable
-fun MainScreen() {
+fun MainScreen(themeManager: ThemeManager) {
     val navController = rememberNavController()
     val screens = listOf(Screen.Home, Screen.Search, Screen.Library, Screen.Profile)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -43,7 +44,7 @@ fun MainScreen() {
             }
         }
     ) { padding ->
-        NavGraph(navController = navController, modifier = Modifier.padding(padding))
+        NavGraph(navController = navController, modifier = Modifier.padding(padding), themeManager = themeManager)
     }
 }
 

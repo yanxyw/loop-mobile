@@ -26,12 +26,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.loop.mobile.presentation.auth.logout.LogoutViewModel
+import com.loop.mobile.presentation.theme.ThemeManager
 import org.koin.compose.koinInject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ProfileScreen(
-    navController: NavController
+    navController: NavController,
+    themeManager: ThemeManager
 ) {
     val viewModel: ProfileViewModel = koinInject()
     val logoutViewModel: LogoutViewModel = koinInject()
@@ -107,5 +109,10 @@ fun ProfileScreen(
                 color = MaterialTheme.colorScheme.error
             )
         }
+    }
+
+    Column {
+        Text("Appearance")
+        ThemeSwitcher(themeManager = themeManager)
     }
 }

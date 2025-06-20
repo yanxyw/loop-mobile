@@ -10,9 +10,10 @@ import com.loop.mobile.presentation.home.HomeScreen
 import com.loop.mobile.presentation.library.LibraryScreen
 import com.loop.mobile.presentation.profile.ProfileScreen
 import com.loop.mobile.presentation.search.SearchScreen
+import com.loop.mobile.presentation.theme.ThemeManager
 
 @Composable
-fun NavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
+fun NavGraph(navController: NavHostController, modifier: Modifier = Modifier, themeManager: ThemeManager) {
     NavHost(
         navController = navController,
         startDestination = Screen.Home.route,
@@ -21,7 +22,7 @@ fun NavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
         composable(Screen.Home.route) { HomeScreen(navController) }
         composable(Screen.Search.route) { SearchScreen() }
         composable(Screen.Library.route) { LibraryScreen() }
-        composable(Screen.Profile.route) { ProfileScreen(navController) }
+        composable(Screen.Profile.route) { ProfileScreen(navController, themeManager) }
         composable(Screen.Login.route) { LoginScreen(navController) }
     }
 }

@@ -1,5 +1,9 @@
 package com.loop.mobile.presentation.theme
 
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
 data class AppColorScheme(
     val background: Long,
     val primary: Long,
@@ -26,21 +30,27 @@ object AppTheme {
     )
 }
 
-// Theme provider interface
 expect class ThemeProvider constructor(context: Any) {
     fun getCurrentColorScheme(): AppColorScheme
     fun isDarkMode(): Boolean
 }
 
-// Optional: Theme manager for switching themes
 class ThemeManager(context: Any) {
     private val themeProvider = ThemeProvider(context)
 
+    private val _overrideDarkMode = MutableStateFlow<Boolean?>(null)
+    val overrideDarkMode: StateFlow<Boolean?> = _overrideDarkMode.asStateFlow()
+
+    fun setOverrideDarkMode(enabled: Boolean?) {
+        _overrideDarkMode.value = enabled
+    }
+
     fun getCurrentColors(): AppColorScheme {
-        return if (themeProvider.isDarkMode()) {
-            AppTheme.darkColors
-        } else {
-            AppTheme.lightColors
-        }
+        val useDark = _overrideDarkMode.value ?: themeProvider.isDarkMode()
+        return if (useDark) AppTheme.darkColors else AppTheme.lightColors
+    }
+
+    fun isDarkMode(): Boolean {
+        return _overrideDarkMode.value ?: themeProvider.isDarkMode()
     }
 }
