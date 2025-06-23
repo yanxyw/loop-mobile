@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -32,9 +33,9 @@ fun HomeScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (user != null) {
-            Text("Welcome, ${user!!.username}!")
+            Text("Welcome, ${user!!.username}!",style = MaterialTheme.typography.displayLarge)
         } else {
-            Text("Welcome to Home!")
+            Text("Welcome to Home!", style = MaterialTheme.typography.displayLarge)
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = { navController.navigate(Screen.Login.route) }) {
                 Text("Log in")

@@ -5,6 +5,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,34 +13,30 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material3.Icon
+import com.loop.mobile.presentation.components.InputField
 import com.loop.mobile.presentation.navigation.Screen
 import org.koin.compose.koinInject
 
@@ -52,8 +49,6 @@ fun LoginScreen(navController: NavController) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val interactionSource = remember { MutableInteractionSource() }
     val passwordFocusRequester = remember { FocusRequester() }
-    var emailWasFocused by remember { mutableStateOf(false) }
-    var passwordWasFocused by remember { mutableStateOf(false) }
 
     LaunchedEffect(state.isSuccess) {
         if (state.isSuccess) {
@@ -69,7 +64,7 @@ fun LoginScreen(navController: NavController) {
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Click outside to clear focus
+        // Dismiss keyboard on background tap
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -80,78 +75,63 @@ fun LoginScreen(navController: NavController) {
                 )
         )
 
+        // Top: Back Icon + Title Row
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(top = 24.dp, start = 16.dp, end = 16.dp)
+                .align(Alignment.TopStart)
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                contentDescription = "Back",
+                modifier = Modifier
+                    .clickable { navController.popBackStack() }
+                    .size(32.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                "Welcome Back!",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
+
+        // Middle: Form
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp),
-            verticalArrangement = Arrangement.Center,
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .padding(top = 100.dp), // push below top row
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Welcome Back!", style = MaterialTheme.typography.headlineMedium)
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            OutlinedTextField(
+            InputField(
                 value = state.email,
+                label = "Email",
                 onValueChange = { viewModel.onIntent(LoginAction.OnEmailChange(it)) },
-                label = { Text("Email") },
-                isError = state.emailTouched && state.emailError != null,
-                supportingText = {
-                    if (state.emailTouched && state.emailError != null) {
-                        Text(state.emailError!!, color = MaterialTheme.colorScheme.error)
-                    }
-                },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .onFocusChanged { focusState ->
-                        if (emailWasFocused && !focusState.isFocused) {
-                            viewModel.onIntent(LoginAction.OnEmailBlur)
-                        }
-                        emailWasFocused = focusState.isFocused
-                    },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { passwordFocusRequester.requestFocus() }
-                )
+                onBlur = { viewModel.onIntent(LoginAction.OnEmailBlur) },
+                error = if (state.emailTouched) state.emailError else null,
+                imeAction = ImeAction.Next,
+                keyboardType = KeyboardType.Email,
+                onImeAction = { passwordFocusRequester.requestFocus() }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
+            InputField(
                 value = state.password,
+                label = "Password",
                 onValueChange = { viewModel.onIntent(LoginAction.OnPasswordChange(it)) },
-                label = { Text("Password") },
-                isError = state.passwordTouched && state.passwordError != null,
-                supportingText = {
-                    if (state.passwordTouched && state.passwordError != null) {
-                        Text(state.passwordError!!, color = MaterialTheme.colorScheme.error)
-                    }
+                onBlur = { viewModel.onIntent(LoginAction.OnPasswordBlur) },
+                error = if (state.passwordTouched) state.passwordError else null,
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Password,
+                onImeAction = {
+                    focusManager.clearFocus()
+                    viewModel.onIntent(LoginAction.OnLogin)
                 },
-                singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(passwordFocusRequester)
-                    .onFocusChanged { focusState ->
-                        if (passwordWasFocused && !focusState.isFocused) {
-                            viewModel.onIntent(LoginAction.OnPasswordBlur)
-                        }
-                        passwordWasFocused = focusState.isFocused
-                    },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        focusManager.clearFocus()
-                        viewModel.onIntent(LoginAction.OnLogin)
-                    }
-                )
+                focusRequester = passwordFocusRequester
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -193,6 +173,23 @@ fun LoginScreen(navController: NavController) {
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
+        }
+
+        // Bottom: Sign Up Text
+        Row(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(24.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text("Don’t have an account? ")
+            Text(
+                "Sign up",
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable {
+                    // TODO: Add navigation to sign up screen
+                }
+            )
         }
     }
 }

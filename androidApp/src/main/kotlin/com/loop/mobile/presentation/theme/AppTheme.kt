@@ -20,7 +20,7 @@ fun AppTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-//        typography = Typography(), // optionally create shared Typography
+        typography = Typography,
         content = content
     )
 }
