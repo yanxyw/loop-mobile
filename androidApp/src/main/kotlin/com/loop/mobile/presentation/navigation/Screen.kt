@@ -1,19 +1,12 @@
 package com.loop.mobile.presentation.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.ui.graphics.vector.ImageVector
+import com.loop.mobile.R
 
-sealed class Screen(val route: String, val label: String, val icon: ImageVector) {
-    data object Home : Screen("home", "Home", Icons.Default.Home)
-    data object Search : Screen("search", "Search", Icons.Default.Search)
-    data object Library : Screen("library", "Library", Icons.Default.ShoppingCart)
-    data object Profile : Screen("profile", "Profile", Icons.Default.Person)
-    data object Login : Screen("auth/login", "Login", Icons.Default.Lock)
-    data object Register : Screen("auth/register", "Register", Icons.Default.AccountCircle)
+sealed class Screen(val route: String, val label: String, val selectedIconResId: Int, val unselectedIconResId: Int) {
+    data object Home : Screen("home", "Home", R.drawable.home_filled, R.drawable.home_outlined)
+    data object Search : Screen("search", "Search", R.drawable.search_filled, R.drawable.search_outlined)
+    data object Library : Screen("library", "Library", R.drawable.library_filled, R.drawable.library_outlined)
+    data object Profile : Screen("profile", "Me", R.drawable.profile_filled, R.drawable.profile_outlined)
+    data object Login : Screen("auth/login", "Login", R.drawable.home_filled, R.drawable.home_outlined)
+    data object Register : Screen("auth/register", "Register", R.drawable.home_filled, R.drawable.home_outlined)
 }
