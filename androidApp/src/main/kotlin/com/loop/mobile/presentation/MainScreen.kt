@@ -22,29 +22,39 @@ fun MainScreen(themeManager: ThemeManager) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
+    // Check if current screen is an auth screen
+    val isAuthScreen = currentRoute?.startsWith("auth/") == true
+    val shouldShowBottomNav = !isAuthScreen
+
     Scaffold(
         bottomBar = {
-            NavigationBar {
-                screens.forEach { screen ->
-                    NavigationBarItem(
-                        icon = { Icon(screen.icon, contentDescription = screen.label) },
-                        label = { Text(screen.label) },
-                        selected = currentRoute == screen.route,
-                        onClick = {
-                            navController.navigate(screen.route) {
-                                popUpTo(navController.graph.startDestinationId) {
-                                    saveState = true
+            if (shouldShowBottomNav) {
+                NavigationBar {
+                    screens.forEach { screen ->
+                        NavigationBarItem(
+                            icon = { Icon(screen.icon, contentDescription = screen.label) },
+                            label = { Text(screen.label) },
+                            selected = currentRoute == screen.route,
+                            onClick = {
+                                navController.navigate(screen.route) {
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }
     ) { padding ->
-        NavGraph(navController = navController, modifier = Modifier.padding(padding), themeManager = themeManager)
+        NavGraph(
+            navController = navController,
+            modifier = if (shouldShowBottomNav) Modifier.padding(padding) else Modifier,
+            themeManager = themeManager
+        )
     }
 }
 
