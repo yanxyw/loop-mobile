@@ -79,7 +79,7 @@ fun LoginScreen(navController: NavController) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(top = 24.dp, start = 16.dp, end = 16.dp)
+                .padding(top = 24.dp, start = 32.dp, end = 32.dp)
                 .align(Alignment.TopStart)
         ) {
             Icon(
@@ -87,13 +87,12 @@ fun LoginScreen(navController: NavController) {
                 contentDescription = "Back",
                 modifier = Modifier
                     .clickable { navController.popBackStack() }
-                    .size(32.dp)
+                    .size(28.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                "Welcome Back!",
+                "Login",
                 style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(top = 4.dp)
             )
         }
 
@@ -101,8 +100,8 @@ fun LoginScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-                .padding(top = 100.dp), // push below top row
+                .padding(horizontal = 40.dp)
+                .padding(top = 64.dp), // push below top row
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -116,8 +115,6 @@ fun LoginScreen(navController: NavController) {
                 keyboardType = KeyboardType.Email,
                 onImeAction = { passwordFocusRequester.requestFocus() }
             )
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             InputField(
                 value = state.password,
@@ -134,7 +131,7 @@ fun LoginScreen(navController: NavController) {
                 focusRequester = passwordFocusRequester
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+//            Spacer(modifier = Modifier.height(16.dp))
 
             if (state.error != null) {
                 Text(

@@ -33,12 +33,12 @@ fun HomeScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (user != null) {
-            Text("Welcome, ${user!!.username}!",style = MaterialTheme.typography.displayLarge)
+            Text("Welcome, ${user!!.username}!",style = MaterialTheme.typography.bodyLarge)
         } else {
-            Text("Welcome to Home!", style = MaterialTheme.typography.displayLarge)
+            Text("To create your own music space", style = MaterialTheme.typography.bodyLarge)
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = { navController.navigate(Screen.Login.route) }) {
-                Text("Log in")
+                Text("Login")
             }
         }
     }
