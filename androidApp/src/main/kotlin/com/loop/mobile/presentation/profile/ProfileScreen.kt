@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.loop.mobile.presentation.auth.logout.LogoutViewModel
+import com.loop.mobile.presentation.navigation.Screen
 import com.loop.mobile.presentation.theme.ThemeManager
 import org.koin.compose.koinInject
 
@@ -46,8 +47,8 @@ fun ProfileScreen(
 
     LaunchedEffect(logoutState.isSuccess) {
         if (logoutState.isSuccess) {
-            navController.navigate("login") {
-                popUpTo("profile") { inclusive = true }
+            navController.navigate(Screen.Login.route) {
+                popUpTo(Screen.Profile.route) { inclusive = true }
             }
         }
     }
