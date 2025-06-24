@@ -1,12 +1,12 @@
 package com.loop.mobile.presentation.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.EaseInCubic
 import androidx.compose.animation.core.EaseOutCubic
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
@@ -30,14 +30,10 @@ fun NavGraph(navController: NavHostController, modifier: Modifier, themeManager:
     ) {
         composable(
             route = Screen.Home.route,
-            enterTransition = {
-                fadeIn(animationSpec = tween(200)) +
-                        scaleIn(initialScale = 0.9f, animationSpec = tween(200))
-            },
-            exitTransition = {
-                fadeOut(animationSpec = tween(200)) +
-                        scaleOut(targetScale = 0.9f, animationSpec = tween(200))
-            }
+            enterTransition = { fadeTransition() },
+            exitTransition = { fadeExitTransition() },
+            popEnterTransition = { fadeTransition() },
+            popExitTransition = { fadeExitTransition() }
         ) {
             HomeScreen(navController)
         }
@@ -72,11 +68,42 @@ fun NavGraph(navController: NavHostController, modifier: Modifier, themeManager:
             LoginScreen(navController)
         }
 
-        composable(Screen.Profile.route) {
-            ProfileScreen(navController, themeManager)
+        composable(
+            Screen.Search.route,
+            enterTransition = { fadeTransition() },
+            exitTransition = { fadeExitTransition() },
+            popEnterTransition = { fadeTransition() },
+            popExitTransition = { fadeExitTransition() }
+        ) {
+            SearchScreen()
         }
 
-        composable(Screen.Search.route) { SearchScreen() }
-        composable(Screen.Library.route) { LibraryScreen() }
+        composable(
+            route = Screen.Library.route,
+            enterTransition = { fadeTransition() },
+            exitTransition = { fadeExitTransition() },
+            popEnterTransition = { fadeTransition() },
+            popExitTransition = { fadeExitTransition() }
+        ) {
+            LibraryScreen()
+        }
+
+        composable(
+            route = Screen.Profile.route,
+            enterTransition = { fadeTransition() },
+            exitTransition = { fadeExitTransition() },
+            popEnterTransition = { fadeTransition() },
+            popExitTransition = { fadeExitTransition() }
+        ) {
+            ProfileScreen(navController, themeManager)
+        }
     }
+}
+
+private fun fadeTransition(duration: Int = 50): EnterTransition {
+    return fadeIn(animationSpec = tween(duration))
+}
+
+private fun fadeExitTransition(duration: Int = 50): ExitTransition {
+    return fadeOut(animationSpec = tween(duration))
 }
