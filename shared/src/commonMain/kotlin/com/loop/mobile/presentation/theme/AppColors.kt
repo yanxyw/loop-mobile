@@ -8,6 +8,7 @@ object AppColors {
     const val onSurfaceLight = 0xFF272829;
     const val outlineLight = 0xFF797C7E;
     const val outlineVariantLight = 0xFFC9C9CA;
+    const val errorLight = 0xFFC3654A;
 
     const val backgroundDark = 0xFF1E1E1F;
     const val primaryDark = 0xFFC2B27F;
@@ -16,4 +17,5 @@ object AppColors {
     const val onSurfaceDark = 0xFFEAECED;
     const val outlineDark = 0xFF797C7E;
     const val outlineVariantDark = 0xFF515253;
+    const val errorDark = 0xFFC3654A;
 }

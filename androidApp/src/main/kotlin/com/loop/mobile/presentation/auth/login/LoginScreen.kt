@@ -12,9 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +33,7 @@ import androidx.navigation.NavController
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
+import com.loop.mobile.presentation.components.AppButton
 import com.loop.mobile.presentation.components.InputField
 import com.loop.mobile.presentation.navigation.Screen
 import org.koin.compose.koinInject
@@ -76,23 +74,25 @@ fun LoginScreen(navController: NavController) {
         )
 
         // Top: Back Icon + Title Row
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        Box(
             modifier = Modifier
                 .padding(top = 24.dp, start = 32.dp, end = 32.dp)
                 .align(Alignment.TopStart)
+                .fillMaxWidth()
+                .height(28.dp)
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                 contentDescription = "Back",
                 modifier = Modifier
                     .clickable { navController.popBackStack() }
-                    .size(28.dp)
+                    .size(24.dp)
+                    .align(Alignment.CenterStart)
             )
-            Spacer(modifier = Modifier.width(8.dp))
             Text(
                 "Login",
                 style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.align(Alignment.Center)
             )
         }
 
@@ -101,7 +101,7 @@ fun LoginScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp)
-                .padding(top = 64.dp), // push below top row
+                .padding(top = 72.dp), // push below top row
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -115,6 +115,8 @@ fun LoginScreen(navController: NavController) {
                 keyboardType = KeyboardType.Email,
                 onImeAction = { passwordFocusRequester.requestFocus() }
             )
+
+            Spacer(modifier = Modifier.height(12.dp))
 
             InputField(
                 value = state.password,
@@ -131,7 +133,7 @@ fun LoginScreen(navController: NavController) {
                 focusRequester = passwordFocusRequester
             )
 
-//            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             if (state.error != null) {
                 Text(
@@ -142,24 +144,12 @@ fun LoginScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            Button(
+            AppButton(
                 onClick = { viewModel.onIntent(LoginAction.OnLogin) },
                 enabled = !state.isLoading,
-                modifier = Modifier.fillMaxWidth()
+                isLoading = state.isLoading,
             ) {
-                if (state.isLoading) {
-                    CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier
-                            .size(20.dp)
-                            .padding(end = 8.dp),
-                        strokeWidth = 2.dp
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Logging In...")
-                } else {
-                    Text("Log In")
-                }
+                Text("Login")
             }
 
             if (state.isSuccess) {
