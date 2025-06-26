@@ -63,5 +63,8 @@ dependencies {
     implementation(libs.koin.compose)
     implementation(libs.navigation.compose)
     implementation(libs.coil.compose)
+    implementation(libs.core.splashscreen)
+    implementation(libs.material3.extra)
+    implementation(libs.material)
 }
 

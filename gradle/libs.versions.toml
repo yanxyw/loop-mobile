@@ -20,6 +20,9 @@ coroutines = "1.8.1"
 compose-material3 = "1.3.0"
 coil = "2.4.0"
 material3Android = "1.3.2"
+material3 = "1.2.1"
+material = "1.11.0"
+splashscreen = "1.0.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -53,6 +56,9 @@ compose-material3 = { module = "androidx.compose.material3:material3", version.r
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
+core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
+material3-extra = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -61,4 +67,3 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 kotlinAndroid = { id = "org.jetbrains.kotlin.android" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-#cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
