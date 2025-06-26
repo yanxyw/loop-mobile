@@ -21,7 +21,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         initTokenStorage(this)
 
         val tokenStorage: TokenStorage = getKoin().get()

@@ -11,11 +11,8 @@ class LoopApp : Application() {
 
         initTokenStorage(this)
 
-        val baseUrl = BuildConfig.API_BASE_URL
-
         initKoin(
             appContext = { androidContext(this@LoopApp) },
-            baseUrl = baseUrl
         )
     }
 }
