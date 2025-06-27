@@ -42,8 +42,7 @@ object AppTheme {
     )
 }
 
-expect class ThemeProvider constructor(context: Any) {
-    fun getCurrentColorScheme(): AppColorScheme
+expect class ThemeProvider(context: Any) {
     fun isDarkMode(): Boolean
 }
 
@@ -55,11 +54,6 @@ class ThemeManager(context: Any) {
 
     fun setOverrideDarkMode(enabled: Boolean?) {
         _overrideDarkMode.value = enabled
-    }
-
-    fun getCurrentColors(): AppColorScheme {
-        val useDark = _overrideDarkMode.value ?: themeProvider.isDarkMode()
-        return if (useDark) AppTheme.darkColors else AppTheme.lightColors
     }
 
     fun isDarkMode(): Boolean {
