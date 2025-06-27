@@ -1,5 +1,6 @@
 package com.loop.mobile.di
 
+import com.loop.mobile.domain.auth.AuthStateManager
 import com.loop.mobile.presentation.auth.login.LoginViewModel
 import com.loop.mobile.presentation.search.SearchViewModel
 import org.koin.core.component.KoinComponent
@@ -22,4 +23,9 @@ class SearchViewModelInjector : KoinComponent {
 @Suppress("unused")
 class LoginViewModelInjector : KoinComponent {
     val loginViewModel: LoginViewModel by inject()
+}
+
+@Suppress("unused")
+class AuthStateManagerInjector : KoinComponent {
+    val authStateManager: AuthStateManager by inject()
 }

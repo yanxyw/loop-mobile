@@ -2,10 +2,18 @@ import SwiftUI
 import shared
 
 struct MainTabView: View {
+    @StateObject private var authWrapper = AuthStateWrapper(manager: AuthStateManagerInjector().authStateManager)
+    @State private var showLogin = false
+
     var body: some View {
         TabView {
             NavigationStack {
-                HomeScreen()
+                HomeScreen(authWrapper: authWrapper) {
+                    showLogin = true
+                }
+                .navigationDestination(isPresented: $showLogin) {
+                    LoginScreen()
+                }
             }
             .tabItem {
                 Label("Home", systemImage: "house")
