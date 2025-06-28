@@ -5,7 +5,7 @@ import shared
 struct iOSApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
-    private let themeStateHolder = ThemeStateHolder(themeManager: ThemeManager(context: UIApplication.shared))
+    @StateObject private var themeStateHolder = ThemeStateHolder(themeManager: ThemeManagerInjector().themeManager)
 
     var body: some Scene {
         WindowGroup {
