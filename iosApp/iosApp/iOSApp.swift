@@ -5,9 +5,12 @@ import shared
 struct iOSApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
+    private let themeStateHolder = ThemeStateHolder(themeManager: ThemeManager(context: UIApplication.shared))
+
     var body: some Scene {
         WindowGroup {
             MainTabView()
+                .environmentObject(themeStateHolder)
                 .onAppear {
                     restoreAuth()
                 }

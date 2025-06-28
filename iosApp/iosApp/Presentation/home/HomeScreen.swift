@@ -3,6 +3,8 @@ import shared
 
 struct HomeScreen: View {
     @ObservedObject var authWrapper: AuthStateWrapper
+    @EnvironmentObject var themeStateHolder: ThemeStateHolder
+    let colors: IOSColorScheme
     var onLoginTap: () -> Void
 
     var body: some View {
@@ -18,6 +20,10 @@ struct HomeScreen: View {
                     .buttonStyle(.borderedProminent)
             }
         }
-        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(colors.background))
+        .ignoresSafeArea()
+        .foregroundColor(Color(colors.primary))
+        .animation(.default, value: colors.background)
     }
 }

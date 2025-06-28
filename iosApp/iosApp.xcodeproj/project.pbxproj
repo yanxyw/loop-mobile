@@ -15,6 +15,9 @@
 		3B0DCC8E2E0ED8C300577427 /* LibraryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0DCC8C2E0ED8C300577427 /* LibraryScreen.swift */; };
 		3B0DCC912E0ED8D200577427 /* ProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0DCC8F2E0ED8D200577427 /* ProfileScreen.swift */; };
 		3B0DCC932E0EDF2500577427 /* AuthStateWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0DCC922E0EDF2400577427 /* AuthStateWrapper.swift */; };
+		3B2B617A2E0F5AAC002D7FB5 /* Flow+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B61792E0F5AAC002D7FB5 /* Flow+Combine.swift */; };
+		3B2B61802E0F5AF7002D7FB5 /* ThemeStateHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B617E2E0F5AF7002D7FB5 /* ThemeStateHolder.swift */; };
+		3B2B61822E0F5B09002D7FB5 /* ThemeSwitcherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B61812E0F5B09002D7FB5 /* ThemeSwitcherView.swift */; };
 		3BD31E282E060D7A000CBAC0 /* LoginViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD31E272E060D7A000CBAC0 /* LoginViewModelWrapper.swift */; };
 		3BD31E2C2E060D94000CBAC0 /* LoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD31E292E060D94000CBAC0 /* LoginScreen.swift */; };
 		A89F74A92D8E4512009BB188 /* SearchViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89F74A72D8E4512009BB188 /* SearchViewModelWrapper.swift */; };
@@ -48,6 +51,9 @@
 		3B0DCC8C2E0ED8C300577427 /* LibraryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryScreen.swift; sourceTree = "<group>"; };
 		3B0DCC8F2E0ED8D200577427 /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreen.swift; sourceTree = "<group>"; };
 		3B0DCC922E0EDF2400577427 /* AuthStateWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStateWrapper.swift; sourceTree = "<group>"; };
+		3B2B61792E0F5AAC002D7FB5 /* Flow+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Flow+Combine.swift"; sourceTree = "<group>"; };
+		3B2B617E2E0F5AF7002D7FB5 /* ThemeStateHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeStateHolder.swift; sourceTree = "<group>"; };
+		3B2B61812E0F5B09002D7FB5 /* ThemeSwitcherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSwitcherView.swift; sourceTree = "<group>"; };
 		3BD31E272E060D7A000CBAC0 /* LoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelWrapper.swift; sourceTree = "<group>"; };
 		3BD31E292E060D94000CBAC0 /* LoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreen.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* Loop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Loop.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,9 +114,18 @@
 		3B0DCC902E0ED8D200577427 /* profile */ = {
 			isa = PBXGroup;
 			children = (
+				3B2B61812E0F5B09002D7FB5 /* ThemeSwitcherView.swift */,
 				3B0DCC8F2E0ED8D200577427 /* ProfileScreen.swift */,
 			);
 			path = profile;
+			sourceTree = "<group>";
+		};
+		3B2B617F2E0F5AF7002D7FB5 /* theme */ = {
+			isa = PBXGroup;
+			children = (
+				3B2B617E2E0F5AF7002D7FB5 /* ThemeStateHolder.swift */,
+			);
+			path = theme;
 			sourceTree = "<group>";
 		};
 		3BD31E2A2E060D94000CBAC0 /* login */ = {
@@ -160,6 +175,7 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				3B2B61792E0F5AAC002D7FB5 /* Flow+Combine.swift */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF8C242A565B00829871 /* Info.plist */,
 				2152FB032600AC8F00CF470E /* iOSApp.swift */,
@@ -191,6 +207,7 @@
 		A89F74A62D8E4512009BB188 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				3B2B617F2E0F5AF7002D7FB5 /* theme */,
 				3B0DCC902E0ED8D200577427 /* profile */,
 				3B0DCC8D2E0ED8C300577427 /* library */,
 				3B0DCC8A2E0ED8B200577427 /* home */,
@@ -357,16 +374,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
+				3B2B617A2E0F5AAC002D7FB5 /* Flow+Combine.swift in Sources */,
 				A89F74A92D8E4512009BB188 /* SearchViewModelWrapper.swift in Sources */,
 				3B0DCC932E0EDF2500577427 /* AuthStateWrapper.swift in Sources */,
 				3BD31E282E060D7A000CBAC0 /* LoginViewModelWrapper.swift in Sources */,
 				A89F74AA2D8E4512009BB188 /* SearchScreen.swift in Sources */,
+				3B2B61802E0F5AF7002D7FB5 /* ThemeStateHolder.swift in Sources */,
 				3B0DCC8E2E0ED8C300577427 /* LibraryScreen.swift in Sources */,
 				3B0DCC8B2E0ED8B200577427 /* HomeScreen.swift in Sources */,
 				3B0DCC882E0ED89900577427 /* MainTabView.swift in Sources */,
 				A89F74AB2D8E4512009BB188 /* AppDelegate.swift in Sources */,
 				3BD31E2C2E060D94000CBAC0 /* LoginScreen.swift in Sources */,
 				3B0DCC912E0ED8D200577427 /* ProfileScreen.swift in Sources */,
+				3B2B61822E0F5B09002D7FB5 /* ThemeSwitcherView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

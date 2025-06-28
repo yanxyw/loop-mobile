@@ -59,4 +59,9 @@ class ThemeManager(context: Any) {
     fun isDarkMode(): Boolean {
         return _overrideDarkMode.value ?: themeProvider.isDarkMode()
     }
+
+    fun getCurrentColorScheme(): AppColorScheme {
+        val useDark = isDarkMode()
+        return if (useDark) AppTheme.darkColors else AppTheme.lightColors
+    }
 }

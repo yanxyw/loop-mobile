@@ -11,7 +11,6 @@ import com.loop.mobile.domain.auth.restoreAuthState
 import com.loop.mobile.domain.repositories.UserRepository
 import com.loop.mobile.presentation.theme.AppTheme
 import com.loop.mobile.presentation.theme.ThemeManager
-import com.loop.mobile.presentation.theme.ThemeProvider
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.getKoin
 
