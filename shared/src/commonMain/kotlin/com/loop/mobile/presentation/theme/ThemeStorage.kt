@@ -1,4 +1,9 @@
 package com.loop.mobile.presentation.theme
 
-class ThemeStorage {
+expect fun provideThemeStorage(context: Any): ThemeStorage
+
+interface ThemeStorage {
+    fun getOverrideDarkMode(): Boolean?
+    fun setOverrideDarkMode(value: Boolean?)
 }
+

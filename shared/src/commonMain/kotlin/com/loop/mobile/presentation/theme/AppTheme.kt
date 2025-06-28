@@ -46,14 +46,18 @@ expect class ThemeProvider(context: Any) {
     fun isDarkMode(): Boolean
 }
 
-class ThemeManager(context: Any) {
+class ThemeManager(
+    context: Any,
+    private val storage: ThemeStorage
+) {
     private val themeProvider = ThemeProvider(context)
 
-    private val _overrideDarkMode = MutableStateFlow<Boolean?>(null)
+    private val _overrideDarkMode = MutableStateFlow<Boolean?>(storage.getOverrideDarkMode())
     val overrideDarkMode: StateFlow<Boolean?> = _overrideDarkMode.asStateFlow()
 
     fun setOverrideDarkMode(enabled: Boolean?) {
         _overrideDarkMode.value = enabled
+        storage.setOverrideDarkMode(enabled)
     }
 
     fun isDarkMode(): Boolean {
