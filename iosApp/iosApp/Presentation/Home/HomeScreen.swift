@@ -11,10 +11,10 @@ struct HomeScreen: View {
         VStack(spacing: 16) {
             if let user = authWrapper.user {
                 Text("Welcome, \(user.username)!")
-                    .font(.title)
+                    .font(AppFont.bitter(24))
             } else {
                 Text("To create your own music space")
-                    .font(.headline)
+                    .font(AppFont.bitter(24))
 
                 Button("Login", action: onLoginTap)
                     .buttonStyle(.borderedProminent)

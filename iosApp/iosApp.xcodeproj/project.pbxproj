@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,6 +15,7 @@
 		3B0DCC8E2E0ED8C300577427 /* LibraryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0DCC8C2E0ED8C300577427 /* LibraryScreen.swift */; };
 		3B0DCC912E0ED8D200577427 /* ProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0DCC8F2E0ED8D200577427 /* ProfileScreen.swift */; };
 		3B0DCC932E0EDF2500577427 /* AuthStateWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0DCC922E0EDF2400577427 /* AuthStateWrapper.swift */; };
+		3B212DBA2E11C678002D6A17 /* AppFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B212DB92E11C678002D6A17 /* AppFont.swift */; };
 		3B2B617A2E0F5AAC002D7FB5 /* Flow+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B61792E0F5AAC002D7FB5 /* Flow+Combine.swift */; };
 		3B2B61802E0F5AF7002D7FB5 /* ThemeStateHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B617E2E0F5AF7002D7FB5 /* ThemeStateHolder.swift */; };
 		3B2B61822E0F5B09002D7FB5 /* ThemeSwitcherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B61812E0F5B09002D7FB5 /* ThemeSwitcherView.swift */; };
@@ -51,6 +52,7 @@
 		3B0DCC8C2E0ED8C300577427 /* LibraryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryScreen.swift; sourceTree = "<group>"; };
 		3B0DCC8F2E0ED8D200577427 /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreen.swift; sourceTree = "<group>"; };
 		3B0DCC922E0EDF2400577427 /* AuthStateWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStateWrapper.swift; sourceTree = "<group>"; };
+		3B212DB92E11C678002D6A17 /* AppFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFont.swift; sourceTree = "<group>"; };
 		3B2B61792E0F5AAC002D7FB5 /* Flow+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Flow+Combine.swift"; sourceTree = "<group>"; };
 		3B2B617E2E0F5AF7002D7FB5 /* ThemeStateHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeStateHolder.swift; sourceTree = "<group>"; };
 		3B2B61812E0F5B09002D7FB5 /* ThemeSwitcherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSwitcherView.swift; sourceTree = "<group>"; };
@@ -66,6 +68,10 @@
 		CA16C87D2DB8D6ED0BA5B431 /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1C02D1557C72CD28502924B /* Pods-iosApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.release.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		3B212D9A2E117614002D6A17 /* Fonts */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Fonts; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		B92378962B6B1156000C7307 /* Frameworks */ = {
@@ -124,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				3B2B617E2E0F5AF7002D7FB5 /* ThemeStateHolder.swift */,
+				3B212DB92E11C678002D6A17 /* AppFont.swift */,
 			);
 			path = theme;
 			sourceTree = "<group>";
@@ -175,6 +182,7 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				3B212D9A2E117614002D6A17 /* Fonts */,
 				3B2B61792E0F5AAC002D7FB5 /* Flow+Combine.swift */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF8C242A565B00829871 /* Info.plist */,
@@ -254,6 +262,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				3B212D9A2E117614002D6A17 /* Fonts */,
 			);
 			name = iosApp;
 			productName = iosApp;
@@ -384,6 +395,7 @@
 				3B0DCC8B2E0ED8B200577427 /* HomeScreen.swift in Sources */,
 				3B0DCC882E0ED89900577427 /* MainTabView.swift in Sources */,
 				A89F74AB2D8E4512009BB188 /* AppDelegate.swift in Sources */,
+				3B212DBA2E11C678002D6A17 /* AppFont.swift in Sources */,
 				3BD31E2C2E060D94000CBAC0 /* LoginScreen.swift in Sources */,
 				3B0DCC912E0ED8D200577427 /* ProfileScreen.swift in Sources */,
 				3B2B61822E0F5B09002D7FB5 /* ThemeSwitcherView.swift in Sources */,
