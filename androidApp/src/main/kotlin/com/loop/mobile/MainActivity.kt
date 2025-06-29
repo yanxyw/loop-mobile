@@ -11,13 +11,11 @@ import com.loop.mobile.domain.auth.restoreAuthState
 import com.loop.mobile.domain.repositories.UserRepository
 import com.loop.mobile.presentation.theme.AppTheme
 import com.loop.mobile.presentation.theme.ThemeManager
-import com.loop.mobile.presentation.theme.provideThemeStorage
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.getKoin
 
 class MainActivity : ComponentActivity() {
-    private val themeManager by lazy {
-        ThemeManager(applicationContext, storage = provideThemeStorage(applicationContext)) }
+    private val themeManager: ThemeManager by lazy { getKoin().get() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
