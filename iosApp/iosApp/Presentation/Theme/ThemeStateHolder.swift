@@ -13,14 +13,19 @@ class ThemeStateHolder: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     @Published var overrideDarkMode: Bool? = nil
+    @Published var currentColors: IOSColorScheme
 
     init(themeManager: ThemeManager) {
         self.themeManager = themeManager
+        self.currentColors = themeManager.getCurrentColorScheme().toIOSColorScheme()
 
         themeManager.overrideDarkMode
             .asPublisher()
             .receive(on: DispatchQueue.main)
-            .assign(to: \.overrideDarkMode, on: self)
+            .sink { [weak self] newValue in
+                self?.overrideDarkMode = newValue
+                self?.currentColors = themeManager.getCurrentColorScheme().toIOSColorScheme()
+            }
             .store(in: &cancellables)
     }
 
@@ -29,6 +34,6 @@ class ThemeStateHolder: ObservableObject {
     }
 
     func getColors() -> IOSColorScheme {
-        themeManager.getCurrentColorScheme().toIOSColorScheme()
+        currentColors
     }
 }

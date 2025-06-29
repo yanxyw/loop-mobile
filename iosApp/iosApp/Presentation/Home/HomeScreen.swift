@@ -14,7 +14,7 @@ struct HomeScreen: View {
                     .font(AppFont.bitter(24))
             } else {
                 Text("To create your own music space")
-                    .font(AppFont.bitter(24))
+                    .font(AppFont.inter(14, weight: .light))
 
                 Button("Login", action: onLoginTap)
                     .buttonStyle(.borderedProminent)
