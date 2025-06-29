@@ -13,10 +13,6 @@ struct iOSApp: App {
                 .environmentObject(themeStateHolder)
                 .onAppear {
                     restoreAuth()
-                    updateTabBarColors()
-                }
-                .onChange(of: themeStateHolder.currentColors) { _ in
-                    updateTabBarColors()
                 }
         }
     }
@@ -57,17 +53,6 @@ struct iOSApp: App {
                 print("Failed to restore auth state: \(error)")
             } else {
                 print("Auth state restored successfully.")
-            }
-        }
-    }
-    
-    func updateTabBarColors() {
-        DispatchQueue.main.async {
-            UITabBar.appearance().tintColor = themeStateHolder.getColors().primary
-            UITabBar.appearance().unselectedItemTintColor = themeStateHolder.getColors().onSurfaceVariant
-            // Force UITabBar to update appearance, if needed
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                windowScene.windows.forEach { $0.rootViewController?.view.setNeedsLayout() }
             }
         }
     }
