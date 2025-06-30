@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.targets.native.tasks.PodInstallTask
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -67,6 +68,10 @@ kotlin {
             implementation(libs.ktor.client.darwin)
         }
     }
+}
+
+tasks.withType<PodInstallTask>().configureEach {
+    podExecutablePath.set(file("/opt/homebrew/bin/pod"))
 }
 
 android {

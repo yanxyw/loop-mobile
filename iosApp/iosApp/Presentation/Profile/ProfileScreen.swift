@@ -2,20 +2,82 @@ import SwiftUI
 import shared
 
 struct ProfileScreen: View {
+    @ObservedObject var profileViewModelWrapper: ProfileViewModelWrapper
+    @ObservedObject var logoutViewModelWrapper: LogoutViewModelWrapper
     @EnvironmentObject var themeStateHolder: ThemeStateHolder
     let colors: IOSColorScheme
+    let onLogoutSuccess: () -> Void
 
     var body: some View {
-        VStack {
-            Text("Profile")
-                .foregroundColor(Color(colors.primary))
+        ZStack {
+            VStack(spacing: 16) {
+                if profileViewModelWrapper.state.isLoading {
+                    ProgressView()
+                } else if let user = profileViewModelWrapper.state.user {
+                    if let url = URL(string: user.profileUrl ?? "") {
+                        AsyncImage(url: url) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 100, height: 100)
+                                    .clipShape(Circle())
+                            default:
+                                ProgressView()
+                            }
+                        }
+                    }
 
-            ThemeSwitcherView(state: themeStateHolder)
+                    Text(user.username)
+                        .foregroundColor(Color(colors.primary))
+                        .font(.title2)
+                        .bold()
+
+                    Text(user.email)
+                        .foregroundColor(Color(colors.onSurface))
+                        .font(.subheadline)
+
+                    Button("Logout") {
+                        logoutViewModelWrapper.logout()
+                    }
+
+                    if let error = logoutViewModelWrapper.state.error {
+                        Text(error)
+                            .foregroundColor(.red)
+                            .font(.caption)
+                    }
+
+                    if logoutViewModelWrapper.state.isLoading {
+                        ProgressView()
+                    }
+                }
+
+                Spacer()
+
+                Text("Is logged out: \(logoutViewModelWrapper.state.isSuccess ? "true" : "false")")
+
+                VStack(alignment: .leading) {
+                    Text("Appearance")
+                        .font(.headline)
+                    ThemeSwitcherView(state: themeStateHolder)
+                }
+            }
+            .padding()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(colors.background))
-        .ignoresSafeArea()
         .foregroundColor(Color(colors.primary))
-        .animation(.default, value: colors.background)
+        .onAppear {
+            profileViewModelWrapper.start()
+            logoutViewModelWrapper.start()
+            profileViewModelWrapper.loadProfile()
+        }
+        .onChange(of: logoutViewModelWrapper.state.isSuccess) { success in
+            print("Logout success changed: \(success)")
+            if success {
+                onLogoutSuccess()
+            }
+        }
     }
 }

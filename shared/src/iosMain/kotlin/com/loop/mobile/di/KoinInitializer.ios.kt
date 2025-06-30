@@ -4,6 +4,8 @@ import com.loop.mobile.data.local.TokenStorage
 import com.loop.mobile.domain.auth.AuthStateManager
 import com.loop.mobile.domain.repositories.UserRepository
 import com.loop.mobile.presentation.auth.login.LoginViewModel
+import com.loop.mobile.presentation.auth.logout.LogoutViewModel
+import com.loop.mobile.presentation.profile.ProfileViewModel
 import com.loop.mobile.presentation.search.SearchViewModel
 import com.loop.mobile.presentation.theme.ThemeManager
 import com.loop.mobile.presentation.theme.ThemeStorage
@@ -61,4 +63,14 @@ class ThemeStorageInjector : KoinComponent {
 @Suppress("unused")
 class ThemeManagerInjector : KoinComponent {
     val themeManager: ThemeManager by inject()
+}
+
+@Suppress("unused")
+class ProfileViewModelInjector : KoinComponent {
+    val profileViewModel: ProfileViewModel by inject()
+}
+
+@Suppress("unused")
+class LogoutViewModelInjector : KoinComponent {
+    val logoutViewModel: LogoutViewModel by inject()
 }

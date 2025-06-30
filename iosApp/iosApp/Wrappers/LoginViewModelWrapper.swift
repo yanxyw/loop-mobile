@@ -32,7 +32,7 @@ class LoginViewModelWrapper: ObservableObject {
     }
 
     func onIntent(_ action: LoginAction) {
-        viewModel.onIntent(intent: action)
+        viewModel.onIntent(action: action)
     }
 
     func login() {

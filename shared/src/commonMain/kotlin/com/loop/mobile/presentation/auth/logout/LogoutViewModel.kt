@@ -2,6 +2,7 @@ package com.loop.mobile.presentation.auth.logout
 
 import com.loop.mobile.domain.repositories.AuthRepository
 import com.loop.mobile.presentation.BaseViewModel
+import com.loop.mobile.presentation.auth.login.LoginState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -28,5 +29,10 @@ class LogoutViewModel(
             )
         }
     }
-}
 
+    fun observeState(callback: (LogoutState) -> Unit) {
+        scope.launch {
+            state.collect(callback)
+        }
+    }
+}

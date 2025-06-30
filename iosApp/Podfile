@@ -1,7 +1,10 @@
+source 'https://cdn.cocoapods.org'
+
 platform :ios, '16.4'
 
 target 'iosApp' do
   use_frameworks!
+  use_modular_headers!
 
   pod 'shared', :path => '../shared'
 end

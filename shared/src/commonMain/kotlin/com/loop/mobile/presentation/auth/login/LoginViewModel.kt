@@ -15,12 +15,12 @@ class LoginViewModel(
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state
 
-    fun onIntent(intent: LoginAction) {
-        when (intent) {
+    fun onIntent(action: LoginAction) {
+        when (action) {
             is LoginAction.OnEmailChange -> {
                 _state.update {
                     it.copy(
-                        email = intent.email,
+                        email = action.email,
                         emailError = null
                     )
                 }
@@ -39,7 +39,7 @@ class LoginViewModel(
             is LoginAction.OnPasswordChange -> {
                 _state.update {
                     it.copy(
-                        password = intent.password,
+                        password = action.password,
                         passwordError = null
                     )
                 }

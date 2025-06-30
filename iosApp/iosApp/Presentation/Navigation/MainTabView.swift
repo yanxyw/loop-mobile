@@ -4,6 +4,8 @@ import shared
 struct MainTabView: View {
     @EnvironmentObject var themeStateHolder: ThemeStateHolder
     @StateObject private var authWrapper = AuthStateWrapper(manager: AuthStateManagerInjector().authStateManager)
+    @StateObject private var profileViewModelWrapper = ProfileViewModelWrapper()
+    @StateObject private var logoutViewModelWrapper = LogoutViewModelWrapper()
     @State private var showLogin = false
     @State private var selectedTab: Tab = .home
 
@@ -56,7 +58,16 @@ struct MainTabView: View {
                     }
                 case .profile:
                     NavigationStack {
-                        ProfileScreen(colors: colors)
+                        ProfileScreen(
+                            profileViewModelWrapper: profileViewModelWrapper,
+                            logoutViewModelWrapper: logoutViewModelWrapper,
+                            colors: colors
+                        ) {
+                            showLogin = true
+                        }
+                        .navigationDestination(isPresented: $showLogin) {
+                            LoginScreen()
+                        }
                     }
                 }
             }
