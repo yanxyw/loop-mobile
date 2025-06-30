@@ -48,11 +48,11 @@ struct MainTabView: View {
                     }
                 case .search:
                     NavigationStack {
-                        SearchScreen()
+                        SearchScreen(colors: colors)
                     }
                 case .library:
                     NavigationStack {
-                        LibraryScreen()
+                        LibraryScreen(colors: colors)
                     }
                 case .profile:
                     NavigationStack {
@@ -60,7 +60,7 @@ struct MainTabView: View {
                     }
                 }
             }
-            Divider().background(Color(colors.outline))
+
             HStack {
                 ForEach(Tab.allCases, id: \.self) { tab in
                     Spacer()
