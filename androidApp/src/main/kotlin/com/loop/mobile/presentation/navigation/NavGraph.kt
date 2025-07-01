@@ -11,6 +11,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,13 +28,20 @@ import com.loop.mobile.presentation.search.SearchViewModel
 import com.loop.mobile.presentation.theme.ThemeManager
 
 @Composable
-fun NavGraph(navController: NavHostController, modifier: Modifier, themeManager: ThemeManager,
-             authStateManager: AuthStateManager, profileViewModel: ProfileViewModel,
-             loginViewModel: LoginViewModel, logoutViewModel: LogoutViewModel,
-             searchViewModel: SearchViewModel) {
+fun NavGraph(
+    navController: NavHostController,
+    modifier: Modifier,
+    themeManager: ThemeManager,
+    authStateManager: AuthStateManager,
+    profileViewModel: ProfileViewModel,
+    loginViewModel: LoginViewModel,
+    logoutViewModel: LogoutViewModel,
+    searchViewModel: SearchViewModel,
+    startDestination: String = Screen.Home.route
+) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Home.route,
+        startDestination = startDestination,
         modifier = modifier
     ) {
         composable(

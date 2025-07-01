@@ -6,8 +6,12 @@ import com.loop.mobile.presentation.MainScreen
 import com.loop.mobile.presentation.theme.ThemeManager
 
 @Composable
-fun App(themeManager: ThemeManager) {
+fun App(
+    themeManager: ThemeManager,
+) {
     MaterialTheme {
-        MainScreen(themeManager)
+        MainScreen(
+            themeManager = themeManager
+        )
     }
 }

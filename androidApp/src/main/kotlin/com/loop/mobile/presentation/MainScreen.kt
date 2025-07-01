@@ -48,7 +48,6 @@ fun MainScreen(themeManager: ThemeManager) {
     val authStateManager: AuthStateManager = koinInject()
     val searchViewModel: SearchViewModel = koinInject()
 
-    // Check if current screen is an auth screen
     val isAuthScreen = currentRoute?.startsWith("auth/") == true
     val shouldShowBottomNav = !isAuthScreen
 
@@ -121,8 +120,7 @@ fun MainScreen(themeManager: ThemeManager) {
             profileViewModel = profileViewModel,
             loginViewModel = loginViewModel,
             logoutViewModel = logoutViewModel,
-            searchViewModel = searchViewModel
-
+            searchViewModel = searchViewModel,
         )
     }
 }
