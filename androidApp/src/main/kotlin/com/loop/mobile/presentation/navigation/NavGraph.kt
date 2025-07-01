@@ -14,15 +14,23 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.loop.mobile.domain.auth.AuthStateManager
 import com.loop.mobile.presentation.auth.login.LoginScreen
+import com.loop.mobile.presentation.auth.login.LoginViewModel
+import com.loop.mobile.presentation.auth.logout.LogoutViewModel
 import com.loop.mobile.presentation.home.HomeScreen
 import com.loop.mobile.presentation.library.LibraryScreen
 import com.loop.mobile.presentation.profile.ProfileScreen
+import com.loop.mobile.presentation.profile.ProfileViewModel
 import com.loop.mobile.presentation.search.SearchScreen
+import com.loop.mobile.presentation.search.SearchViewModel
 import com.loop.mobile.presentation.theme.ThemeManager
 
 @Composable
-fun NavGraph(navController: NavHostController, modifier: Modifier, themeManager: ThemeManager) {
+fun NavGraph(navController: NavHostController, modifier: Modifier, themeManager: ThemeManager,
+             authStateManager: AuthStateManager, profileViewModel: ProfileViewModel,
+             loginViewModel: LoginViewModel, logoutViewModel: LogoutViewModel,
+             searchViewModel: SearchViewModel) {
     NavHost(
         navController = navController,
         startDestination = Screen.Home.route,
@@ -35,7 +43,7 @@ fun NavGraph(navController: NavHostController, modifier: Modifier, themeManager:
             popEnterTransition = { fadeTransition() },
             popExitTransition = { fadeExitTransition() }
         ) {
-            HomeScreen(navController)
+            HomeScreen(navController, authStateManager)
         }
 
         composable(
@@ -65,7 +73,7 @@ fun NavGraph(navController: NavHostController, modifier: Modifier, themeManager:
                 )
             }
         ) {
-            LoginScreen(navController)
+            LoginScreen(navController, loginViewModel)
         }
 
         composable(
@@ -75,7 +83,7 @@ fun NavGraph(navController: NavHostController, modifier: Modifier, themeManager:
             popEnterTransition = { fadeTransition() },
             popExitTransition = { fadeExitTransition() }
         ) {
-            SearchScreen()
+            SearchScreen(searchViewModel)
         }
 
         composable(
@@ -95,7 +103,7 @@ fun NavGraph(navController: NavHostController, modifier: Modifier, themeManager:
             popEnterTransition = { fadeTransition() },
             popExitTransition = { fadeExitTransition() }
         ) {
-            ProfileScreen(navController, themeManager)
+            ProfileScreen(navController, themeManager, profileViewModel, logoutViewModel)
         }
     }
 }

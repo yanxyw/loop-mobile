@@ -30,6 +30,10 @@ class LogoutViewModel(
         }
     }
 
+    fun clearState() {
+        _state.value = LogoutState()
+    }
+
     fun observeState(callback: (LogoutState) -> Unit) {
         scope.launch {
             state.collect(callback)

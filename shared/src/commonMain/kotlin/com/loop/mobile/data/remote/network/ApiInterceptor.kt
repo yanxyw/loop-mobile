@@ -40,7 +40,7 @@ fun createAuthPlugin() = createClientPlugin("AuthPlugin", ::ApiInterceptorConfig
     onRequest { request, _ ->
         logger?.log("Auth plugin - Request: ${request.url}")
 
-        if (request.url.encodedPath.startsWith("/users")) {
+        if (request.url.encodedPath.contains("/users/me")) {
             // Add Bearer token (Access Token) for /users requests
             request.headers.remove(HttpHeaders.Authorization)
             val accessToken = tokenProvider()

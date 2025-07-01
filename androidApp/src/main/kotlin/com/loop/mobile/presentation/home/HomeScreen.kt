@@ -18,11 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.loop.mobile.domain.auth.AuthStateManager
 import com.loop.mobile.presentation.navigation.Screen
-import org.koin.compose.koinInject
 
 @Composable
-fun HomeScreen(navController: NavController) {
-    val authStateManager: AuthStateManager = koinInject()
+fun HomeScreen(navController: NavController, authStateManager: AuthStateManager) {
     val user by authStateManager.user.collectAsState()
 
     Column(

@@ -28,25 +28,27 @@ import coil.compose.AsyncImage
 import com.loop.mobile.presentation.auth.logout.LogoutViewModel
 import com.loop.mobile.presentation.navigation.Screen
 import com.loop.mobile.presentation.theme.ThemeManager
-import org.koin.compose.koinInject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    themeManager: ThemeManager
+    themeManager: ThemeManager,
+    profileViewModel: ProfileViewModel,
+    logoutViewModel: LogoutViewModel
 ) {
-    val viewModel: ProfileViewModel = koinInject()
-    val logoutViewModel: LogoutViewModel = koinInject()
-    val state by viewModel.state.collectAsState()
+    val state by profileViewModel.state.collectAsState()
     val logoutState by logoutViewModel.state.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.onIntent(ProfileAction.LoadProfile)
+    LaunchedEffect(state.user) {
+        if (state.user == null && !state.isLoading) {
+            profileViewModel.onIntent(ProfileAction.LoadProfile)
+        }
     }
 
     LaunchedEffect(logoutState.isSuccess) {
         if (logoutState.isSuccess) {
+            logoutViewModel.clearState()
             navController.navigate(Screen.Login.route) {
                 popUpTo(Screen.Profile.route) { inclusive = true }
             }

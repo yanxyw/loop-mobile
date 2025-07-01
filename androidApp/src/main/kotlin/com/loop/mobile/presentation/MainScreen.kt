@@ -24,9 +24,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.loop.mobile.domain.auth.AuthStateManager
+import com.loop.mobile.presentation.auth.login.LoginViewModel
+import com.loop.mobile.presentation.auth.logout.LogoutViewModel
 import com.loop.mobile.presentation.navigation.NavGraph
 import com.loop.mobile.presentation.navigation.Screen
+import com.loop.mobile.presentation.profile.ProfileViewModel
+import com.loop.mobile.presentation.search.SearchViewModel
 import com.loop.mobile.presentation.theme.ThemeManager
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,6 +41,12 @@ fun MainScreen(themeManager: ThemeManager) {
     val screens = listOf(Screen.Home, Screen.Search, Screen.Library, Screen.Profile)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+
+    val profileViewModel: ProfileViewModel = koinInject()
+    val logoutViewModel: LogoutViewModel = koinInject()
+    val loginViewModel: LoginViewModel = koinInject()
+    val authStateManager: AuthStateManager = koinInject()
+    val searchViewModel: SearchViewModel = koinInject()
 
     // Check if current screen is an auth screen
     val isAuthScreen = currentRoute?.startsWith("auth/") == true
@@ -104,7 +116,13 @@ fun MainScreen(themeManager: ThemeManager) {
         NavGraph(
             navController = navController,
             modifier = if (shouldShowBottomNav) Modifier.padding(padding) else Modifier,
-            themeManager = themeManager
+            themeManager = themeManager,
+            authStateManager = authStateManager,
+            profileViewModel = profileViewModel,
+            loginViewModel = loginViewModel,
+            logoutViewModel = logoutViewModel,
+            searchViewModel = searchViewModel
+
         )
     }
 }

@@ -36,13 +36,11 @@ import androidx.compose.material3.Icon
 import com.loop.mobile.presentation.components.AppButton
 import com.loop.mobile.presentation.components.InputField
 import com.loop.mobile.presentation.navigation.Screen
-import org.koin.compose.koinInject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun LoginScreen(navController: NavController) {
-    val viewModel: LoginViewModel = koinInject()
-    val state by viewModel.state.collectAsState()
+fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
+    val state by loginViewModel.state.collectAsState()
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -108,8 +106,8 @@ fun LoginScreen(navController: NavController) {
             InputField(
                 value = state.email,
                 label = "Email",
-                onValueChange = { viewModel.onIntent(LoginAction.OnEmailChange(it)) },
-                onBlur = { viewModel.onIntent(LoginAction.OnEmailBlur) },
+                onValueChange = { loginViewModel.onIntent(LoginAction.OnEmailChange(it)) },
+                onBlur = { loginViewModel.onIntent(LoginAction.OnEmailBlur) },
                 error = if (state.emailTouched) state.emailError else null,
                 imeAction = ImeAction.Next,
                 keyboardType = KeyboardType.Email,
@@ -121,14 +119,14 @@ fun LoginScreen(navController: NavController) {
             InputField(
                 value = state.password,
                 label = "Password",
-                onValueChange = { viewModel.onIntent(LoginAction.OnPasswordChange(it)) },
-                onBlur = { viewModel.onIntent(LoginAction.OnPasswordBlur) },
+                onValueChange = { loginViewModel.onIntent(LoginAction.OnPasswordChange(it)) },
+                onBlur = { loginViewModel.onIntent(LoginAction.OnPasswordBlur) },
                 error = if (state.passwordTouched) state.passwordError else null,
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Password,
                 onImeAction = {
                     focusManager.clearFocus()
-                    viewModel.onIntent(LoginAction.OnLogin)
+                    loginViewModel.onIntent(LoginAction.OnLogin)
                 },
                 focusRequester = passwordFocusRequester
             )
@@ -145,7 +143,7 @@ fun LoginScreen(navController: NavController) {
             }
 
             AppButton(
-                onClick = { viewModel.onIntent(LoginAction.OnLogin) },
+                onClick = { loginViewModel.onIntent(LoginAction.OnLogin) },
                 enabled = !state.isLoading,
                 isLoading = state.isLoading,
             ) {

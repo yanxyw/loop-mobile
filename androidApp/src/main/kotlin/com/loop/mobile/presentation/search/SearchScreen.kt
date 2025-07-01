@@ -28,13 +28,11 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
-import org.koin.compose.koinInject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchScreen() {
-    val viewModel: SearchViewModel = koinInject()
-    val state by viewModel.state.collectAsState()
+fun SearchScreen(searchViewModel: SearchViewModel) {
+    val state by searchViewModel.state.collectAsState()
     val focusManager: FocusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -58,7 +56,7 @@ fun SearchScreen() {
         ) {
             OutlinedTextField(
                 value = state.query,
-                onValueChange = { viewModel.onIntent(SearchAction.OnQueryChange(it)) },
+                onValueChange = { searchViewModel.onIntent(SearchAction.OnQueryChange(it)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
@@ -80,7 +78,7 @@ fun SearchScreen() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { viewModel.onIntent(SearchAction.OnSearch) },
+                onClick = { searchViewModel.onIntent(SearchAction.OnSearch) },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors()
             ) {
