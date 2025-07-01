@@ -51,8 +51,10 @@ struct iOSApp: App {
         ) { error in
             if let error = error {
                 print("Failed to restore auth state: \(error)")
+                continuation.resume(throwing: error) // Resume with error
             } else {
                 print("Auth state restored successfully.")
+                continuation.resume(returning: ()) // Resume normally
             }
         }
     }

@@ -28,6 +28,10 @@ class ProfileViewModelWrapper: ObservableObject {
     func loadProfile() {
         onIntent(ProfileActionLoadProfile())
     }
+    
+    func clearProfile() {
+        viewModel.clearProfile()
+    }
 
     deinit {
         viewModel.clear()

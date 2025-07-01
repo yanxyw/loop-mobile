@@ -2,7 +2,7 @@ import SwiftUI
 import shared
 
 struct SearchScreen: View {
-    @StateObject private var viewModelWrapper = SearchViewModelWrapper()
+    @ObservedObject var searchViewModelWrapper: SearchViewModelWrapper
     @EnvironmentObject var themeStateHolder: ThemeStateHolder
     let colors: IOSColorScheme
 
@@ -15,12 +15,12 @@ struct SearchScreen: View {
             VStack(spacing: 12) {
                 // Search area with custom background
                 VStack(spacing: 8) {
-                    TextField("Search", text: $viewModelWrapper.query)
+                    TextField("Search", text: $searchViewModelWrapper.query)
                         .textFieldStyle(.roundedBorder)
                         .padding(.horizontal)
 
                     Button("Search") {
-                        viewModelWrapper.search()
+                        searchViewModelWrapper.search()
                     }
                     .padding(.horizontal)
                 }
@@ -28,11 +28,11 @@ struct SearchScreen: View {
                 .cornerRadius(10)
                 .padding()
 
-                if viewModelWrapper.searchState.isLoading {
+                if searchViewModelWrapper.searchState.isLoading {
                     ProgressView()
                         .padding()
                 } else {
-                    List(viewModelWrapper.searchState.results, id: \.self) { result in
+                    List(searchViewModelWrapper.searchState.results, id: \.self) { result in
                         Text(result)
                             .foregroundColor(Color(colors.primary))
                     }
@@ -44,7 +44,7 @@ struct SearchScreen: View {
         }
         .animation(.default, value: colors.background)
         .onAppear {
-            viewModelWrapper.start()
+            searchViewModelWrapper.start()
         }
     }
 }

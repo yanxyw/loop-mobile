@@ -55,8 +55,6 @@ struct ProfileScreen: View {
 
                 Spacer()
 
-                Text("Is logged out: \(logoutViewModelWrapper.state.isSuccess ? "true" : "false")")
-
                 VStack(alignment: .leading) {
                     Text("Appearance")
                         .font(.headline)
@@ -71,11 +69,13 @@ struct ProfileScreen: View {
         .onAppear {
             profileViewModelWrapper.start()
             logoutViewModelWrapper.start()
-            profileViewModelWrapper.loadProfile()
+            if profileViewModelWrapper.state.user == nil && !profileViewModelWrapper.state.isLoading {
+                profileViewModelWrapper.loadProfile()
+            }
         }
         .onChange(of: logoutViewModelWrapper.state.isSuccess) { success in
-            print("Logout success changed: \(success)")
             if success {
+                profileViewModelWrapper.clearProfile()
                 onLogoutSuccess()
             }
         }

@@ -4,8 +4,10 @@ import shared
 struct MainTabView: View {
     @EnvironmentObject var themeStateHolder: ThemeStateHolder
     @StateObject private var authWrapper = AuthStateWrapper(manager: AuthStateManagerInjector().authStateManager)
+    @StateObject private var loginViewModelWrapper = LoginViewModelWrapper()
     @StateObject private var profileViewModelWrapper = ProfileViewModelWrapper()
     @StateObject private var logoutViewModelWrapper = LogoutViewModelWrapper()
+    @StateObject private var searchViewModelWrapper = SearchViewModelWrapper()
     @State private var showLogin = false
     @State private var selectedTab: Tab = .home
 
@@ -45,12 +47,15 @@ struct MainTabView: View {
                             showLogin = true
                         }
                         .navigationDestination(isPresented: $showLogin) {
-                            LoginScreen()
+                            LoginScreen(loginViewModelWrapper: loginViewModelWrapper)
                         }
                     }
                 case .search:
                     NavigationStack {
-                        SearchScreen(colors: colors)
+                        SearchScreen(
+                            searchViewModelWrapper: searchViewModelWrapper,
+                            colors: colors
+                        )
                     }
                 case .library:
                     NavigationStack {
@@ -66,7 +71,7 @@ struct MainTabView: View {
                             showLogin = true
                         }
                         .navigationDestination(isPresented: $showLogin) {
-                            LoginScreen()
+                            LoginScreen(loginViewModelWrapper: loginViewModelWrapper)
                         }
                     }
                 }

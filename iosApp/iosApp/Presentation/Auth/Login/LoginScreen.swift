@@ -2,27 +2,27 @@ import SwiftUI
 import shared
 
 struct LoginScreen: View {
-    @StateObject private var viewModelWrapper = LoginViewModelWrapper()
+    @ObservedObject var loginViewModelWrapper: LoginViewModelWrapper
 
     var body: some View {
         VStack(spacing: 20) {
-            TextField("Email", text: $viewModelWrapper.email)
+            TextField("Email", text: $loginViewModelWrapper.email)
                 .textFieldStyle(.roundedBorder)
                 .keyboardType(.emailAddress)
                 .autocapitalization(.none)
 
-            SecureField("Password", text: $viewModelWrapper.password)
+            SecureField("Password", text: $loginViewModelWrapper.password)
                 .textFieldStyle(.roundedBorder)
 
-            if viewModelWrapper.state.isLoading {
+            if loginViewModelWrapper.state.isLoading {
                 ProgressView()
             } else {
                 Button("Login") {
-                    viewModelWrapper.login()
+                    loginViewModelWrapper.login()
                 }
             }
 
-            if let error = viewModelWrapper.state.error {
+            if let error = loginViewModelWrapper.state.error {
                 Text(error)
                     .foregroundColor(.red)
                     .font(.caption)
@@ -30,7 +30,7 @@ struct LoginScreen: View {
         }
         .padding()
         .onAppear {
-            viewModelWrapper.start()
+            loginViewModelWrapper.start()
         }
     }
 }

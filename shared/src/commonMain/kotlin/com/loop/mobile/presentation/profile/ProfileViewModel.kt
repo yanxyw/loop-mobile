@@ -50,6 +50,10 @@ class ProfileViewModel(
         }
     }
 
+    fun clearProfile() {
+        _state.value = ProfileState()
+    }
+
     fun observeState(callback: (ProfileState) -> Unit) {
         scope.launch {
             state.collect(callback)
