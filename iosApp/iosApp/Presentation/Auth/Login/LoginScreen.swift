@@ -3,6 +3,8 @@ import shared
 
 struct LoginScreen: View {
     @ObservedObject var loginViewModelWrapper: LoginViewModelWrapper
+    let colors: IOSColorScheme
+    let onLoginSuccess: () -> Void
 
     var body: some View {
         VStack(spacing: 20) {
@@ -31,6 +33,11 @@ struct LoginScreen: View {
         .padding()
         .onAppear {
             loginViewModelWrapper.start()
+        }
+        .onChange(of: loginViewModelWrapper.state.isSuccess) { success in
+            if success {
+                onLoginSuccess()
+            }
         }
     }
 }

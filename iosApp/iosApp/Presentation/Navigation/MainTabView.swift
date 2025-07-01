@@ -47,7 +47,10 @@ struct MainTabView: View {
                             showLogin = true
                         }
                         .navigationDestination(isPresented: $showLogin) {
-                            LoginScreen(loginViewModelWrapper: loginViewModelWrapper)
+                            LoginScreen(loginViewModelWrapper: loginViewModelWrapper, colors: colors) {
+                                showLogin = false
+                                selectedTab = .home
+                            }
                         }
                     }
                 case .search:
@@ -71,7 +74,10 @@ struct MainTabView: View {
                             showLogin = true
                         }
                         .navigationDestination(isPresented: $showLogin) {
-                            LoginScreen(loginViewModelWrapper: loginViewModelWrapper)
+                            LoginScreen(loginViewModelWrapper: loginViewModelWrapper, colors: colors) {
+                                showLogin = false
+                                selectedTab = .home
+                            }
                         }
                     }
                 }
