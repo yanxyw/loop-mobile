@@ -63,6 +63,8 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.ktor.client.android)
             implementation(libs.koin.compose)
+            implementation(libs.androidx.material3.android)
+            implementation(libs.androidx.security.crypto)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -84,7 +86,4 @@ android {
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
     }
-}
-dependencies {
-    implementation(libs.androidx.material3.android)
 }
