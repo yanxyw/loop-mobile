@@ -49,8 +49,9 @@ fun ProfileScreen(
     LaunchedEffect(logoutState.isSuccess) {
         if (logoutState.isSuccess) {
             logoutViewModel.clearState()
-            navController.navigate(Screen.Login.route) {
-                popUpTo(Screen.Profile.route) { inclusive = true }
+            profileViewModel.clearProfile()
+            navController.navigate(Screen.Home.route) {
+                popUpTo(0) { inclusive = true }
             }
         }
     }

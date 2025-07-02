@@ -46,6 +46,10 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
     val interactionSource = remember { MutableInteractionSource() }
     val passwordFocusRequester = remember { FocusRequester() }
 
+    LaunchedEffect(Unit) {
+        loginViewModel.clearState()  // Reset login success/error info on entering login screen
+    }
+
     LaunchedEffect(state.isSuccess) {
         if (state.isSuccess) {
             // Clear focus and hide keyboard on success

@@ -10,6 +10,7 @@ class LoopApp : Application() {
 
         initKoin(
             appContext = { androidContext(this@LoopApp) },
+            baseUrl = BuildConfig.API_BASE_URL
         )
     }
 }

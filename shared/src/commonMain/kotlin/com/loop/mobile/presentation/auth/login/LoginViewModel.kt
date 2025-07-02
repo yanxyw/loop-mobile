@@ -97,6 +97,10 @@ class LoginViewModel(
         }
     }
 
+    fun clearState() {
+        _state.value = LoginState()
+    }
+
     fun observeState(callback: (LoginState) -> Unit) {
         scope.launch {
             state.collect(callback)
