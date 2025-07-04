@@ -13,7 +13,7 @@ kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_21)
         }
     }
 
@@ -62,9 +62,17 @@ kotlin {
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)
+            implementation(libs.koin.android)
+            implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.koin.compose)
             implementation(libs.androidx.material3.android)
             implementation(libs.androidx.security.crypto)
+            implementation(libs.androidx.core.ktx)
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.compose.ui.tooling)
+            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -80,8 +88,8 @@ android {
     namespace = "com.loop.mobile.shared"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
