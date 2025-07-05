@@ -69,8 +69,11 @@ struct ProfileScreen: View {
         .onAppear {
             profileViewModelWrapper.start()
             logoutViewModelWrapper.start()
-            if profileViewModelWrapper.state.user == nil && !profileViewModelWrapper.state.isLoading {
-                profileViewModelWrapper.loadProfile()
+
+            DispatchQueue.main.async {
+                if profileViewModelWrapper.state.user == nil && !profileViewModelWrapper.state.isLoading {
+                    profileViewModelWrapper.loadProfile()
+                }
             }
         }
         .onChange(of: logoutViewModelWrapper.state.isSuccess) { success in

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinAndroid)
 }
 
 android {
@@ -47,6 +48,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
+    kotlinOptions {
+        jvmTarget = "21"
+    }
 }
 
 dependencies {
@@ -60,5 +64,6 @@ dependencies {
     implementation(libs.core.splashscreen)
     implementation(libs.material3.extra)
     implementation(libs.material)
+    implementation(libs.core.ktx)
 }
 
