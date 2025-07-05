@@ -7,30 +7,35 @@ struct LoginScreen: View {
     let onLoginSuccess: () -> Void
 
     var body: some View {
-        VStack(spacing: 20) {
-            TextField("Email", text: $loginViewModelWrapper.email)
-                .textFieldStyle(.roundedBorder)
-                .keyboardType(.emailAddress)
-                .autocapitalization(.none)
+        ZStack {
+            Color.clear // Background to capture taps
 
-            SecureField("Password", text: $loginViewModelWrapper.password)
-                .textFieldStyle(.roundedBorder)
+            VStack(spacing: 20) {
+                TextField("Email", text: $loginViewModelWrapper.email)
+                    .textFieldStyle(.roundedBorder)
+                    .keyboardType(.emailAddress)
+                    .autocapitalization(.none)
 
-            if loginViewModelWrapper.state.isLoading {
-                ProgressView()
-            } else {
-                Button("Login") {
-                    loginViewModelWrapper.login()
+                SecureField("Password", text: $loginViewModelWrapper.password)
+                    .textFieldStyle(.roundedBorder)
+
+                if loginViewModelWrapper.state.isLoading {
+                    ProgressView()
+                } else {
+                    Button("Login") {
+                        loginViewModelWrapper.login()
+                    }
+                }
+
+                if let error = loginViewModelWrapper.state.error {
+                    Text(error)
+                        .foregroundColor(.red)
+                        .font(.caption)
                 }
             }
-
-            if let error = loginViewModelWrapper.state.error {
-                Text(error)
-                    .foregroundColor(.red)
-                    .font(.caption)
-            }
+            .padding()
         }
-        .padding()
+        .hideKeyboardOnTap() // 👈 Important
         .onAppear {
             loginViewModelWrapper.start()
         }
