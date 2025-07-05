@@ -15,7 +15,7 @@ struct LoginScreen: View {
                     presentationMode.wrappedValue.dismiss()
                 }) {
                     Image(systemName: "chevron.left")
-                        .font(.title3)
+                        .font(AppFont.bitter(18, weight: .semibold))
                         .foregroundColor(Color(colors.onSurface))
                         .frame(width: 44, height: 44) // tappable area
                 }
@@ -57,6 +57,7 @@ struct LoginScreen: View {
                 
                 // Login button
                 Button(action: {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     loginViewModelWrapper.login()
                 }) {
                     HStack {
@@ -95,6 +96,7 @@ struct LoginScreen: View {
         }
         .onChange(of: loginViewModelWrapper.state.isSuccess) { success in
             if success {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 onLoginSuccess()
             }
         }
