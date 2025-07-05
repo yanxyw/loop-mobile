@@ -79,6 +79,11 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		3BD6113F2E197DE3006C5B3A /* Components */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Components;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -224,6 +229,7 @@
 		A89F74A62D8E4512009BB188 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				3BD6113F2E197DE3006C5B3A /* Components */,
 				3B2B617F2E0F5AF7002D7FB5 /* Theme */,
 				3B0DCC902E0ED8D200577427 /* Profile */,
 				3B0DCC8D2E0ED8C300577427 /* Library */,
@@ -276,6 +282,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				3B212D9A2E117614002D6A17 /* Fonts */,
+				3BD6113F2E197DE3006C5B3A /* Components */,
 			);
 			name = iosApp;
 			productName = iosApp;
