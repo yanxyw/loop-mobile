@@ -7,7 +7,9 @@ struct AppTextField: View {
     let placeholder: String
     @Binding var text: String
     var isSecure: Bool = false
+
     @FocusState private var isFocused: Bool
+    @State private var isTextVisible: Bool = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -23,20 +25,33 @@ struct AppTextField: View {
                         .padding(.vertical, 14)
                 }
 
-                Group {
+                HStack {
+                    Group {
+                        if isSecure && !isTextVisible {
+                            SecureField("", text: $text)
+                        } else {
+                            TextField("", text: $text)
+                        }
+                    }
+                    .focused($isFocused)
+                    .foregroundColor(Color(colors.onSurface))
+                    .font(AppFont.inter(16))
+                    .padding(.vertical, 14)
+                    .padding(.leading, 14)
+
                     if isSecure {
-                        SecureField("", text: $text)  // empty placeholder here
-                            .foregroundColor(Color(colors.onSurface))
-                            .font(AppFont.inter(16))
-                        
-                    } else {
-                        TextField("", text: $text)    // empty placeholder here
-                            .foregroundColor(Color(colors.onSurface))
-                            .font(AppFont.inter(16))
+                        Button(action: {
+                            isTextVisible.toggle()
+                        }) {
+                            Image(isTextVisible ? "eye_open" : "eye_closed")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(Color(colors.outlineVariant))
+                        }
+                        .padding(.trailing, 14)
                     }
                 }
-                .focused($isFocused)
-                .padding(14)
             }
             .background(RoundedRectangle(cornerRadius: 4).stroke(Color(colors.outlineVariant)))
             .frame(height: 48)
