@@ -38,6 +38,10 @@ class LoginViewModelWrapper: ObservableObject {
     func login() {
         onIntent(LoginActionOnLogin())
     }
+    
+    func clearState() {
+        viewModel.clearState()
+    }
 
     deinit {
         viewModel.clear()

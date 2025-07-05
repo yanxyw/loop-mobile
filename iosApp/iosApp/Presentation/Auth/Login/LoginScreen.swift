@@ -5,6 +5,7 @@ struct LoginScreen: View {
     @ObservedObject var loginViewModelWrapper: LoginViewModelWrapper
     let colors: IOSColorScheme
     let onLoginSuccess: () -> Void
+    let onBack: () -> Void
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
@@ -12,7 +13,7 @@ struct LoginScreen: View {
             // Custom navigation bar
             HStack(spacing: 6) {
                 Button(action: {
-                    presentationMode.wrappedValue.dismiss()
+                    onBack()
                 }) {
                     Image(systemName: "chevron.left")
                         .font(AppFont.bitter(18, weight: .semibold))
@@ -97,6 +98,7 @@ struct LoginScreen: View {
         .onChange(of: loginViewModelWrapper.state.isSuccess) { success in
             if success {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                loginViewModelWrapper.clearState()
                 onLoginSuccess()
             }
         }

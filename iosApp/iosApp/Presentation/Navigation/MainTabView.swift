@@ -38,90 +38,89 @@ struct MainTabView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            ZStack {
-                switch selectedTab {
-                case .home:
-                    NavigationStack {
-                        HomeScreen(authWrapper: authWrapper, colors: colors) {
-                            showLogin = true
-                        }
-                        .navigationDestination(isPresented: $showLogin) {
-                            LoginScreen(loginViewModelWrapper: loginViewModelWrapper, colors: colors) {
-                                showLogin = false
-                                selectedTab = .home
+        ZStack {
+            VStack(spacing: 0) {
+                ZStack {
+                    switch selectedTab {
+                    case .home:
+                        NavigationStack {
+                            HomeScreen(authWrapper: authWrapper, colors: colors) {
+                                withAnimation {
+                                    showLogin = true
+                                }
                             }
                         }
-                    }
-                case .search:
-                    NavigationStack {
-                        SearchScreen(
-                            searchViewModelWrapper: searchViewModelWrapper,
-                            colors: colors
-                        )
-                    }
-                case .library:
-                    NavigationStack {
-                        LibraryScreen(colors: colors)
-                    }
-                case .profile:
-                    NavigationStack {
-                        ProfileScreen(
-                            profileViewModelWrapper: profileViewModelWrapper,
-                            logoutViewModelWrapper: logoutViewModelWrapper,
-                            colors: colors
-                        ) {
-                            showLogin = true
+                    case .search:
+                        NavigationStack {
+                            SearchScreen(
+                                searchViewModelWrapper: searchViewModelWrapper,
+                                colors: colors
+                            )
                         }
-                        .navigationDestination(isPresented: $showLogin) {
-                            LoginScreen(loginViewModelWrapper: loginViewModelWrapper, colors: colors) {
-                                showLogin = false
-                                selectedTab = .home
+                    case .library:
+                        NavigationStack {
+                            LibraryScreen(colors: colors)
+                        }
+                    case .profile:
+                        NavigationStack {
+                            ProfileScreen(
+                                profileViewModelWrapper: profileViewModelWrapper,
+                                logoutViewModelWrapper: logoutViewModelWrapper,
+                                colors: colors
+                            ) {
+                                withAnimation {
+                                    showLogin = true
+                                }
                             }
                         }
                     }
                 }
+                // Tab bar
+                HStack {
+                    ForEach(Tab.allCases, id: \.self) { tab in
+                        Spacer()
+                        Button(action: {
+                            selectedTab = tab
+                        }) {
+                            VStack {
+                                Image(selectedTab == tab ? tab.iconName(isSelected: true) : tab.iconName(isSelected: false))
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 20, height: 20)
+                                Text(tab.label)
+                                    .font(AppFont.inter(12, weight: .light))
+                            }
+                            .foregroundColor(selectedTab == tab ? Color(colors.primary) : Color(colors.onSurfaceVariant))
+                        }
+                        Spacer()
+                    }
+                }
+                .padding(.vertical, 8)
+                .background(Color(colors.background))
             }
 
-            HStack {
-                ForEach(Tab.allCases, id: \.self) { tab in
-                    Spacer()
-                    Button(action: {
-                        selectedTab = tab
-                    }) {
-                        VStack {
-                            if tab == .home {
-                                Image(selectedTab == .home ? "home_filled" : "home_outlined")
-                                    .renderingMode(.template)
-                                    .resizable()
-                                    .frame(width: 20, height: 20)
-                            } else if tab == .search {
-                                Image(selectedTab == .search ? "search_filled" : "search_outlined")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 20, height: 20)
-                            } else if tab == .library {
-                                Image(selectedTab == .library ? "library_filled" : "library_outlined")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 20, height: 20)
-                            } else {
-                                Image(selectedTab == .profile ? "profile_filled" : "profile_outlined")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 20, height: 20)
-                            }
-                            Text(tab.label)
-                                .font(AppFont.inter(12, weight: .light))
+            // Overlay LoginScreen when needed
+            if showLogin {
+                LoginScreen(
+                    loginViewModelWrapper: loginViewModelWrapper,
+                    colors: colors,
+                    onLoginSuccess: {
+                        withAnimation {
+                            showLogin = false
+                            selectedTab = .home
                         }
-                        .foregroundColor(selectedTab == tab ? Color(colors.primary) : Color(colors.onSurfaceVariant))
+                    },
+                    onBack: {
+                        withAnimation {
+                            showLogin = false
+                        }
                     }
-                    Spacer()
-                }
+                )
+                .transition(.move(edge: .trailing)) // slide in from right
+                .zIndex(1)
             }
-            .padding(.vertical, 8)
-            .background(Color(colors.background))
         }
         .ignoresSafeArea(.keyboard)
+        .animation(.easeInOut, value: showLogin)
     }
 }
