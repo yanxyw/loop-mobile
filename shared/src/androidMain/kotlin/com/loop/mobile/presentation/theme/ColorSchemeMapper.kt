@@ -13,7 +13,8 @@ fun AppColorScheme.toLightColorScheme(): ColorScheme = lightColorScheme(
     onSurface = Color(onSurface),
     outline = Color(outline),
     outlineVariant = Color(outlineVariant),
-    error = Color(error)
+    error = Color(error),
+    secondary = Color(secondary)
 )
 
 fun AppColorScheme.toDarkColorScheme(): ColorScheme = darkColorScheme(
@@ -24,5 +25,6 @@ fun AppColorScheme.toDarkColorScheme(): ColorScheme = darkColorScheme(
     onSurface = Color(onSurface),
     outline = Color(outline),
     outlineVariant = Color(outlineVariant),
-    error = Color(error)
+    error = Color(error),
+    secondary = Color(secondary)
 )

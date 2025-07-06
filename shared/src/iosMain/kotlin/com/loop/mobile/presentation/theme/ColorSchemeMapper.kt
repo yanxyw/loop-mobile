@@ -11,7 +11,8 @@ class IOSColorScheme(
     val outline: UIColor,
     val outlineVariant: UIColor,
     val error: UIColor,
-    val onSurfaceVariant: UIColor
+    val onSurfaceVariant: UIColor,
+    val secondary: UIColor,
 )
 
 fun AppColorScheme.toIOSColorScheme(): IOSColorScheme = IOSColorScheme(
@@ -23,7 +24,8 @@ fun AppColorScheme.toIOSColorScheme(): IOSColorScheme = IOSColorScheme(
     outline = outline.toUIColor(),
     outlineVariant = outlineVariant.toUIColor(),
     error = error.toUIColor(),
-    onSurfaceVariant = onSurfaceVariant.toUIColor()
+    onSurfaceVariant = onSurfaceVariant.toUIColor(),
+    secondary = secondary.toUIColor()
 )
 
 fun Long.toUIColor(): UIColor {

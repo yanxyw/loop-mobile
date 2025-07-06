@@ -16,6 +16,7 @@ struct iOSApp: App {
                     .environmentObject(themeStateHolder)
             } else {
                 SplashView()
+                    .environmentObject(themeStateHolder)
                     .onAppear {
                         restoreAuth {
                             DispatchQueue.main.async {

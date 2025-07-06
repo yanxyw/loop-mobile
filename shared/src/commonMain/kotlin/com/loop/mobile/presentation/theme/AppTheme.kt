@@ -13,7 +13,8 @@ data class AppColorScheme(
     val outline: Long,
     val outlineVariant: Long,
     val error: Long,
-    val onSurfaceVariant: Long
+    val onSurfaceVariant: Long,
+    val secondary: Long,
 )
 
 object AppTheme {
@@ -26,7 +27,8 @@ object AppTheme {
         outline = AppColors.outlineLight,
         outlineVariant = AppColors.outlineVariantLight,
         error = AppColors.errorLight,
-        onSurfaceVariant = AppColors.onSurfaceVariantLight
+        onSurfaceVariant = AppColors.onSurfaceVariantLight,
+        secondary = AppColors.secondaryLight
     )
 
     val darkColors = AppColorScheme(
@@ -38,7 +40,8 @@ object AppTheme {
         outline = AppColors.outlineDark,
         outlineVariant = AppColors.outlineVariantDark,
         error = AppColors.errorDark,
-        onSurfaceVariant = AppColors.onSurfaceVariantDark
+        onSurfaceVariant = AppColors.onSurfaceVariantDark,
+        secondary = AppColors.secondaryDark
     )
 }
 

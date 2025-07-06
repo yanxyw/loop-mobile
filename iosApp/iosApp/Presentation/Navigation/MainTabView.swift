@@ -120,7 +120,6 @@ struct MainTabView: View {
                 .zIndex(1)
             }
         }
-        .ignoresSafeArea(.keyboard)
         .animation(.easeInOut, value: showLogin)
     }
 }
