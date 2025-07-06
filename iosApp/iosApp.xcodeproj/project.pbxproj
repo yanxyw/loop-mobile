@@ -21,7 +21,7 @@
 		3B2B61822E0F5B09002D7FB5 /* ThemeSwitcherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B61812E0F5B09002D7FB5 /* ThemeSwitcherView.swift */; };
 		3BD31E282E060D7A000CBAC0 /* LoginViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD31E272E060D7A000CBAC0 /* LoginViewModelWrapper.swift */; };
 		3BD31E2C2E060D94000CBAC0 /* LoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD31E292E060D94000CBAC0 /* LoginScreen.swift */; };
-		3BD611142E197B33006C5B3A /* View+Keyboard.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD611132E197B30006C5B3A /* View+Keyboard.swift.swift */; };
+		3BD611142E197B33006C5B3A /* View+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD611132E197B30006C5B3A /* View+Keyboard.swift */; };
 		3BD62B642E12EDD700AB0642 /* ProfileViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD62B632E12EDD300AB0642 /* ProfileViewModelWrapper.swift */; };
 		3BD62B662E12EF6B00AB0642 /* LogoutViewModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD62B652E12EF6700AB0642 /* LogoutViewModelWrapper.swift */; };
 		81BF2113A0FC3343809BE4A9 /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8EE72D0A389EA6172F70982 /* Pods_iosApp.framework */; };
@@ -58,7 +58,7 @@
 		3B2B61812E0F5B09002D7FB5 /* ThemeSwitcherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSwitcherView.swift; sourceTree = "<group>"; };
 		3BD31E272E060D7A000CBAC0 /* LoginViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelWrapper.swift; sourceTree = "<group>"; };
 		3BD31E292E060D94000CBAC0 /* LoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreen.swift; sourceTree = "<group>"; };
-		3BD611132E197B30006C5B3A /* View+Keyboard.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Keyboard.swift.swift"; sourceTree = "<group>"; };
+		3BD611132E197B30006C5B3A /* View+Keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Keyboard.swift"; sourceTree = "<group>"; };
 		3BD62B632E12EDD300AB0642 /* ProfileViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModelWrapper.swift; sourceTree = "<group>"; };
 		3BD62B652E12EF6700AB0642 /* LogoutViewModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutViewModelWrapper.swift; sourceTree = "<group>"; };
 		49E39E0B400300C3DFCCFBB7 /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -195,7 +195,7 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
-				3BD611132E197B30006C5B3A /* View+Keyboard.swift.swift */,
+				3BD611132E197B30006C5B3A /* View+Keyboard.swift */,
 				3B212D9A2E117614002D6A17 /* Fonts */,
 				3B2B61792E0F5AAC002D7FB5 /* Flow+Combine.swift */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
@@ -409,7 +409,7 @@
 				A89F74AA2D8E4512009BB188 /* SearchScreen.swift in Sources */,
 				3BD62B642E12EDD700AB0642 /* ProfileViewModelWrapper.swift in Sources */,
 				3B2B61802E0F5AF7002D7FB5 /* ThemeStateHolder.swift in Sources */,
-				3BD611142E197B33006C5B3A /* View+Keyboard.swift.swift in Sources */,
+				3BD611142E197B33006C5B3A /* View+Keyboard.swift in Sources */,
 				3B0DCC8E2E0ED8C300577427 /* LibraryScreen.swift in Sources */,
 				3B0DCC8B2E0ED8B200577427 /* HomeScreen.swift in Sources */,
 				3BD62B662E12EF6B00AB0642 /* LogoutViewModelWrapper.swift in Sources */,
