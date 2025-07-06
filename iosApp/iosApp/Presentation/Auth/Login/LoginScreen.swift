@@ -45,7 +45,12 @@ struct LoginScreen: View {
                     colors: colors,
                     label: "Email",
                     placeholder: "you@example.com",
-                    text: $loginViewModelWrapper.email
+                    text: $loginViewModelWrapper.email,
+                    onBlur: {
+                        loginViewModelWrapper.onIntent(LoginActionOnEmailBlur())
+                    },
+                    error: loginViewModelWrapper.state.emailError,
+                    touched: loginViewModelWrapper.state.emailTouched
                 )
 
                 AppTextField(
@@ -53,7 +58,12 @@ struct LoginScreen: View {
                     label: "Password",
                     placeholder: "••••••••",
                     text: $loginViewModelWrapper.password,
-                    isSecure: true
+                    isSecure: true,
+                    onBlur: {
+                        loginViewModelWrapper.onIntent(LoginActionOnPasswordBlur())
+                    },
+                    error: loginViewModelWrapper.state.passwordError,
+                    touched: loginViewModelWrapper.state.passwordTouched
                 )
                 
                 // Login button

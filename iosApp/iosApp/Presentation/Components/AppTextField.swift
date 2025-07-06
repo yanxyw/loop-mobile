@@ -7,6 +7,9 @@ struct AppTextField: View {
     let placeholder: String
     @Binding var text: String
     var isSecure: Bool = false
+    var onBlur: (() -> Void)? = nil
+    var error: String? = nil
+    var touched: Bool = false
 
     @FocusState private var isFocused: Bool
     @State private var isTextVisible: Bool = false
@@ -34,6 +37,11 @@ struct AppTextField: View {
                         }
                     }
                     .focused($isFocused)
+                    .onChange(of: isFocused) { newValue in
+                        if !newValue {
+                            onBlur?()
+                        }
+                    }
                     .foregroundColor(Color(colors.onSurface))
                     .frame(height: 20)
                     .font(AppFont.inter(16))
@@ -54,8 +62,27 @@ struct AppTextField: View {
                     }
                 }
             }
-            .background(RoundedRectangle(cornerRadius: 4).stroke(Color(colors.outlineVariant)))
+            .background(
+                RoundedRectangle(cornerRadius: 4)
+                    .stroke(error != nil ? Color(colors.error) : Color(colors.outlineVariant))
+            )
             .frame(height: 48)
+
+            Group {
+                if touched, let error = error {
+                    Text(error)
+                        .foregroundColor(Color(colors.error))
+                        .font(.caption)
+                        .transition(
+                            .asymmetric(
+                                insertion: .move(edge: .top).combined(with: .opacity),
+                                removal: .move(edge: .top).combined(with: .opacity)
+                            )
+                        )
+                }
+            }
+            .animation(.easeInOut(duration: 0.25), value: error)
         }
+        .animation(.easeInOut(duration: 0.25), value: error)
     }
 }
