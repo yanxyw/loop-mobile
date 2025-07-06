@@ -1,12 +1,11 @@
 import SwiftUI
 
 extension View {
-    func hideKeyboardOnTap() -> some View {
+    func hideKeyboardOnTap<T: Hashable>(focusedField: Binding<T?>) -> some View {
         self
             .contentShape(Rectangle()) // Make entire area tappable
             .onTapGesture {
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
-                                                to: nil, from: nil, for: nil)
+                focusedField.wrappedValue = nil // dismiss keyboard by clearing focus
             }
     }
 }

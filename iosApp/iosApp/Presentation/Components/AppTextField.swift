@@ -72,7 +72,7 @@ struct AppTextField: View {
                 if touched, let error = error {
                     Text(error)
                         .foregroundColor(Color(colors.error))
-                        .font(.caption)
+                        .font(AppFont.inter(14))
                         .transition(
                             .asymmetric(
                                 insertion: .move(edge: .top).combined(with: .opacity),
