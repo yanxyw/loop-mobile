@@ -10,6 +10,7 @@ struct MainTabView: View {
     @StateObject private var searchViewModelWrapper = SearchViewModelWrapper()
     @State private var showLogin = false
     @State private var selectedTab: Tab = .home
+    @State private var loginOffset: CGFloat = 0
 
     var colors: IOSColorScheme {
         themeStateHolder.getColors()
@@ -38,6 +39,26 @@ struct MainTabView: View {
     }
 
     var body: some View {
+        let drag = DragGesture()
+            .onChanged { value in
+                loginOffset = max(value.translation.width, 0)
+            }
+            .onEnded { value in
+                let dragThreshold: CGFloat = 100
+                let velocityThreshold: CGFloat = 500
+                
+                if value.translation.width > dragThreshold || value.velocity.width > velocityThreshold {
+                    withAnimation(.easeOut(duration: 0.3)) {
+                        showLogin = false
+                        loginOffset = 0
+                    }
+                } else {
+                    withAnimation(.easeOut(duration: 0.2)) {
+                        loginOffset = 0
+                    }
+                }
+            }
+
         ZStack {
             VStack(spacing: 0) {
                 ZStack {
@@ -47,6 +68,7 @@ struct MainTabView: View {
                             HomeScreen(authWrapper: authWrapper, colors: colors) {
                                 withAnimation {
                                     showLogin = true
+                                    loginOffset = 0
                                 }
                             }
                         }
@@ -70,33 +92,38 @@ struct MainTabView: View {
                             ) {
                                 withAnimation {
                                     showLogin = true
+                                    loginOffset = 0
                                 }
                             }
                         }
                     }
                 }
-                // Tab bar
-                HStack {
-                    ForEach(Tab.allCases, id: \.self) { tab in
-                        Spacer()
-                        Button(action: {
-                            selectedTab = tab
-                        }) {
-                            VStack {
-                                Image(selectedTab == tab ? tab.iconName(isSelected: true) : tab.iconName(isSelected: false))
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 20, height: 20)
-                                Text(tab.label)
-                                    .font(AppFont.inter(12, weight: .light))
+                
+                // Tab bar - hide when login is shown
+                if !showLogin {
+                    HStack {
+                        ForEach(Tab.allCases, id: \.self) { tab in
+                            Spacer()
+                            Button(action: {
+                                selectedTab = tab
+                            }) {
+                                VStack {
+                                    Image(selectedTab == tab ? tab.iconName(isSelected: true) : tab.iconName(isSelected: false))
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 20, height: 20)
+                                    Text(tab.label)
+                                        .font(AppFont.inter(12, weight: .light))
+                                }
+                                .foregroundColor(selectedTab == tab ? Color(colors.primary) : Color(colors.onSurfaceVariant))
                             }
-                            .foregroundColor(selectedTab == tab ? Color(colors.primary) : Color(colors.onSurfaceVariant))
+                            Spacer()
                         }
-                        Spacer()
                     }
+                    .padding(.vertical, 8)
+                    .background(Color(colors.background))
+                    .transition(.move(edge: .bottom))
                 }
-                .padding(.vertical, 8)
-                .background(Color(colors.background))
             }
 
             // Overlay LoginScreen when needed
@@ -105,21 +132,26 @@ struct MainTabView: View {
                     loginViewModelWrapper: loginViewModelWrapper,
                     colors: colors,
                     onLoginSuccess: {
-                        withAnimation {
+                        withAnimation(.easeInOut(duration: 0.3)) {
                             showLogin = false
-                            selectedTab = .home
+                            loginOffset = 0
                         }
                     },
                     onBack: {
-                        withAnimation {
+                        withAnimation(.easeInOut(duration: 0.3)) {
                             showLogin = false
+                            loginOffset = 0
                         }
                     }
                 )
-                .transition(.move(edge: .trailing)) // slide in from right
+                .offset(x: loginOffset)
+                .gesture(drag)
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing),
+                    removal: .move(edge: .trailing)
+                ))
                 .zIndex(1)
             }
         }
-        .animation(.easeInOut, value: showLogin)
     }
 }
