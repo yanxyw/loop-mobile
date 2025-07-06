@@ -65,6 +65,8 @@ class LoginViewModel(
                 if (emailError != null || passwordError != null) {
                     _state.update {
                         it.copy(
+                            emailTouched = true,
+                            passwordTouched = true,
                             emailError = emailError,
                             passwordError = passwordError
                         )
