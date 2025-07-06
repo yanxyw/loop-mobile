@@ -6,18 +6,30 @@ struct iOSApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     @StateObject private var themeStateHolder = ThemeStateHolder(themeManager: ThemeManagerInjector().themeManager)
+    
+    @State private var isAuthRestored = false
 
     var body: some Scene {
         WindowGroup {
-            MainTabView()
-                .environmentObject(themeStateHolder)
-                .onAppear {
-                    restoreAuth()
-                }
+            if isAuthRestored {
+                MainTabView()
+                    .environmentObject(themeStateHolder)
+            } else {
+                SplashView()
+                    .onAppear {
+                        restoreAuth {
+                            DispatchQueue.main.async {
+                                withAnimation(.easeInOut) {
+                                    isAuthRestored = true
+                                }
+                            }
+                        }
+                    }
+            }
         }
     }
 
-    func restoreAuth() {
+    func restoreAuth(completion: @escaping () -> Void) {
         let tokenStorage = TokenStorageInjector().tokenStorage
         let userRepository = UserRepositoryInjector().userRepository
         let authStateManager = AuthStateManagerInjector().authStateManager
@@ -32,8 +44,10 @@ struct iOSApp: App {
                         continuation: continuation
                     )
                 }
+                completion()
             } catch {
                 print("Failed to restore auth state: \(error)")
+                completion()
             }
         }
     }

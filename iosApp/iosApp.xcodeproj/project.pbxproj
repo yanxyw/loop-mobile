@@ -16,6 +16,7 @@
 		3B0DCC912E0ED8D200577427 /* ProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0DCC8F2E0ED8D200577427 /* ProfileScreen.swift */; };
 		3B0DCC932E0EDF2500577427 /* AuthStateWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0DCC922E0EDF2400577427 /* AuthStateWrapper.swift */; };
 		3B212DBA2E11C678002D6A17 /* AppFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B212DB92E11C678002D6A17 /* AppFont.swift */; };
+		3B2B0B5C2E1ABE660054B396 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B0B5B2E1ABE630054B396 /* SplashView.swift */; };
 		3B2B617A2E0F5AAC002D7FB5 /* Flow+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B61792E0F5AAC002D7FB5 /* Flow+Combine.swift */; };
 		3B2B61802E0F5AF7002D7FB5 /* ThemeStateHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B617E2E0F5AF7002D7FB5 /* ThemeStateHolder.swift */; };
 		3B2B61822E0F5B09002D7FB5 /* ThemeSwitcherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2B61812E0F5B09002D7FB5 /* ThemeSwitcherView.swift */; };
@@ -53,6 +54,7 @@
 		3B0DCC8F2E0ED8D200577427 /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreen.swift; sourceTree = "<group>"; };
 		3B0DCC922E0EDF2400577427 /* AuthStateWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStateWrapper.swift; sourceTree = "<group>"; };
 		3B212DB92E11C678002D6A17 /* AppFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFont.swift; sourceTree = "<group>"; };
+		3B2B0B5B2E1ABE630054B396 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		3B2B61792E0F5AAC002D7FB5 /* Flow+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Flow+Combine.swift"; sourceTree = "<group>"; };
 		3B2B617E2E0F5AF7002D7FB5 /* ThemeStateHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeStateHolder.swift; sourceTree = "<group>"; };
 		3B2B61812E0F5B09002D7FB5 /* ThemeSwitcherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSwitcherView.swift; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 		A89F74A62D8E4512009BB188 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				3B2B0B5B2E1ABE630054B396 /* SplashView.swift */,
 				3BD6113F2E197DE3006C5B3A /* Components */,
 				3B2B617F2E0F5AF7002D7FB5 /* Theme */,
 				3B0DCC902E0ED8D200577427 /* Profile */,
@@ -417,6 +420,7 @@
 				A89F74AB2D8E4512009BB188 /* AppDelegate.swift in Sources */,
 				3B212DBA2E11C678002D6A17 /* AppFont.swift in Sources */,
 				3BD31E2C2E060D94000CBAC0 /* LoginScreen.swift in Sources */,
+				3B2B0B5C2E1ABE660054B396 /* SplashView.swift in Sources */,
 				3B0DCC912E0ED8D200577427 /* ProfileScreen.swift in Sources */,
 				3B2B61822E0F5B09002D7FB5 /* ThemeSwitcherView.swift in Sources */,
 			);
