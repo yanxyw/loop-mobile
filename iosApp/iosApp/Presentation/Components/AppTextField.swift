@@ -35,6 +35,7 @@ struct AppTextField: View {
                     }
                     .focused($isFocused)
                     .foregroundColor(Color(colors.onSurface))
+                    .frame(height: 20)
                     .font(AppFont.inter(16))
                     .padding(.vertical, 14)
                     .padding(.leading, 14)
