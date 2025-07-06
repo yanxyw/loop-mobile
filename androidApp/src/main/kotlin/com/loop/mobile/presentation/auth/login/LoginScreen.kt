@@ -87,7 +87,10 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                 contentDescription = "Back",
                 modifier = Modifier
-                    .clickable { navController.popBackStack() }
+                    .clickable {
+                        loginViewModel.clearState()
+                        navController.popBackStack()
+                    }
                     .size(24.dp)
                     .align(Alignment.CenterStart)
             )

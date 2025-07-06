@@ -20,6 +20,7 @@ struct LoginScreen: View {
                 // Custom navigation bar
                 HStack(spacing: 6) {
                     Button(action: {
+                        loginViewModelWrapper.clearState()
                         onBack()
                     }) {
                         Image(systemName: "chevron.left")
