@@ -52,7 +52,7 @@ val Typography = Typography(
     bodySmall = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.Light,
-        fontSize = 12.sp
+        fontSize = 14.sp
     ),
     labelLarge = TextStyle(
         fontFamily = Inter,

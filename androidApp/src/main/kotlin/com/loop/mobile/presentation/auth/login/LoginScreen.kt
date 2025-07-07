@@ -1,5 +1,10 @@
 package com.loop.mobile.presentation.auth.login
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
@@ -49,7 +53,7 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
     val logger = PlatformLogger()
 
     LaunchedEffect(Unit) {
-        loginViewModel.clearState()  // Reset login success/error info on entering login screen
+        loginViewModel.clearState()
     }
 
     LaunchedEffect(state.isSuccess) {
@@ -142,16 +146,6 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            if (state.error != null) {
-                Text(
-                    text = state.error!!,
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                logger.log("logger: " + state.error!!)
-            }
-
             AppButton(
                 onClick = { loginViewModel.onIntent(LoginAction.OnLogin) },
                 enabled = !state.isLoading,
@@ -160,13 +154,20 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                 Text("Login")
             }
 
-            if (state.isSuccess) {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    "Login successful! ✅",
-                    color = Color.Green,
-                    style = MaterialTheme.typography.bodyMedium
-                )
+            AnimatedVisibility(
+                visible = state.error != null,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                Column {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = state.error ?: "",
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    logger.log("logger: ${state.error}")
+                }
             }
         }
 

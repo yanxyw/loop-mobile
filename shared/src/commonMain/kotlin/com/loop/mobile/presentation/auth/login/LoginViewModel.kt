@@ -21,7 +21,8 @@ class LoginViewModel(
                 _state.update {
                     it.copy(
                         email = action.email,
-                        emailError = null
+                        emailError = null,
+                        error = null
                     )
                 }
             }
@@ -40,7 +41,8 @@ class LoginViewModel(
                 _state.update {
                     it.copy(
                         password = action.password,
-                        passwordError = null
+                        passwordError = null,
+                        error = null
                     )
                 }
             }
