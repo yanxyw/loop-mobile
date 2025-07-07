@@ -52,15 +52,12 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
     val passwordFocusRequester = remember { FocusRequester() }
     val logger = PlatformLogger()
 
-    LaunchedEffect(Unit) {
-        loginViewModel.clearState()
-    }
-
     LaunchedEffect(state.isSuccess) {
         if (state.isSuccess) {
             // Clear focus and hide keyboard on success
             focusManager.clearFocus()
             keyboardController?.hide()
+            loginViewModel.clearState()
 
             navController.navigate(Screen.Home.route) {
                 popUpTo(Screen.Login.route) { inclusive = true }
