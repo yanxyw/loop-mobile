@@ -36,6 +36,7 @@ import androidx.compose.material3.Icon
 import com.loop.mobile.presentation.components.AppButton
 import com.loop.mobile.presentation.components.InputField
 import com.loop.mobile.presentation.navigation.Screen
+import com.loop.mobile.utils.PlatformLogger
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -45,6 +46,7 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val interactionSource = remember { MutableInteractionSource() }
     val passwordFocusRequester = remember { FocusRequester() }
+    val logger = PlatformLogger()
 
     LaunchedEffect(Unit) {
         loginViewModel.clearState()  // Reset login success/error info on entering login screen
@@ -147,6 +149,7 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                     style = MaterialTheme.typography.bodySmall
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+                logger.log("logger: " + state.error!!)
             }
 
             AppButton(

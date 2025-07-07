@@ -31,11 +31,20 @@ suspend inline fun <reified T> handleApiCall(
     } catch (e: RetrySuccessException) {
         e.response.toApiResult<T>()
     } catch (e: ResponseException) {
-        ApiResult.Error(
-            code = e.response.status.value,
-            message = "HTTP error: ${e.message}",
-            exception = e
-        )
+        try {
+            val errorWrapper = e.response.body<ApiResponse<T>>()
+            ApiResult.Error(
+                code = errorWrapper.code,
+                message = errorWrapper.message,
+                exception = e
+            )
+        } catch (_: Exception) {
+            ApiResult.Error(
+                code = e.response.status.value,
+                message = "HTTP ${e.response.status.value}: ${e.message}",
+                exception = e
+            )
+        }
     } catch (e: Exception) {
         ApiResult.Error(
             code = -1,
