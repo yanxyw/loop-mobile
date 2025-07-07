@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
@@ -34,13 +35,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
+import androidx.compose.ui.res.painterResource
 import com.loop.mobile.presentation.components.AppButton
 import com.loop.mobile.presentation.components.InputField
 import com.loop.mobile.presentation.navigation.Screen
 import com.loop.mobile.utils.PlatformLogger
+import com.loop.mobile.R
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -81,20 +82,22 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
         // Top: Back Icon + Title Row
         Box(
             modifier = Modifier
-                .padding(top = 24.dp, start = 32.dp, end = 32.dp)
-                .align(Alignment.TopStart)
-                .fillMaxWidth()
+                .padding(top = 24.dp)
+                .fillMaxWidth(0.9f)
+                .align(Alignment.TopCenter)
                 .height(28.dp)
         ) {
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                painter = painterResource(id = R.drawable.arrow_left),
                 contentDescription = "Back",
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
+                    .offset(x = (-2).dp)
                     .clickable {
                         loginViewModel.clearState()
                         navController.popBackStack()
                     }
-                    .size(24.dp)
+                    .size(16.dp)
                     .align(Alignment.CenterStart)
             )
             Text(
@@ -107,9 +110,9 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
         // Middle: Form
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 40.dp)
-                .padding(top = 72.dp), // push below top row
+                .fillMaxWidth(0.9f)
+                .padding(top = 72.dp)
+                .align(Alignment.TopCenter), // push below top row
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

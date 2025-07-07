@@ -27,7 +27,7 @@ android {
     buildTypes {
         debug {
             isMinifyEnabled = false
-            buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:8080/api/v1\"")
+            buildConfigField("String", "API_BASE_URL", "\"https://proper-cricket-wholly.ngrok-free.app/api/v1\"")
         }
         release {
             isMinifyEnabled = true

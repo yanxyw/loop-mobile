@@ -19,7 +19,7 @@ import platform.UIKit.UIApplication
 @Suppress("unused")
 fun initKoin() {
     startKoin {
-        properties(mapOf("baseUrl" to "http://localhost:8080/api/v1"))
+        properties(mapOf("baseUrl" to "https://proper-cricket-wholly.ngrok-free.app/api/v1"))
         modules(commonModules() + themeModule)
     }
 }
