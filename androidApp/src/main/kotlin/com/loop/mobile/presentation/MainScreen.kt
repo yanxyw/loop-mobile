@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.ripple.RippleAlpha
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -55,10 +54,6 @@ fun MainScreen(themeManager: ThemeManager) {
         bottomBar = {
             if (shouldShowBottomNav) {
                 Column {
-                    HorizontalDivider(
-                        thickness = 0.3.dp,
-                        color = MaterialTheme.colorScheme.outline
-                    )
                     NavigationBar(
                         containerColor = MaterialTheme.colorScheme.background
                     ) {

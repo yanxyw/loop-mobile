@@ -74,8 +74,6 @@ fun InputField(
     val interactionSource = remember { MutableInteractionSource() }
     var passwordVisible by remember { mutableStateOf(false) }
     val isPasswordType = keyboardType == KeyboardType.Password
-    val visualTransformation = if (isPasswordType && !passwordVisible)
-        PasswordVisualTransformation() else VisualTransformation.None
 
     // Check if label should be floating (focused or has content)
     val shouldFloat = isFocused || value.isNotEmpty()
