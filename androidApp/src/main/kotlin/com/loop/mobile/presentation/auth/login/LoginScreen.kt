@@ -87,19 +87,28 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                 .align(Alignment.TopCenter)
                 .height(28.dp)
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.arrow_left),
-                contentDescription = "Back",
-                tint = MaterialTheme.colorScheme.onSurface,
+            Box(
                 modifier = Modifier
-                    .offset(x = (-2).dp)
-                    .clickable {
+                    .align(Alignment.CenterStart)
+                    .size(40.dp)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
                         loginViewModel.clearState()
                         navController.popBackStack()
-                    }
-                    .size(16.dp)
-                    .align(Alignment.CenterStart)
-            )
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.arrow_left),
+                    contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier
+                        .size(16.dp)
+                        .offset(x = (-14).dp)
+                )
+            }
             Text(
                 "Login",
                 style = MaterialTheme.typography.headlineMedium,
