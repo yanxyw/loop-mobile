@@ -4,30 +4,43 @@ import shared
 
 struct SocialSignInButton: View {
     @ObservedObject var loginViewModelWrapper: LoginViewModelWrapper
+    let colors: IOSColorScheme
+    let onLoginSuccess: () -> Void
+    let provider: String
+    var isDisabled: Bool = false
+    
     @State private var isLoading = false
     
     var body: some View {
         Button(action: {
             handleGoogleSignIn()
         }) {
-            HStack {
+            HStack(spacing: 8) {
                 if isLoading {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
                         .scaleEffect(0.8)
                 } else {
-                    Image("home_filled") // Add Google logo
+                    Image(provider)
                         .resizable()
                         .frame(width: 20, height: 20)
+                        .foregroundColor(Color(colors.primary))
+                        
                     
-                    Text("Continue with Google")
-                        .font(.system(size: 16, weight: .medium))
+                    Text(provider.capitalized)
+                        .padding(.leading, 4)
+                        .font(AppFont.inter(16))
+                        .foregroundColor(Color(colors.onSurface))
+                        
                 }
             }
-            .frame(maxWidth: .infinity)
-            .frame(height: 48)
-            .background(Color.blue) // Customize your button color
-            .foregroundColor(.white)
+            .frame(maxWidth: .infinity, minHeight: 48)
+            .padding(.horizontal, 12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 4)
+                    .stroke(Color(colors.outlineVariant), lineWidth: 1.5)
+            )
+            .background(Color.clear)
             .cornerRadius(4)
         }
         .disabled(isLoading)
@@ -35,14 +48,12 @@ struct SocialSignInButton: View {
             isLoading = state.isLoading
             
             if state.isSuccess {
-                // Handle successful login - navigate to home
-                print("Login successful")
                 loginViewModelWrapper.clearState()
+                onLoginSuccess()
             }
             
             if let error = state.error {
                 print("Login failed: \(error)")
-                // Handle error - show alert or toast
             }
         }
     }
@@ -54,8 +65,6 @@ struct SocialSignInButton: View {
             return
         }
         
-        // Google Sign-In is already configured in AppDelegate
-        // Just call signIn directly
         GIDSignIn.sharedInstance.signIn(withPresenting: presentingViewController) { result, error in
             if let error = error {
                 handleSignInError(error)
@@ -84,7 +93,7 @@ struct SocialSignInButton: View {
         // Send to your login view model
         loginViewModelWrapper.onIntent(
             LoginActionOnOAuthLogin(
-                provider: "google",
+                provider: provider,
                 code: idToken,
                 redirectUri: ""
             )

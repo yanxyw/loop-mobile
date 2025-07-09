@@ -101,9 +101,41 @@ struct LoginScreen: View {
                             .font(.caption)
                     }
                     
-                    SocialSignInButton(
-                        loginViewModelWrapper: loginViewModelWrapper
-                    )
+                    HStack {
+                        Rectangle()
+                            .fill(Color(colors.outlineVariant))
+                            .frame(height: 1)
+                            .frame(maxWidth: .infinity)
+
+                        Text("or login with")
+                            .font(AppFont.inter(16))
+                            .foregroundColor(Color(colors.outline))
+                            .padding(.horizontal, 8)
+
+                        Rectangle()
+                            .fill(Color(colors.outlineVariant))
+                            .frame(height: 1)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .padding(.vertical, 4)
+                    
+                    HStack(spacing: 12) {
+                        SocialSignInButton(
+                            loginViewModelWrapper: loginViewModelWrapper,
+                            colors: colors,
+                            onLoginSuccess: onLoginSuccess,
+                            provider: "google"
+                        )
+                        
+                        SocialSignInButton(
+                            loginViewModelWrapper: loginViewModelWrapper,
+                            colors: colors,
+                            onLoginSuccess: onLoginSuccess,
+                            provider: "apple",
+                            isDisabled: true
+                        )
+                    }
+                    .frame(maxWidth: .infinity)
                 }
                 .padding(.top, 16)
                 .padding(.horizontal, 24)
