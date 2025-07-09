@@ -37,7 +37,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "API_BASE_URL", "\"https://api.production.com/api/v1\"")
+            buildConfigField("String", "API_BASE_URL", "\"https://proper-cricket-wholly.ngrok-free.app/api/v1\"")
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     buildTypes.all {
