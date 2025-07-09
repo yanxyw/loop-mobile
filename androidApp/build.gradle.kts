@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeCompiler)
@@ -38,8 +40,10 @@ android {
             buildConfigField("String", "API_BASE_URL", "\"https://api.production.com/api/v1\"")
         }
     }
-    buildFeatures {
-        buildConfig = true
+    buildTypes.all {
+        val localProperties = Properties()
+        localProperties.load(project.rootProject.file("local.properties").inputStream())
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"${localProperties.getProperty("GOOGLE_WEB_CLIENT_ID")}\"")
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
@@ -65,5 +69,8 @@ dependencies {
     implementation(libs.material3.extra)
     implementation(libs.material)
     implementation(libs.core.ktx)
+    implementation("androidx.credentials:credentials:1.5.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 }
 

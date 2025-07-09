@@ -6,4 +6,9 @@ sealed interface LoginAction {
     data class OnPasswordChange(val password: String) : LoginAction
     data object OnPasswordBlur : LoginAction
     data object OnLogin : LoginAction
+    data class OnOAuthLogin(
+        val provider: String,
+        val code: String,
+        val redirectUri: String
+    ) : LoginAction
 }

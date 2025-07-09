@@ -46,6 +46,7 @@ import com.loop.mobile.presentation.components.InputField
 import com.loop.mobile.presentation.navigation.Screen
 import com.loop.mobile.utils.PlatformLogger
 import com.loop.mobile.R
+import com.loop.mobile.presentation.components.SocialSignInButton
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -186,6 +187,11 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                     logger.log("logger: ${state.error}")
                 }
             }
+
+            SocialSignInButton(
+                navController = navController,
+                loginViewModel = loginViewModel
+            )
         }
 
         // Bottom: Sign Up Text

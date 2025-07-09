@@ -5,12 +5,16 @@ import com.loop.mobile.data.local.provideTokenStorage
 import com.loop.mobile.data.remote.network.installApiAuth
 import com.loop.mobile.data.remote.services.auth.AuthService
 import com.loop.mobile.data.remote.services.auth.AuthServiceImpl
+import com.loop.mobile.data.remote.services.oauth.OAuthService
+import com.loop.mobile.data.remote.services.oauth.OAuthServiceImpl
 import com.loop.mobile.data.remote.services.profile.ProfileService
 import com.loop.mobile.data.remote.services.profile.ProfileServiceImpl
 import com.loop.mobile.data.repositories.AuthRepositoryImpl
+import com.loop.mobile.data.repositories.OAuthRepositoryImpl
 import com.loop.mobile.data.repositories.UserRepositoryImpl
 import com.loop.mobile.domain.auth.AuthStateManager
 import com.loop.mobile.domain.repositories.AuthRepository
+import com.loop.mobile.domain.repositories.OAuthRepository
 import com.loop.mobile.domain.repositories.UserRepository
 import com.loop.mobile.domain.usecases.LoginUseCase
 import com.loop.mobile.presentation.auth.login.LoginViewModel
@@ -71,11 +75,13 @@ val networkModule = module {
 
     // API Services - use the named qualifier to get the baseUrl
     single<AuthService> { AuthServiceImpl(get(), get(named("baseUrl"))) }
+    single<OAuthService> { OAuthServiceImpl(get(), get(named("baseUrl"))) }
     single<ProfileService> { ProfileServiceImpl(get(), get(named("baseUrl"))) }
 }
 
 val repositoriesModule = module {
     single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
+    single<OAuthRepository> { OAuthRepositoryImpl(get()) }
     single<UserRepository> { UserRepositoryImpl(get()) }
 }
 
@@ -90,6 +96,7 @@ val useCaseModule = module {
     single {
         LoginUseCase(
             authRepository = get(),
+            oauthRepository = get(),
             tokenStorage = get(),
             authStateManager = get()
         )

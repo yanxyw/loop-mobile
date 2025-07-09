@@ -98,6 +98,29 @@ class LoginViewModel(
                     )
                 }
             }
+
+            is LoginAction.OnOAuthLogin -> {
+                _state.update { it.copy(isLoading = true, error = null) }
+
+                scope.launch {
+                    val result = loginUseCase(
+                        provider = action.provider,
+                        code = action.code,
+                        redirectUri = action.redirectUri
+                    )
+
+                    result.fold(
+                        onSuccess = {
+                            _state.update { it.copy(isLoading = false, isSuccess = true) }
+                        },
+                        onFailure = { err ->
+                            _state.update {
+                                it.copy(isLoading = false, error = err.message)
+                            }
+                        }
+                    )
+                }
+            }
         }
     }
 
