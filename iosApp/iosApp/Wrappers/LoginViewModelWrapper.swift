@@ -5,7 +5,7 @@ class LoginViewModelWrapper: ObservableObject {
     private let viewModel: LoginViewModel
     private var isObserving = false
 
-    @Published var state: LoginState = LoginState(email: "", password: "", emailTouched: false, passwordTouched: false, emailError: nil, passwordError: nil, isLoading: false, error: nil, isSuccess: false)
+    @Published var state: LoginState = LoginState(email: "", password: "", emailTouched: false, passwordTouched: false, emailError: nil, passwordError: nil, isLoading: false, loadingProvider: nil, error: nil, isSuccess: false)
 
     var email: String {
         get { state.email }
@@ -19,7 +19,7 @@ class LoginViewModelWrapper: ObservableObject {
 
     init() {
         self.viewModel = LoginViewModelInjector().loginViewModel
-        self.state = viewModel.state.value as? LoginState ?? LoginState(email: "", password: "", emailTouched: false, passwordTouched: false, emailError: nil, passwordError: nil, isLoading: false, error: nil, isSuccess: false)
+        self.state = viewModel.state.value as? LoginState ?? LoginState(email: "", password: "", emailTouched: false, passwordTouched: false, emailError: nil, passwordError: nil, isLoading: false, loadingProvider: nil, error: nil, isSuccess: false)
     }
 
     func start() {

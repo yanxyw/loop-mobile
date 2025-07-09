@@ -76,7 +76,7 @@ class LoginViewModel(
                     return
                 }
 
-                _state.update { it.copy(isLoading = true, error = null) }
+                _state.update { it.copy(isLoading = true, loadingProvider = "password", error = null) }
 
                 scope.launch {
                     val result = loginUseCase(email, password)
@@ -84,15 +84,12 @@ class LoginViewModel(
                     result.fold(
                         onSuccess = {
                             _state.update {
-                                it.copy(isLoading = false, isSuccess = true)
+                                it.copy(isLoading = false, loadingProvider = null, isSuccess = true)
                             }
                         },
                         onFailure = { err ->
                             _state.update {
-                                it.copy(
-                                    isLoading = false,
-                                    error = err.message
-                                )
+                                it.copy(isLoading = false, loadingProvider = null, error = err.message)
                             }
                         }
                     )
@@ -100,7 +97,7 @@ class LoginViewModel(
             }
 
             is LoginAction.OnOAuthLogin -> {
-                _state.update { it.copy(isLoading = true, error = null) }
+                _state.update { it.copy(isLoading = true, loadingProvider = action.provider, error = null) }
 
                 scope.launch {
                     val result = loginUseCase(
@@ -111,11 +108,11 @@ class LoginViewModel(
 
                     result.fold(
                         onSuccess = {
-                            _state.update { it.copy(isLoading = false, isSuccess = true) }
+                            _state.update { it.copy(isLoading = false, loadingProvider = null, isSuccess = true) }
                         },
                         onFailure = { err ->
                             _state.update {
-                                it.copy(isLoading = false, error = err.message)
+                                it.copy(isLoading = false, loadingProvider = null, error = err.message)
                             }
                         }
                     )

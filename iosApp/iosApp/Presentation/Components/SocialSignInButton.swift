@@ -8,30 +8,33 @@ struct SocialSignInButton: View {
     let onLoginSuccess: () -> Void
     let provider: String
     var isDisabled: Bool = false
-    
-    @State private var isLoading = false
-    
+
     var body: some View {
+        let state = loginViewModelWrapper.state
+        
         Button(action: {
             handleGoogleSignIn()
         }) {
             HStack(spacing: 8) {
-                if isLoading {
+                if state.isLoading && state.loadingProvider == provider {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
                         .scaleEffect(0.8)
+                        .foregroundColor(Color(colors.onSurface))
+                    
+                    Text("Loading...")
+                        .font(AppFont.inter(16))
+                        .foregroundColor(Color(colors.onSurface))
                 } else {
                     Image(provider)
                         .resizable()
                         .frame(width: 20, height: 20)
                         .foregroundColor(Color(colors.primary))
-                        
                     
                     Text(provider.capitalized)
-                        .padding(.leading, 4)
+                        .padding(.leading, 12)
                         .font(AppFont.inter(16))
                         .foregroundColor(Color(colors.onSurface))
-                        
                 }
             }
             .frame(maxWidth: .infinity, minHeight: 48)
@@ -43,10 +46,8 @@ struct SocialSignInButton: View {
             .background(Color.clear)
             .cornerRadius(4)
         }
-        .disabled(isLoading)
+        .disabled(state.isLoading || isDisabled)
         .onReceive(loginViewModelWrapper.$state) { state in
-            isLoading = state.isLoading
-            
             if state.isSuccess {
                 loginViewModelWrapper.clearState()
                 onLoginSuccess()
@@ -90,7 +91,6 @@ struct SocialSignInButton: View {
         
         print("Google ID Token received")
         
-        // Send to your login view model
         loginViewModelWrapper.onIntent(
             LoginActionOnOAuthLogin(
                 provider: provider,

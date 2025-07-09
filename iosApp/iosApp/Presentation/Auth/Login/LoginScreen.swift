@@ -15,6 +15,8 @@ struct LoginScreen: View {
     }
 
     var body: some View {
+        let state = loginViewModelWrapper.state
+        
         GeometryReader { geometry in
             let horizontalPadding = geometry.size.width * 0.06
             let baseTopInset = UIApplication.shared.connectedScenes
@@ -60,8 +62,8 @@ struct LoginScreen: View {
                             onBlur: {
                                 loginViewModelWrapper.onIntent(LoginActionOnEmailBlur())
                             },
-                            error: loginViewModelWrapper.state.emailError,
-                            touched: loginViewModelWrapper.state.emailTouched
+                            error: state.emailError,
+                            touched: state.emailTouched
                         )
                         .focused($focusedField, equals: .email)
                         
@@ -74,8 +76,8 @@ struct LoginScreen: View {
                             onBlur: {
                                 loginViewModelWrapper.onIntent(LoginActionOnPasswordBlur())
                             },
-                            error: loginViewModelWrapper.state.passwordError,
-                            touched: loginViewModelWrapper.state.passwordTouched
+                            error: state.passwordError,
+                            touched: state.passwordTouched
                         )
                         .focused($focusedField, equals: .password)
                         
@@ -83,24 +85,31 @@ struct LoginScreen: View {
                             focusedField = nil
                             loginViewModelWrapper.login()
                         }) {
-                            HStack {
-                                if loginViewModelWrapper.state.isLoading {
+                            HStack(spacing: 8) {
+                                if state.isLoading && state.loadingProvider == "password" {
                                     ProgressView()
-                                        .progressViewStyle(CircularProgressViewStyle(tint: Color(colors.background)))
+                                        .progressViewStyle(CircularProgressViewStyle())
+                                        .scaleEffect(0.8)
+                                        .foregroundColor(Color(colors.onSurface))
+                                    
+                                    Text("Loading...")
+                                        .font(AppFont.inter(16))
+                                        .foregroundColor(Color(colors.onSurface))
+                                } else {
+                                    Text("Login")
+                                        .font(AppFont.inter(16, weight: .medium))
                                 }
-                                Text("Login")
-                                    .font(AppFont.inter(16, weight: .medium))
                             }
-                            .frame(maxWidth: .infinity)
-                            .padding()
+                            .frame(maxWidth: .infinity, minHeight: 48)
+//                            .padding()
                             .background(Color(colors.primary))
                             .foregroundColor(Color(colors.background))
                             .cornerRadius(4)
                         }
                         .padding(.top, 8)
-                        .disabled(loginViewModelWrapper.state.isLoading)
+                        .disabled(state.isLoading)
                         
-                        if let error = loginViewModelWrapper.state.error {
+                        if let error = state.error {
                             Text(error)
                                 .foregroundColor(Color(colors.error))
                                 .font(.caption)
@@ -122,7 +131,6 @@ struct LoginScreen: View {
                                 .frame(height: 1)
                                 .frame(maxWidth: .infinity)
                         }
-                        .padding(.vertical, geometry.size.height * 0.015)
                         
                         HStack(spacing: 12) {
                             SocialSignInButton(
@@ -155,7 +163,7 @@ struct LoginScreen: View {
             .onAppear {
                 loginViewModelWrapper.start()
             }
-            .onChange(of: loginViewModelWrapper.state.isSuccess) { success in
+            .onChange(of: state.isSuccess) { success in
                 if success {
                     focusedField = nil
                     loginViewModelWrapper.clearState()
