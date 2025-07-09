@@ -100,6 +100,10 @@ struct LoginScreen: View {
                             .foregroundColor(Color(colors.error))
                             .font(.caption)
                     }
+                    
+                    SocialSignInButton(
+                        loginViewModelWrapper: loginViewModelWrapper
+                    )
                 }
                 .padding(.top, 16)
                 .padding(.horizontal, 24)

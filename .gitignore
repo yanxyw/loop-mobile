@@ -15,3 +15,5 @@ captures
 iosApp/Pods/
 iosApp/Podfile.lock
 ~/Library/Developer/Xcode/DerivedData/
+
+iosApp/GoogleService-Info.plist
