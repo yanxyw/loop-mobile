@@ -190,7 +190,14 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
 
             SocialSignInButton(
                 navController = navController,
-                loginViewModel = loginViewModel
+                loginViewModel = loginViewModel,
+                provider = "google"
+            )
+
+            SocialSignInButton(
+                navController = navController,
+                loginViewModel = loginViewModel,
+                provider = "apple"
             )
         }
 
