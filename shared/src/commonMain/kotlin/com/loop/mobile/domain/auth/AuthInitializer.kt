@@ -1,17 +1,18 @@
 package com.loop.mobile.domain.auth
 
-import com.loop.mobile.data.local.TokenStorage
+import com.loop.mobile.data.local.SessionStorage
 import com.loop.mobile.data.mappers.toDecodedUser
 import com.loop.mobile.domain.repositories.UserRepository
 import com.loop.mobile.domain.utils.JwtUtils
 
 suspend fun restoreAuthState(
-    tokenStorage: TokenStorage,
+    sessionStorage: SessionStorage,
     userRepository: UserRepository,
     authStateManager: AuthStateManager
 ) {
-    val accessToken = tokenStorage.getAccessToken()
-    val refreshToken = tokenStorage.getRefreshToken()
+    val accessToken = sessionStorage.getAccessToken()
+    val refreshToken = sessionStorage.getRefreshToken()
+    val provider = sessionStorage.getAuthProvider()
 
     if (!accessToken.isNullOrBlank()) {
         if (JwtUtils.isTokenExpired(accessToken)) {
@@ -22,23 +23,23 @@ suspend fun restoreAuthState(
 
                 result.fold(
                     onSuccess = { user ->
-                        authStateManager.setUser(user.toDecodedUser())
+                        authStateManager.setUser(user.toDecodedUser(), provider)
                     },
                     onFailure = {
-                        authStateManager.setUser(null)
+                        authStateManager.clearUser()
                     }
                 )
             } else {
                 // No refresh token, clear user state
-                authStateManager.setUser(null)
+                authStateManager.clearUser()
             }
         } else {
             // Token is still valid, use the decoded user
             val decodedUser = JwtUtils.decodeUser(accessToken)
-            authStateManager.setUser(decodedUser)
+            authStateManager.setUser(decodedUser, provider)
         }
     } else {
         // No access token, clear user state
-        authStateManager.setUser(null)
+        authStateManager.clearUser()
     }
 }

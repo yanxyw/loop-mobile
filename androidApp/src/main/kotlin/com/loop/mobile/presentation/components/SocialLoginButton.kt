@@ -1,10 +1,6 @@
 package com.loop.mobile.presentation.components
 
 import SocialSignInHandler
-import android.app.Activity
-import android.content.Intent
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
@@ -34,9 +30,6 @@ import kotlinx.coroutines.launch
 import com.loop.mobile.presentation.auth.login.LoginViewModel
 import com.loop.mobile.utils.PlatformLogger
 import com.loop.mobile.R
-import kotlinx.coroutines.delay
-import android.provider.Settings
-
 
 @Composable
 fun SocialSignInButton(
@@ -48,8 +41,10 @@ fun SocialSignInButton(
     val coroutineScope = rememberCoroutineScope()
     val logger = PlatformLogger()
     val loginState by loginViewModel.state.collectAsState()
-
     val capitalizedProvider = provider.replaceFirstChar { it.uppercaseChar() }
+    val socialSignInHandler = remember {
+        SocialSignInHandler(context, loginViewModel, logger, coroutineScope)
+    }
 
     // Handle login state changes
     LaunchedEffect(loginState.isSuccess) {
@@ -70,32 +65,10 @@ fun SocialSignInButton(
         }
     }
 
-    val signInHandler = remember { SocialSignInHandler(context, loginViewModel, logger, coroutineScope) }
-
-    val addAccountLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) {
-        // Try sign-in again after a small delay (so system has time to register new account)
-        coroutineScope.launch {
-            delay(1000)
-            signInHandler.attemptSignIn(provider)
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        signInHandler.addAccountLauncher = {
-            addAccountLauncher.launch(
-                Intent(Settings.ACTION_ADD_ACCOUNT).apply {
-                    putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
-                }
-            )
-        }
-    }
-
     Button(
         onClick = {
             coroutineScope.launch {
-                signInHandler.attemptSignIn(provider)
+                socialSignInHandler.attemptSignIn(provider)
             }
         },
         enabled = !loginState.isLoading,

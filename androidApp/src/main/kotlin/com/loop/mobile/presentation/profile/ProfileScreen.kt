@@ -16,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -23,22 +25,31 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import androidx.credentials.ClearCredentialStateRequest
+import androidx.credentials.CredentialManager
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.loop.mobile.domain.auth.AuthStateManager
 import com.loop.mobile.presentation.auth.logout.LogoutViewModel
 import com.loop.mobile.presentation.navigation.Screen
 import com.loop.mobile.presentation.theme.ThemeManager
+import com.loop.mobile.utils.PlatformLogger
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ProfileScreen(
     navController: NavController,
     themeManager: ThemeManager,
+    authStateManager: AuthStateManager,
     profileViewModel: ProfileViewModel,
     logoutViewModel: LogoutViewModel
 ) {
     val state by profileViewModel.state.collectAsState()
     val logoutState by logoutViewModel.state.collectAsState()
+    val logger = PlatformLogger()
+    val context = LocalContext.current
+    val currentProvider = remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(state.user) {
         if (state.user == null && !state.isLoading) {
@@ -48,6 +59,19 @@ fun ProfileScreen(
 
     LaunchedEffect(logoutState.isSuccess) {
         if (logoutState.isSuccess) {
+            currentProvider.value?.let { provider ->
+                if (provider == "google") {
+                    try {
+                        val credentialManager = CredentialManager.create(context)
+                        val request = ClearCredentialStateRequest()
+
+                        credentialManager.clearCredentialState(request)
+                        logger.log("Credential cleared successfully")
+                    } catch (e: Exception) {
+                        logger.log("Failed to clear google credential state: ${e.message}")
+                    }
+                }
+            }
             logoutViewModel.clearState()
             profileViewModel.clearProfile()
             navController.navigate(Screen.Home.route) {
@@ -96,6 +120,7 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(onClick = {
+                currentProvider.value = authStateManager.provider.value
                 logoutViewModel.logout()
             }) {
                 Text("Logout")

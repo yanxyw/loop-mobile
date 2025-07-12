@@ -111,7 +111,7 @@ fun NavGraph(
             popEnterTransition = { fadeTransition() },
             popExitTransition = { fadeExitTransition() }
         ) {
-            ProfileScreen(navController, themeManager, profileViewModel, logoutViewModel)
+            ProfileScreen(navController, themeManager, authStateManager, profileViewModel, logoutViewModel)
         }
     }
 }

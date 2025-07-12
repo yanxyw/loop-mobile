@@ -1,7 +1,7 @@
 package com.loop.mobile.di
 
-import com.loop.mobile.data.local.TokenStorage
-import com.loop.mobile.data.local.provideTokenStorage
+import com.loop.mobile.data.local.SessionStorage
+import com.loop.mobile.data.local.provideSessionStorage
 import com.loop.mobile.data.remote.network.installApiAuth
 import com.loop.mobile.data.remote.services.auth.AuthService
 import com.loop.mobile.data.remote.services.auth.AuthServiceImpl
@@ -37,7 +37,7 @@ val networkModule = module {
     single {
         HttpClient {
             // Get token storage from DI
-            val tokenStorage = get<TokenStorage>()
+            val sessionStorage = get<SessionStorage>()
             val platformLogger: PlatformLogger = get()
             platformLogger.log("Creating HttpClient")
 
@@ -59,10 +59,10 @@ val networkModule = module {
 
             installApiAuth(
                 baseUrl = get<String>(named("baseUrl")),
-                tokenProvider = { tokenStorage.getAccessToken() },
-                refreshTokenProvider = { tokenStorage.getRefreshToken() },
+                tokenProvider = { sessionStorage.getAccessToken() },
+                refreshTokenProvider = { sessionStorage.getRefreshToken() },
                 onTokensRefreshed = { accessToken, refreshToken ->
-                    tokenStorage.saveTokens(accessToken, refreshToken)
+                    sessionStorage.saveTokens(accessToken, refreshToken)
                     platformLogger.log("Tokens refreshed: $accessToken")
                 },
                 logger = platformLogger
@@ -97,14 +97,14 @@ val useCaseModule = module {
         LoginUseCase(
             authRepository = get(),
             oauthRepository = get(),
-            tokenStorage = get(),
+            sessionStorage = get(),
             authStateManager = get()
         )
     }
 }
 
 val storageModule = module {
-    single<TokenStorage> { provideTokenStorage() }
+    single<SessionStorage> { provideSessionStorage() }
     single { AuthStateManager() }
 }
 

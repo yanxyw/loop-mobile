@@ -2,7 +2,7 @@ package com.loop.mobile.data.local
 
 import platform.Foundation.NSUserDefaults
 
-class TokenStorageImpl : TokenStorage {
+class SessionStorageImpl : SessionStorage {
 
     private val defaults = NSUserDefaults.standardUserDefaults
 
@@ -17,8 +17,17 @@ class TokenStorageImpl : TokenStorage {
     override suspend fun getRefreshToken(): String? =
         defaults.stringForKey("refreshToken")
 
-    override suspend fun clearTokens() {
+
+    override suspend fun saveAuthProvider(provider: String) {
+        defaults.setObject(provider, forKey = "authProvider")
+    }
+
+    override suspend fun getAuthProvider(): String? =
+        defaults.stringForKey("authProvider")
+
+    override suspend fun clearSession() {
         defaults.removeObjectForKey("accessToken")
         defaults.removeObjectForKey("refreshToken")
+        defaults.removeObjectForKey("authProvider")
     }
 }

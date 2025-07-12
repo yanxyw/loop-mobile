@@ -16,6 +16,9 @@ class AuthStateManager {
     private val _user = MutableStateFlow<DecodedUser?>(null)
     val user: StateFlow<DecodedUser?> = _user
 
+    private val _provider = MutableStateFlow<String?>(null)
+    val provider: StateFlow<String?> = _provider
+
     val isLoggedIn: StateFlow<Boolean> = _user.map { it != null }.stateIn(
         scope = CoroutineScope(Dispatchers.Default + SupervisorJob()),
         started = SharingStarted.Eagerly,
@@ -31,11 +34,15 @@ class AuthStateManager {
         }
     }
 
-    fun setUser(decodedUser: DecodedUser?) {
+    fun setUser(decodedUser: DecodedUser?, provider: String? = null) {
         _user.value = decodedUser
+        if (provider != null) {
+            _provider.value = provider
+        }
     }
 
     fun clearUser() {
         _user.value = null
+        _provider.value = null
     }
 }

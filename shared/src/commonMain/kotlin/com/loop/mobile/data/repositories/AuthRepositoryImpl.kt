@@ -1,6 +1,6 @@
 package com.loop.mobile.data.repositories
 
-import com.loop.mobile.data.local.TokenStorage
+import com.loop.mobile.data.local.SessionStorage
 import com.loop.mobile.data.mappers.toDomain
 import com.loop.mobile.data.remote.network.ApiResult
 import com.loop.mobile.data.remote.network.ApiResult.Error
@@ -12,7 +12,7 @@ import com.loop.mobile.domain.repositories.AuthRepository
 
 class AuthRepositoryImpl(
     private val authService: AuthService,
-    private val tokenStorage: TokenStorage,
+    private val sessionStorage: SessionStorage,
     private val authStateManager: AuthStateManager
 ) : AuthRepository {
 
@@ -30,7 +30,7 @@ class AuthRepositoryImpl(
     override suspend fun logout(): ApiResult<String> {
         return when (val result = authService.logout()) {
             is Success -> {
-                tokenStorage.clearTokens()
+                sessionStorage.clearSession()
                 authStateManager.clearUser()
                 Success(result.data, result.code, result.message)
             }

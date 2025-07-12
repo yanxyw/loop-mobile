@@ -10,12 +10,12 @@ import javax.crypto.spec.GCMParameterSpec
 import android.util.Base64
 import androidx.core.content.edit
 
-private const val KEY_ALIAS = "auth_token_key"
+private const val KEY_ALIAS = "auth_session_key"
 private const val ANDROID_KEYSTORE = "AndroidKeyStore"
 private const val AES_MODE = "AES/GCM/NoPadding"
 private const val PREF_NAME = "secure_auth_prefs"
 
-class TokenStorageImpl(context: Context) : TokenStorage {
+class SessionStorageImpl(context: Context) : SessionStorage {
 
     private val prefs: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
 
@@ -74,7 +74,23 @@ class TokenStorageImpl(context: Context) : TokenStorage {
     override suspend fun getRefreshToken(): String? =
         decrypt(prefs.getString("refreshToken", null), prefs.getString("refreshTokenIv", null))
 
-    override suspend fun clearTokens() {
+    override suspend fun saveAuthProvider(provider: String) {
+        val (encrypted, iv) = encrypt(provider)
+        prefs.edit {
+            putString("authProvider", encrypted)
+            putString("authProviderIv", iv)
+        }
+
+
+    }
+
+    override suspend fun getAuthProvider(): String? =
+        decrypt(
+            prefs.getString("authProvider", null),
+            prefs.getString("authProviderIv", null)
+        )
+
+    override suspend fun clearSession() {
         prefs.edit { clear() }
     }
 }

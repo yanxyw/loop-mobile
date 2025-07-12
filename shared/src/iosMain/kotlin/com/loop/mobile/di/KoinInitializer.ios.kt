@@ -1,6 +1,6 @@
 package com.loop.mobile.di
 
-import com.loop.mobile.data.local.TokenStorage
+import com.loop.mobile.data.local.SessionStorage
 import com.loop.mobile.domain.auth.AuthStateManager
 import com.loop.mobile.domain.repositories.UserRepository
 import com.loop.mobile.presentation.auth.login.LoginViewModel
@@ -47,7 +47,7 @@ class AuthStateManagerInjector : KoinComponent {
 
 @Suppress("unused")
 class TokenStorageInjector : KoinComponent {
-    val tokenStorage: TokenStorage by inject()
+    val sessionStorage: SessionStorage by inject()
 }
 
 @Suppress("unused")

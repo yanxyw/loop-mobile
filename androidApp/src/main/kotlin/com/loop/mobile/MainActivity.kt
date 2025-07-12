@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.lifecycleScope
-import com.loop.mobile.data.local.TokenStorage
-import com.loop.mobile.data.local.initTokenStorage
+import com.loop.mobile.data.local.SessionStorage
+import com.loop.mobile.data.local.initSessionStorage
 import com.loop.mobile.domain.auth.AuthStateManager
 import com.loop.mobile.domain.auth.restoreAuthState
 import com.loop.mobile.domain.repositories.UserRepository
@@ -19,7 +19,7 @@ import org.koin.android.ext.android.getKoin
 
 class MainActivity : ComponentActivity() {
     private val themeManager: ThemeManager by lazy { getKoin().get() }
-    private val tokenStorage: TokenStorage by lazy { getKoin().get() }
+    private val sessionStorage: SessionStorage by lazy { getKoin().get() }
     private val userRepository: UserRepository by lazy { getKoin().get() }
     private val authStateManager: AuthStateManager by lazy { getKoin().get() }
 
@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setTheme(R.style.Theme_Loop_App)
-        initTokenStorage(this)
+        initSessionStorage(this)
 
         setContent {
             AppTheme(themeManager) {
@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
         }
 
         lifecycleScope.launch(Dispatchers.IO) {
-            restoreAuthState(tokenStorage, userRepository, authStateManager)
+            restoreAuthState(sessionStorage, userRepository, authStateManager)
             withContext(Dispatchers.Main) {
                 setContent {
                     AppTheme(themeManager) {
