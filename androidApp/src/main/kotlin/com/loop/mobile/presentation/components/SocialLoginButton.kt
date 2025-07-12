@@ -2,18 +2,18 @@ package com.loop.mobile.presentation.components
 
 import SocialSignInHandler
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,8 +34,10 @@ import com.loop.mobile.R
 @Composable
 fun SocialSignInButton(
     navController: NavController,
+    modifier: Modifier = Modifier,
     loginViewModel: LoginViewModel,
-    provider: String
+    provider: String,
+    disabled: Boolean = false
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -65,23 +67,34 @@ fun SocialSignInButton(
         }
     }
 
-    Button(
+    OutlinedButton(
         onClick = {
             coroutineScope.launch {
                 socialSignInHandler.attemptSignIn(provider)
             }
         },
-        enabled = !loginState.isLoading,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp),
+        enabled = !disabled && !loginState.isLoading,
+        modifier = modifier.height(48.dp),
         shape = RoundedCornerShape(4.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
-        if (loginState.isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(20.dp),
-                color = MaterialTheme.colorScheme.onPrimary
-            )
+        if (loginState.isLoading && loginState.loadingProvider == provider) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp),
+                    color = MaterialTheme.colorScheme.outline,
+                    strokeWidth = 1.5.dp
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    text = "Loading...",
+                    color = MaterialTheme.colorScheme.outline,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
         } else {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -96,11 +109,14 @@ fun SocialSignInButton(
                         }
                     ),
                     contentDescription = "$capitalizedProvider logo",
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(16.dp),
                     tint = MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.width(12.dp))
-                Text("Continue with $capitalizedProvider")
+                Text(
+                    capitalizedProvider,
+                    color = MaterialTheme.colorScheme.outline
+                )
             }
         }
     }

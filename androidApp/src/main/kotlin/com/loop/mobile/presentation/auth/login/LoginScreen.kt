@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -167,7 +168,7 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
             AppButton(
                 onClick = { loginViewModel.onIntent(LoginAction.OnLogin) },
                 enabled = !state.isLoading,
-                isLoading = state.isLoading,
+                isLoading = state.isLoading && state.loadingProvider == "password",
             ) {
                 Text("Login")
             }
@@ -188,17 +189,53 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                 }
             }
 
-            SocialSignInButton(
-                navController = navController,
-                loginViewModel = loginViewModel,
-                provider = "google"
-            )
+            Spacer(modifier = Modifier.height(20.dp))
 
-            SocialSignInButton(
-                navController = navController,
-                loginViewModel = loginViewModel,
-                provider = "apple"
-            )
+            // Divider
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                HorizontalDivider(
+                    modifier = Modifier.weight(1f),
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant
+                )
+                Text(
+                    "or login with",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.outline,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+                HorizontalDivider(
+                    modifier = Modifier.weight(1f),
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant
+                )
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Social Login Buttons
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SocialSignInButton(
+                    navController = navController,
+                    modifier = Modifier.weight(1f),
+                    loginViewModel = loginViewModel,
+                    provider = "google"
+                )
+                SocialSignInButton(
+                    navController = navController,
+                    modifier = Modifier.weight(1f),
+                    loginViewModel = loginViewModel,
+                    provider = "apple",
+                    disabled = true
+                )
+            }
         }
 
         // Bottom: Sign Up Text
