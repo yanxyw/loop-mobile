@@ -1,4 +1,4 @@
-
+import android.app.AlertDialog
 import android.content.Context
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
@@ -13,16 +13,16 @@ import com.loop.mobile.BuildConfig
 import com.loop.mobile.presentation.auth.login.LoginAction
 import com.loop.mobile.presentation.auth.login.LoginViewModel
 import com.loop.mobile.utils.PlatformLogger
-import kotlinx.coroutines.CoroutineScope
 
 class SocialSignInHandler(
     private val context: Context,
     private val loginViewModel: LoginViewModel,
-    private val logger: PlatformLogger,
-    private val coroutineScope: CoroutineScope
+    private val logger: PlatformLogger
 ) {
     private val googleWebClientId = BuildConfig.GOOGLE_WEB_CLIENT_ID
     private val credentialManager = CredentialManager.create(context)
+
+    var addAccountLauncher: (() -> Unit)? = null
 
     suspend fun attemptSignIn(provider: String) {
         when (provider.lowercase()) {
@@ -64,8 +64,8 @@ class SocialSignInHandler(
 
                 handleSignIn(fallbackResult)
 
-            } catch (credentialException: GetCredentialException) {
-                // redirect to system setting to allow user to add google account, then redirect back
+            } catch (_: GetCredentialException) {
+                addAccountLauncher?.let { showNoAccountDialog(it) }
             }
         } catch (e: Exception) {
             logger.log("Unexpected error during Google sign-in: ${e.message}")
@@ -121,5 +121,16 @@ class SocialSignInHandler(
                     .build()
             )
             .build()
+    }
+
+    fun showNoAccountDialog(launchAddAccount: () -> Unit) {
+        AlertDialog.Builder(context)
+            .setTitle("No Google Account Found")
+            .setMessage("To sign in with Google, please add a Google account to your device settings.")
+            .setPositiveButton("Add Account") { _, _ ->
+                launchAddAccount()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 }

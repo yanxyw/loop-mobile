@@ -70,8 +70,8 @@ dependencies {
     implementation(libs.material3.extra)
     implementation(libs.material)
     implementation(libs.core.ktx)
-    implementation("androidx.credentials:credentials:1.5.0")
-    implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play)
+    implementation(libs.google.identity.services)
 }
 

@@ -1,6 +1,10 @@
 package com.loop.mobile.presentation.components
 
 import SocialSignInHandler
+import android.content.Intent
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,7 +49,26 @@ fun SocialSignInButton(
     val loginState by loginViewModel.state.collectAsState()
     val capitalizedProvider = provider.replaceFirstChar { it.uppercaseChar() }
     val socialSignInHandler = remember {
-        SocialSignInHandler(context, loginViewModel, logger, coroutineScope)
+        SocialSignInHandler(context, loginViewModel, logger)
+    }
+
+    val addAccountLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) {
+        // Try again after account added
+        coroutineScope.launch {
+            socialSignInHandler.attemptSignIn(provider)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        socialSignInHandler.addAccountLauncher = {
+            addAccountLauncher.launch(
+                Intent(Settings.ACTION_ADD_ACCOUNT).apply {
+                    putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
+                }
+            )
+        }
     }
 
     // Handle login state changes

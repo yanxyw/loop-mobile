@@ -25,6 +25,8 @@ material = "1.11.0"
 splashscreen = "1.0.1"
 security-crypto="1.1.0-beta01"
 coreKtx = "1.16.0"
+credentials = "1.5.0"
+googleid = "1.1.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -63,6 +65,9 @@ material3-extra = { module = "androidx.compose.material3:material3", version.ref
 material = { module = "com.google.android.material:material", version.ref = "material" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
+androidx-credentials-play = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentials" }
+google-identity-services = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
