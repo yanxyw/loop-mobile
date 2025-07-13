@@ -1,4 +1,3 @@
-import android.app.AlertDialog
 import android.content.Context
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
@@ -23,8 +22,11 @@ class SocialSignInHandler(
     private val credentialManager = CredentialManager.create(context)
 
     var addAccountLauncher: (() -> Unit)? = null
+    var onNoAccountFound: (() -> Unit)? = null
 
     suspend fun attemptSignIn(provider: String) {
+        loginViewModel.setLoading(true, provider)
+
         when (provider.lowercase()) {
             "google" -> attemptGoogleSignIn()
             "apple" -> TODO("Implement Apple sign-in here")
@@ -65,13 +67,14 @@ class SocialSignInHandler(
                 handleSignIn(fallbackResult)
 
             } catch (_: GetCredentialException) {
-                addAccountLauncher?.let { showNoAccountDialog(it) }
+                onNoAccountFound?.invoke()
             }
         } catch (e: Exception) {
             logger.log("Unexpected error during Google sign-in: ${e.message}")
+        } finally {
+            loginViewModel.setLoading(false, null)
         }
     }
-
 
     fun handleSignIn(result: GetCredentialResponse) {
         when (val credential = result.credential) {
@@ -121,16 +124,5 @@ class SocialSignInHandler(
                     .build()
             )
             .build()
-    }
-
-    fun showNoAccountDialog(launchAddAccount: () -> Unit) {
-        AlertDialog.Builder(context)
-            .setTitle("No Google Account Found")
-            .setMessage("To sign in with Google, please add a Google account to your device settings.")
-            .setPositiveButton("Add Account") { _, _ ->
-                launchAddAccount()
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
     }
 }

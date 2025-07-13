@@ -18,11 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,6 +44,9 @@ fun SocialSignInButton(
     val logger = PlatformLogger()
     val loginState by loginViewModel.state.collectAsState()
     val capitalizedProvider = provider.replaceFirstChar { it.uppercaseChar() }
+
+    var showNoAccountDialog by remember { mutableStateOf(false) }
+
     val socialSignInHandler = remember {
         SocialSignInHandler(context, loginViewModel, logger)
     }
@@ -69,6 +68,10 @@ fun SocialSignInButton(
                 }
             )
         }
+
+        socialSignInHandler.onNoAccountFound = {
+            showNoAccountDialog = true
+        }
     }
 
     // Handle login state changes
@@ -89,6 +92,17 @@ fun SocialSignInButton(
             // You can show a toast or snackbar here
         }
     }
+
+    AppAlertDialog(
+        showDialog = showNoAccountDialog,
+        onDismiss = { showNoAccountDialog = false },
+        onConfirm = {
+            showNoAccountDialog = false
+            socialSignInHandler.addAccountLauncher?.invoke()
+        },
+        title = "No $provider Account Found",
+        content = "To sign in with $provider, please add a $provider account to your device settings."
+    )
 
     OutlinedButton(
         onClick = {

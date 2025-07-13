@@ -121,6 +121,13 @@ class LoginViewModel(
         }
     }
 
+    fun setLoading(isLoading: Boolean, provider: String? = null) {
+        _state.value = _state.value.copy(
+            isLoading = isLoading,
+            loadingProvider = if (isLoading) provider else null
+        )
+    }
+
     fun clearState() {
         _state.value = LoginState()
     }
