@@ -2,6 +2,8 @@ package com.loop.mobile.data.repositories
 
 import com.loop.mobile.data.local.SessionStorage
 import com.loop.mobile.data.mappers.toDomain
+import com.loop.mobile.data.remote.dto.LoginRequestDto
+import com.loop.mobile.data.remote.dto.SignUpRequestDto
 import com.loop.mobile.data.remote.network.ApiResult
 import com.loop.mobile.data.remote.network.ApiResult.Error
 import com.loop.mobile.data.remote.network.ApiResult.Success
@@ -17,12 +19,17 @@ class AuthRepositoryImpl(
 ) : AuthRepository {
 
     override suspend fun login(email: String, password: String): ApiResult<AuthResult> {
-        return when (val result = authService.login(email, password)) {
-            is Success -> {
-                val authResult = result.data.toDomain()
-                Success(authResult, result.code, result.message)
-            }
+        val dto = LoginRequestDto(email, password)
+        return when (val result = authService.login(dto)) {
+            is Success -> Success(result.data.toDomain(), result.code, result.message)
+            is Error -> Error(result.code, result.message, result.exception)
+        }
+    }
 
+    override suspend fun signUp(email: String, password: String, username: String): ApiResult<String> {
+        val dto = SignUpRequestDto(email, password, username)
+        return when (val result = authService.signUp(dto)) {
+            is Success -> Success(result.data.message, result.code, result.message)
             is Error -> Error(result.code, result.message, result.exception)
         }
     }

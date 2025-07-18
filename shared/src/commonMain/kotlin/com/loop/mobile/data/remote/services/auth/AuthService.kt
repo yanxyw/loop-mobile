@@ -1,10 +1,15 @@
 package com.loop.mobile.data.remote.services.auth
 
+import com.loop.mobile.data.remote.dto.LoginRequestDto
 import com.loop.mobile.data.remote.dto.LoginResponseDto
+import com.loop.mobile.data.remote.dto.SignUpRequestDto
+import com.loop.mobile.data.remote.dto.SignUpResponseDto
 import com.loop.mobile.data.remote.network.ApiResult
 
 interface AuthService {
-    suspend fun login(email: String, password: String): ApiResult<LoginResponseDto>
+    suspend fun login(request: LoginRequestDto): ApiResult<LoginResponseDto>
+
+    suspend fun signUp(request: SignUpRequestDto): ApiResult<SignUpResponseDto>
 
     suspend fun logout(): ApiResult<String>
 }

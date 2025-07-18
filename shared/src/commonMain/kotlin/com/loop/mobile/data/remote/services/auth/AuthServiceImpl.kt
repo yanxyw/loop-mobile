@@ -2,6 +2,8 @@ package com.loop.mobile.data.remote.services.auth
 
 import com.loop.mobile.data.remote.dto.LoginRequestDto
 import com.loop.mobile.data.remote.dto.LoginResponseDto
+import com.loop.mobile.data.remote.dto.SignUpRequestDto
+import com.loop.mobile.data.remote.dto.SignUpResponseDto
 import com.loop.mobile.data.remote.network.ApiResult
 import com.loop.mobile.data.remote.network.handleApiCall
 import io.ktor.client.HttpClient
@@ -15,11 +17,20 @@ class AuthServiceImpl(
     private val baseUrl: String
 ) : AuthService {
 
-    override suspend fun login(email: String, password: String): ApiResult<LoginResponseDto> {
+    override suspend fun login(request: LoginRequestDto): ApiResult<LoginResponseDto> {
         return handleApiCall {
             httpClient.post("$baseUrl/auth/login") {
                 contentType(ContentType.Application.Json)
-                setBody(LoginRequestDto(email, password))
+                setBody(request)
+            }
+        }
+    }
+
+    override suspend fun signUp(request: SignUpRequestDto): ApiResult<SignUpResponseDto> {
+        return handleApiCall {
+            httpClient.post("$baseUrl/auth/signup") {
+                contentType(ContentType.Application.Json)
+                setBody(request)
             }
         }
     }
