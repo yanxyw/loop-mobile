@@ -1,6 +1,5 @@
 package com.loop.mobile.presentation.auth.signup
 
-import SignUpAction
 import com.loop.mobile.domain.repositories.AuthRepository
 import com.loop.mobile.domain.validation.AuthInputValidator
 import com.loop.mobile.presentation.BaseViewModel
@@ -23,6 +22,7 @@ class SignUpViewModel(
                     it.copy(email = action.email, emailError = null, error = null)
                 }
             }
+
             SignUpAction.OnEmailBlur -> {
                 val error = AuthInputValidator.validateEmail(_state.value.email)
                 _state.update {
@@ -35,6 +35,7 @@ class SignUpViewModel(
                     it.copy(password = action.password, passwordError = null, error = null)
                 }
             }
+
             SignUpAction.OnPasswordBlur -> {
                 val error = AuthInputValidator.validatePassword(_state.value.password)
                 _state.update {
@@ -47,6 +48,7 @@ class SignUpViewModel(
                     it.copy(username = action.username, usernameError = null, error = null)
                 }
             }
+
             SignUpAction.OnUsernameBlur -> {
                 val error = AuthInputValidator.validateUsername(_state.value.username)
                 _state.update {

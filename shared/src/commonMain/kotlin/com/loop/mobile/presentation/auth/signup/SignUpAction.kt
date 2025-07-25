@@ -1,3 +1,5 @@
+package com.loop.mobile.presentation.auth.signup
+
 sealed interface SignUpAction {
     data class OnEmailChange(val email: String) : SignUpAction
     data object OnEmailBlur : SignUpAction
