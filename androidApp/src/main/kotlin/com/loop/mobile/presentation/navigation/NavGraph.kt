@@ -19,6 +19,8 @@ import com.loop.mobile.domain.auth.AuthStateManager
 import com.loop.mobile.presentation.auth.login.LoginScreen
 import com.loop.mobile.presentation.auth.login.LoginViewModel
 import com.loop.mobile.presentation.auth.logout.LogoutViewModel
+import com.loop.mobile.presentation.auth.signup.SignUpScreen
+import com.loop.mobile.presentation.auth.signup.SignUpViewModel
 import com.loop.mobile.presentation.home.HomeScreen
 import com.loop.mobile.presentation.library.LibraryScreen
 import com.loop.mobile.presentation.profile.ProfileScreen
@@ -35,6 +37,7 @@ fun NavGraph(
     authStateManager: AuthStateManager,
     profileViewModel: ProfileViewModel,
     loginViewModel: LoginViewModel,
+    signUpViewModel: SignUpViewModel,
     logoutViewModel: LogoutViewModel,
     searchViewModel: SearchViewModel,
     startDestination: String = Screen.Home.route
@@ -82,6 +85,36 @@ fun NavGraph(
             }
         ) {
             LoginScreen(navController, loginViewModel)
+        }
+
+        composable(
+            route = Screen.Register.route,
+            enterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { it }, // Slide in from right
+                    animationSpec = tween(200, easing = EaseOutCubic)
+                )
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { -it }, // Slide out to left
+                    animationSpec = tween(200, easing = EaseInCubic)
+                )
+            },
+            popEnterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { -it }, // Slide in from left when returning
+                    animationSpec = tween(200, easing = EaseOutCubic)
+                )
+            },
+            popExitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { it }, // Slide out to right when going back
+                    animationSpec = tween(200, easing = EaseInCubic)
+                )
+            }
+        ) {
+            SignUpScreen(navController, signUpViewModel)
         }
 
         composable(

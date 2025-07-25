@@ -29,7 +29,7 @@ class AuthRepositoryImpl(
     override suspend fun signUp(email: String, password: String, username: String): ApiResult<String> {
         val dto = SignUpRequestDto(email, password, username)
         return when (val result = authService.signUp(dto)) {
-            is Success -> Success(result.data.message, result.code, result.message)
+            is Success -> Success(result.data, result.code, result.message)
             is Error -> Error(result.code, result.message, result.exception)
         }
     }

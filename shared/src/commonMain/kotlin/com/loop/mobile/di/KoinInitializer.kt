@@ -19,6 +19,7 @@ import com.loop.mobile.domain.repositories.UserRepository
 import com.loop.mobile.domain.usecases.LoginUseCase
 import com.loop.mobile.presentation.auth.login.LoginViewModel
 import com.loop.mobile.presentation.auth.logout.LogoutViewModel
+import com.loop.mobile.presentation.auth.signup.SignUpViewModel
 import com.loop.mobile.presentation.profile.ProfileViewModel
 import com.loop.mobile.presentation.search.SearchViewModel
 import com.loop.mobile.utils.PlatformLogger
@@ -88,6 +89,7 @@ val repositoriesModule = module {
 val viewModelModule = module {
     factory { SearchViewModel() }
     factory { LoginViewModel(get()) }
+    factory { SignUpViewModel(get()) }
     factory { LogoutViewModel(get()) }
     factory { ProfileViewModel(get(), get()) }
 }

@@ -1,4 +1,4 @@
-package com.loop.mobile.presentation.auth.login
+package com.loop.mobile.presentation.auth.signup
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -7,27 +7,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -39,18 +21,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.loop.mobile.presentation.components.AppButton
 import com.loop.mobile.presentation.components.InputField
+import com.loop.mobile.presentation.components.TopBarWithBackButton
 import com.loop.mobile.presentation.navigation.Screen
 import com.loop.mobile.utils.PlatformLogger
-import com.loop.mobile.presentation.components.SocialSignInButton
-import com.loop.mobile.presentation.components.TopBarWithBackButton
 
 @Composable
-fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
-    val state by loginViewModel.state.collectAsState()
+fun SignUpScreen(navController: NavController, signUpViewModel: SignUpViewModel) {
+    val state by signUpViewModel.state.collectAsState()
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val interactionSource = remember { MutableInteractionSource() }
     val passwordFocusRequester = remember { FocusRequester() }
+    val usernameFocusRequester = remember { FocusRequester() }
     val logger = PlatformLogger()
 
     LaunchedEffect(state.isSuccess) {
@@ -58,8 +40,9 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
             // Clear focus and hide keyboard on success
             focusManager.clearFocus()
             keyboardController?.hide()
-            loginViewModel.clearState()
+            signUpViewModel.clearState()
 
+            // TODO: change to confirmation screen
             navController.navigate(Screen.Home.route) {
                 popUpTo(Screen.Login.route) { inclusive = true }
                 launchSingleTop = true
@@ -85,9 +68,9 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
 
         // Top: Back Icon + Title Row
         TopBarWithBackButton(
-            title = "Login",
+            title = "Sign Up",
             onBack = {
-                loginViewModel.clearState()
+                signUpViewModel.clearState()
                 navController.popBackStack()
             },
             modifier = Modifier.align(Alignment.TopCenter)
@@ -105,8 +88,8 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
             InputField(
                 value = state.email,
                 label = "Email",
-                onValueChange = { loginViewModel.onIntent(LoginAction.OnEmailChange(it)) },
-                onBlur = { loginViewModel.onIntent(LoginAction.OnEmailBlur) },
+                onValueChange = { signUpViewModel.onIntent(SignUpAction.OnEmailChange(it)) },
+                onBlur = { signUpViewModel.onIntent(SignUpAction.OnEmailBlur) },
                 error = if (state.emailTouched) state.emailError else null,
                 imeAction = ImeAction.Next,
                 keyboardType = KeyboardType.Email,
@@ -118,26 +101,40 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
             InputField(
                 value = state.password,
                 label = "Password",
-                onValueChange = { loginViewModel.onIntent(LoginAction.OnPasswordChange(it)) },
-                onBlur = { loginViewModel.onIntent(LoginAction.OnPasswordBlur) },
+                onValueChange = { signUpViewModel.onIntent(SignUpAction.OnPasswordChange(it)) },
+                onBlur = { signUpViewModel.onIntent(SignUpAction.OnPasswordBlur) },
                 error = if (state.passwordTouched) state.passwordError else null,
-                imeAction = ImeAction.Done,
+                imeAction = ImeAction.Next,
                 keyboardType = KeyboardType.Password,
-                onImeAction = {
-                    focusManager.clearFocus()
-                    loginViewModel.onIntent(LoginAction.OnLogin)
-                },
+                onImeAction = { usernameFocusRequester.requestFocus() },
                 focusRequester = passwordFocusRequester
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+
+            InputField(
+                value = state.username,
+                label = "Username",
+                onValueChange = { signUpViewModel.onIntent(SignUpAction.OnUsernameChange(it)) },
+                onBlur = { signUpViewModel.onIntent(SignUpAction.OnUsernameBlur) },
+                error = if (state.usernameTouched) state.usernameError else null,
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Text,
+                onImeAction = {
+                    focusManager.clearFocus()
+                    signUpViewModel.onIntent(SignUpAction.OnSignUp)
+                },
+                focusRequester = usernameFocusRequester
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
 
             AppButton(
-                onClick = { loginViewModel.onIntent(LoginAction.OnLogin) },
+                onClick = { signUpViewModel.onIntent(SignUpAction.OnSignUp) },
                 enabled = !state.isLoading,
-                isLoading = state.isLoading && state.loadingProvider == "password",
+                isLoading = state.isLoading,
             ) {
-                Text("Login")
+                Text("Sign Up")
             }
 
             AnimatedVisibility(
@@ -156,69 +153,30 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // Divider
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                HorizontalDivider(
-                    modifier = Modifier.weight(1f),
-                    thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
+            if (state.isSuccess) {
+                Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    "or login with",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.outline,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-                HorizontalDivider(
-                    modifier = Modifier.weight(1f),
-                    thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // Social Login Buttons
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                SocialSignInButton(
-                    navController = navController,
-                    modifier = Modifier.weight(1f),
-                    loginViewModel = loginViewModel,
-                    provider = "google"
-                )
-                SocialSignInButton(
-                    navController = navController,
-                    modifier = Modifier.weight(1f),
-                    loginViewModel = loginViewModel,
-                    provider = "apple",
-                    disabled = true
+                    text = "✅ Sign up successful!",
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }
 
-        // Bottom: Sign Up Text
+        // Bottom: Login Text
         Row(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(24.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            Text("Don’t have an account? ")
+            Text("Already have an account? ")
             Text(
-                "Sign up",
+                "Log in",
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable {
-                    loginViewModel.clearState()
-                    navController.navigate(Screen.Register.route) {
+                    signUpViewModel.clearState()
+                    navController.navigate(Screen.Login.route) {
                         launchSingleTop = true
                     }
                 }

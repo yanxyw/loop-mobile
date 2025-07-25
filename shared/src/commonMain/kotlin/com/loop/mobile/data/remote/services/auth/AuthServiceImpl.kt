@@ -3,7 +3,6 @@ package com.loop.mobile.data.remote.services.auth
 import com.loop.mobile.data.remote.dto.LoginRequestDto
 import com.loop.mobile.data.remote.dto.LoginResponseDto
 import com.loop.mobile.data.remote.dto.SignUpRequestDto
-import com.loop.mobile.data.remote.dto.SignUpResponseDto
 import com.loop.mobile.data.remote.network.ApiResult
 import com.loop.mobile.data.remote.network.handleApiCall
 import io.ktor.client.HttpClient
@@ -26,7 +25,7 @@ class AuthServiceImpl(
         }
     }
 
-    override suspend fun signUp(request: SignUpRequestDto): ApiResult<SignUpResponseDto> {
+    override suspend fun signUp(request: SignUpRequestDto): ApiResult<String> {
         return handleApiCall {
             httpClient.post("$baseUrl/auth/signup") {
                 contentType(ContentType.Application.Json)

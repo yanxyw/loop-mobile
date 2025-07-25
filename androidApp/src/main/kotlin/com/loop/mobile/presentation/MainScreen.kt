@@ -26,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import com.loop.mobile.domain.auth.AuthStateManager
 import com.loop.mobile.presentation.auth.login.LoginViewModel
 import com.loop.mobile.presentation.auth.logout.LogoutViewModel
+import com.loop.mobile.presentation.auth.signup.SignUpViewModel
 import com.loop.mobile.presentation.navigation.NavGraph
 import com.loop.mobile.presentation.navigation.Screen
 import com.loop.mobile.presentation.profile.ProfileViewModel
@@ -44,6 +45,7 @@ fun MainScreen(themeManager: ThemeManager) {
     val profileViewModel: ProfileViewModel = koinInject()
     val logoutViewModel: LogoutViewModel = koinInject()
     val loginViewModel: LoginViewModel = koinInject()
+    val signUpViewModel: SignUpViewModel = koinInject()
     val authStateManager: AuthStateManager = koinInject()
     val searchViewModel: SearchViewModel = koinInject()
 
@@ -114,6 +116,7 @@ fun MainScreen(themeManager: ThemeManager) {
             authStateManager = authStateManager,
             profileViewModel = profileViewModel,
             loginViewModel = loginViewModel,
+            signUpViewModel = signUpViewModel,
             logoutViewModel = logoutViewModel,
             searchViewModel = searchViewModel,
         )
