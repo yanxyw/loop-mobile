@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,7 +40,7 @@ import com.loop.mobile.presentation.components.AppButton
 import com.loop.mobile.presentation.components.InputField
 import com.loop.mobile.presentation.navigation.Screen
 import com.loop.mobile.utils.PlatformLogger
-import com.loop.mobile.presentation.components.SocialSignInButton
+import com.loop.mobile.presentation.components.SocialSignInSection
 import com.loop.mobile.presentation.components.TopBarWithBackButton
 
 @Composable
@@ -156,53 +155,11 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // Divider
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                HorizontalDivider(
-                    modifier = Modifier.weight(1f),
-                    thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
-                Text(
-                    "or login with",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.outline,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-                HorizontalDivider(
-                    modifier = Modifier.weight(1f),
-                    thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // Social Login Buttons
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                SocialSignInButton(
-                    navController = navController,
-                    modifier = Modifier.weight(1f),
-                    loginViewModel = loginViewModel,
-                    provider = "google"
-                )
-                SocialSignInButton(
-                    navController = navController,
-                    modifier = Modifier.weight(1f),
-                    loginViewModel = loginViewModel,
-                    provider = "apple",
-                    disabled = true
-                )
-            }
+            SocialSignInSection(
+                navController = navController,
+                loginViewModel = loginViewModel,
+                dividerText = "or login with"
+            )
         }
 
         // Bottom: Sign Up Text

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
@@ -26,7 +27,7 @@ fun AppButton(
     enabled: Boolean = true,
     isLoading: Boolean = false,
     width: Dp? = null,
-    cornerRadii: CornerRadii = CornerRadii(), // custom data class below
+    cornerRadii: CornerRadii = CornerRadii(),
     contentPadding: PaddingValues = PaddingValues(12.dp),
     content: @Composable RowScope.() -> Unit
 ) {
@@ -37,7 +38,13 @@ fun AppButton(
         bottomStart = cornerRadii.bottomStart
     )
 
-    val widthModifier = if (width != null) modifier.width(width) else modifier.fillMaxWidth()
+    val widthModifier = if (width != null) {
+        modifier.width(width).height(48.dp)
+    } else {
+        modifier
+            .fillMaxWidth()
+            .height(48.dp)
+    }
 
     Button(
         onClick = onClick,

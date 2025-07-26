@@ -39,7 +39,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -84,7 +85,7 @@ fun InputField(
         animationSpec = tween(150), label = ""
     )
     val labelOffsetX by animateFloatAsState(
-        targetValue = if (shouldFloat) 8f else 12f,
+        targetValue = 13f,
         animationSpec = tween(150), label = ""
     )
     val labelScale by animateFloatAsState(
@@ -192,7 +193,11 @@ fun InputField(
                         x = labelOffsetX.dp,
                         y = labelOffsetY.dp
                     )
-                    .scale(labelScale)
+                    .graphicsLayer {
+                        scaleX = labelScale
+                        scaleY = labelScale
+                        transformOrigin = TransformOrigin(0f, 0f)
+                    }
                     .background(
                         if (shouldFloat) MaterialTheme.colorScheme.background else Color.Transparent,
                         RoundedCornerShape(2.dp)

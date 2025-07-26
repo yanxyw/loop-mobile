@@ -11,4 +11,7 @@ sealed interface SignUpAction {
     data object OnUsernameBlur : SignUpAction
 
     data object OnSignUp : SignUpAction
+
+    data object PreviousStep : SignUpAction
+    data object NextStep : SignUpAction
 }

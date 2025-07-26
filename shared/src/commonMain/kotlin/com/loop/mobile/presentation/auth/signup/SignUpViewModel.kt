@@ -98,6 +98,41 @@ class SignUpViewModel(
                     )
                 }
             }
+
+            SignUpAction.PreviousStep -> {
+                if (_state.value.step > 0) {
+                    _state.update { it.copy(step = it.step - 1) }
+                }
+            }
+
+            SignUpAction.NextStep -> {
+                when (_state.value.step) {
+                    0 -> {
+                        val emailError = AuthInputValidator.validateEmail(_state.value.email)
+                        if (emailError != null) {
+                            _state.update {
+                                it.copy(emailTouched = true, emailError = emailError)
+                            }
+                            return
+                        }
+                    }
+
+                    1 -> {
+                        val passwordError = AuthInputValidator.validatePassword(_state.value.password)
+                        if (passwordError != null) {
+                            _state.update {
+                                it.copy(passwordTouched = true, passwordError = passwordError)
+                            }
+                            return
+                        }
+                    }
+                }
+
+                // Only advance if no error
+                if (_state.value.step < 2) {
+                    _state.update { it.copy(step = it.step + 1) }
+                }
+            }
         }
     }
 

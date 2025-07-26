@@ -11,7 +11,6 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -114,7 +113,7 @@ fun NavGraph(
                 )
             }
         ) {
-            SignUpScreen(navController, signUpViewModel)
+            SignUpScreen(navController, signUpViewModel, loginViewModel)
         }
 
         composable(
