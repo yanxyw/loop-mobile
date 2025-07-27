@@ -31,7 +31,7 @@ struct iOSApp: App {
     }
 
     func restoreAuth(completion: @escaping () -> Void) {
-        let tokenStorage = TokenStorageInjector().tokenStorage
+        let sessionStorage = SessionStorageInjector().sessionStorage
         let userRepository = UserRepositoryInjector().userRepository
         let authStateManager = AuthStateManagerInjector().authStateManager
 
@@ -39,7 +39,7 @@ struct iOSApp: App {
             do {
                 try await withCheckedThrowingContinuation { continuation in
                     sharedApiRestoreAuthState(
-                        tokenStorage: tokenStorage,
+                        sessionStorage: sessionStorage,
                         userRepository: userRepository,
                         authStateManager: authStateManager,
                         continuation: continuation
@@ -54,13 +54,13 @@ struct iOSApp: App {
     }
 
     func sharedApiRestoreAuthState(
-        tokenStorage: TokenStorage,
+        sessionStorage: SessionStorage,
         userRepository: UserRepository,
         authStateManager: AuthStateManager,
         continuation: CheckedContinuation<Void, Error>
     ) {
         AuthInitializerKt.restoreAuthState(
-            tokenStorage: tokenStorage,
+            sessionStorage: sessionStorage,
             userRepository: userRepository,
             authStateManager: authStateManager
         ) { error in

@@ -111,7 +111,7 @@ struct MainTabView: View {
                                     Image(selectedTab == tab ? tab.iconName(isSelected: true) : tab.iconName(isSelected: false))
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(width: 20, height: 20)
+                                        .frame(width: 22, height: 22)
                                     Text(tab.label)
                                         .font(AppFont.inter(12, weight: .light))
                                 }

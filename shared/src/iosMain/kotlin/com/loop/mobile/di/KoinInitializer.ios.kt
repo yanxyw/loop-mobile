@@ -46,7 +46,7 @@ class AuthStateManagerInjector : KoinComponent {
 
 
 @Suppress("unused")
-class TokenStorageInjector : KoinComponent {
+class SessionStorageInjector : KoinComponent {
     val sessionStorage: SessionStorage by inject()
 }
 
