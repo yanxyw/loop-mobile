@@ -158,11 +158,11 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
             SocialSignInSection(
                 navController = navController,
                 loginViewModel = loginViewModel,
-                dividerText = "or login with"
+                dividerText = "or continue with"
             )
         }
 
-        // Bottom: Sign Up Text
+        // Bottom: Login Text
         Row(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
