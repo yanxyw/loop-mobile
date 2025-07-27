@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -217,6 +218,9 @@ fun SignUpScreen(navController: NavController, signUpViewModel: SignUpViewModel,
             Text(
                 "Log in",
                 color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
                 modifier = Modifier.clickable {
                     signUpViewModel.clearState()
                     navController.navigate(Screen.Login.route) {

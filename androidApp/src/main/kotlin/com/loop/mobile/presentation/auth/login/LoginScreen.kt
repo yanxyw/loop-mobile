@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -173,6 +174,9 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
             Text(
                 "Sign up",
                 color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
                 modifier = Modifier.clickable {
                     loginViewModel.clearState()
                     navController.navigate(Screen.Register.route) {

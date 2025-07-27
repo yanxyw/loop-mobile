@@ -13,7 +13,7 @@ object AppColors {
     const val secondaryLight = 0xFF7F766F;
 
     const val backgroundDark = 0xFF1E1E1F;
-    const val primaryDark = 0xFFC2B27F;
+    const val primaryDark = 0xFFCCBE91;
     const val onPrimaryDark = 0xFF1E1E1F;
     const val surfaceDark = 0xFF272829;
     const val onSurfaceDark = 0xFFEAECED;

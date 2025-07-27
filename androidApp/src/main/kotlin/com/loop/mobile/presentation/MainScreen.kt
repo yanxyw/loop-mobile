@@ -75,7 +75,7 @@ fun MainScreen(themeManager: ThemeManager) {
                                             painter = painterResource(id = if (isSelected) screen.selectedIconResId else screen.unselectedIconResId),
                                             contentDescription = screen.label,
                                             tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                                            modifier = Modifier.size(24.dp)
+                                            modifier = Modifier.size(22.dp)
                                         )
                                     },
                                     label = {

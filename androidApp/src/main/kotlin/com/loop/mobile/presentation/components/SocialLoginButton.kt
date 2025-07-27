@@ -152,7 +152,8 @@ fun SocialSignInButton(
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     capitalizedProvider,
-                    color = MaterialTheme.colorScheme.outline
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
         }
