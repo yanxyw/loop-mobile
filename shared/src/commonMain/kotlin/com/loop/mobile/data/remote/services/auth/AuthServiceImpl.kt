@@ -6,6 +6,7 @@ import com.loop.mobile.data.remote.dto.SignUpRequestDto
 import com.loop.mobile.data.remote.network.ApiResult
 import com.loop.mobile.data.remote.network.handleApiCall
 import io.ktor.client.HttpClient
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -30,6 +31,16 @@ class AuthServiceImpl(
             httpClient.post("$baseUrl/auth/signup") {
                 contentType(ContentType.Application.Json)
                 setBody(request)
+            }
+        }
+    }
+
+    override suspend fun checkEmail(email: String): ApiResult<String> {
+        return handleApiCall {
+            httpClient.get("$baseUrl/auth/check-email") {
+                url {
+                    parameters.append("email", email)
+                }
             }
         }
     }

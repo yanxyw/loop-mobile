@@ -15,8 +15,8 @@ class UserRepositoryImpl(
     override suspend fun getMe(): ApiResult<User> {
         return when (val result = profileService.getProfile()) {
             is Success -> {
-                val user = result.data.toDomain()
-                Success(user, result.code, result.message)
+                val user = result.data?.toDomain()
+                Success(result.code, result.message, user)
             }
 
             is Error -> {

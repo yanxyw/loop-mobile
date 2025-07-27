@@ -10,5 +10,7 @@ interface AuthService {
 
     suspend fun signUp(request: SignUpRequestDto): ApiResult<String>
 
+    suspend fun checkEmail(email: String): ApiResult<String>
+
     suspend fun logout(): ApiResult<String>
 }

@@ -23,7 +23,7 @@ suspend fun restoreAuthState(
 
                 result.fold(
                     onSuccess = { user ->
-                        authStateManager.setUser(user.toDecodedUser(), provider)
+                        authStateManager.setUser(user?.toDecodedUser(), provider)
                     },
                     onFailure = {
                         authStateManager.clearUser()

@@ -24,9 +24,29 @@ class SignUpViewModel(
             }
 
             SignUpAction.OnEmailBlur -> {
-                val error = AuthInputValidator.validateEmail(_state.value.email)
-                _state.update {
-                    it.copy(emailTouched = true, emailError = error)
+                val email = _state.value.email
+                val error = AuthInputValidator.validateEmail(email)
+
+                _state.update { it.copy(emailTouched = true, emailError = error, error = null) }
+
+                // If email format is valid, check with server
+                if (error == null) {
+                    scope.launch {
+                        val result = authRepository.checkEmail(email)
+
+                        result.fold(
+                            onSuccess = {
+                                _state.update {
+                                    it.copy(emailError = null)
+                                }
+                            },
+                            onFailure = { err ->
+                                _state.update {
+                                    it.copy(emailError = err.message)
+                                }
+                            }
+                        )
+                    }
                 }
             }
 
@@ -108,13 +128,31 @@ class SignUpViewModel(
             SignUpAction.NextStep -> {
                 when (_state.value.step) {
                     0 -> {
-                        val emailError = AuthInputValidator.validateEmail(_state.value.email)
-                        if (emailError != null) {
+                        val email = _state.value.email
+                        val formatError = AuthInputValidator.validateEmail(email)
+
+                        if (formatError != null) {
                             _state.update {
-                                it.copy(emailTouched = true, emailError = emailError)
+                                it.copy(emailTouched = true, emailError = formatError)
                             }
                             return
                         }
+
+                        scope.launch {
+                            val result = authRepository.checkEmail(email)
+                            result.fold(
+                                onSuccess = {
+                                    _state.update { it.copy(step = _state.value.step + 1, emailError = null) }
+                                },
+                                onFailure = { err ->
+                                    _state.update {
+                                        it.copy(emailTouched = true, emailError = err.message)
+                                    }
+                                }
+                            )
+                        }
+
+                        return
                     }
 
                     1 -> {
@@ -125,12 +163,11 @@ class SignUpViewModel(
                             }
                             return
                         }
-                    }
-                }
 
-                // Only advance if no error
-                if (_state.value.step < 2) {
-                    _state.update { it.copy(step = it.step + 1) }
+                        if (_state.value.step < 2) {
+                            _state.update { it.copy(step = _state.value.step + 1) }
+                        }
+                    }
                 }
             }
         }

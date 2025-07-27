@@ -21,7 +21,7 @@ class AuthRepositoryImpl(
     override suspend fun login(email: String, password: String): ApiResult<AuthResult> {
         val dto = LoginRequestDto(email, password)
         return when (val result = authService.login(dto)) {
-            is Success -> Success(result.data.toDomain(), result.code, result.message)
+            is Success -> Success(result.code, result.message, result.data?.toDomain())
             is Error -> Error(result.code, result.message, result.exception)
         }
     }
@@ -29,7 +29,14 @@ class AuthRepositoryImpl(
     override suspend fun signUp(email: String, password: String, username: String): ApiResult<String> {
         val dto = SignUpRequestDto(email, password, username)
         return when (val result = authService.signUp(dto)) {
-            is Success -> Success(result.data, result.code, result.message)
+            is Success -> Success(result.code, result.message, result.data)
+            is Error -> Error(result.code, result.message, result.exception)
+        }
+    }
+
+    override suspend fun checkEmail(email: String): ApiResult<String> {
+        return when (val result = authService.checkEmail(email)) {
+            is Success -> Success(result.code, result.message, result.data)
             is Error -> Error(result.code, result.message, result.exception)
         }
     }
@@ -39,7 +46,7 @@ class AuthRepositoryImpl(
             is Success -> {
                 sessionStorage.clearSession()
                 authStateManager.clearUser()
-                Success(result.data, result.code, result.message)
+                Success(result.code, result.message, result.data)
             }
 
             is Error -> Error(result.code, result.message, result.exception)

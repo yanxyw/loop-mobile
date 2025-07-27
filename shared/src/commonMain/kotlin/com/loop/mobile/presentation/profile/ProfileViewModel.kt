@@ -36,7 +36,7 @@ class ProfileViewModel(
                         it.copy(isLoading = false, user = user)
 
                     }
-                    authStateManager.setUser(user.toDecodedUser())
+                    authStateManager.setUser(user?.toDecodedUser())
                 },
                 onFailure = { error ->
                     _state.update {

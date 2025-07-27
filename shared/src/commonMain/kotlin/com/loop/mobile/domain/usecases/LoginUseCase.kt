@@ -19,10 +19,12 @@ class LoginUseCase(
         return when (val result = authRepository.login(email, password)) {
             is Success -> {
                 val auth = result.data
-                sessionStorage.saveTokens(auth.accessToken, auth.refreshToken)
+                if (auth != null) {
+                    sessionStorage.saveTokens(auth.accessToken, auth.refreshToken)
+                    authStateManager.setUser(JwtUtils.decodeUser(auth.accessToken), "password")
+                }
                 sessionStorage.saveAuthProvider("password")
-                authStateManager.setUser(JwtUtils.decodeUser(auth.accessToken), "password")
-                Success(Unit, result.code, result.message)
+                Success(result.code, result.message, Unit)
             }
 
             is Error -> Error(result.code, result.message, result.exception)
@@ -37,10 +39,12 @@ class LoginUseCase(
         return when (val result = oauthRepository.oauthLogin(provider, code, redirectUri)) {
             is Success -> {
                 val auth = result.data
-                sessionStorage.saveTokens(auth.accessToken, auth.refreshToken)
+                if (auth != null) {
+                    sessionStorage.saveTokens(auth.accessToken, auth.refreshToken)
+                    authStateManager.setUser(JwtUtils.decodeUser(auth.accessToken), provider)
+                }
                 sessionStorage.saveAuthProvider(provider)
-                authStateManager.setUser(JwtUtils.decodeUser(auth.accessToken), provider)
-                Success(Unit, result.code, result.message)
+                Success( result.code, result.message, Unit)
             }
 
             is Error -> Error(result.code, result.message, result.exception)

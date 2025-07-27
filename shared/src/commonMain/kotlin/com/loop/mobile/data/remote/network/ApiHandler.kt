@@ -8,8 +8,8 @@ suspend inline fun <reified T> HttpResponse.toApiResult(): ApiResult<T> {
     return try {
         val wrapper = this.body<ApiResponse<T>>()
 
-        if (wrapper.status == "SUCCESS" && wrapper.data != null) {
-            ApiResult.Success(wrapper.data, wrapper.code, wrapper.message)
+        if (wrapper.status == "SUCCESS") {
+            ApiResult.Success(wrapper.code, wrapper.message, wrapper.data)
         } else {
             ApiResult.Error(wrapper.code, wrapper.message)
         }
@@ -21,6 +21,7 @@ suspend inline fun <reified T> HttpResponse.toApiResult(): ApiResult<T> {
         )
     }
 }
+
 
 suspend inline fun <reified T> handleApiCall(
     crossinline call: suspend () -> HttpResponse

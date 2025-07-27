@@ -14,8 +14,8 @@ class OAuthRepositoryImpl(
     override suspend fun oauthLogin(provider: String, code: String, redirectUri: String): ApiResult<AuthResult> {
         return when (val result = oAuthService.oauthLogin(provider, code, redirectUri)) {
             is Success -> {
-                val authResult = result.data.toDomain()
-                Success(authResult, result.code, result.message)
+                val authResult = result.data?.toDomain()
+                Success( result.code, result.message, authResult)
             }
 
             is Error -> Error(result.code, result.message, result.exception)
