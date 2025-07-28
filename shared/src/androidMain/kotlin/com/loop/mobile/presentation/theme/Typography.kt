@@ -31,7 +31,7 @@ val Typography = Typography(
     ),
     headlineMedium = TextStyle(
         fontFamily = Bitter,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 20.sp
     ),
     titleLarge = TextStyle(
@@ -46,7 +46,7 @@ val Typography = Typography(
     ),
     bodyMedium = TextStyle(
         fontFamily = Inter,
-        fontWeight = FontWeight.Light,
+        fontWeight = FontWeight.Normal,
         fontSize = 14.sp
     ),
     bodySmall = TextStyle(

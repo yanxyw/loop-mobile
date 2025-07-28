@@ -2,6 +2,8 @@ package com.loop.mobile.presentation.auth.signup
 
 import com.loop.mobile.domain.repositories.AuthRepository
 import com.loop.mobile.domain.validation.AuthInputValidator
+import com.loop.mobile.domain.validation.PasswordRequirement
+import com.loop.mobile.domain.validation.getPasswordRequirements
 import com.loop.mobile.presentation.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +16,8 @@ class SignUpViewModel(
 
     private val _state = MutableStateFlow(SignUpState())
     val state: StateFlow<SignUpState> = _state
+    val passwordRequirements: List<PasswordRequirement>
+        get() = getPasswordRequirements(state.value.password)
 
     fun onIntent(action: SignUpAction) {
         when (action) {

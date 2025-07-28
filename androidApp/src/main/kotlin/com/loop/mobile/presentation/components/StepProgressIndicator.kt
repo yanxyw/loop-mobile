@@ -11,6 +11,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -24,7 +25,7 @@ fun StepProgressIndicator(
     barShape: Shape = RoundedCornerShape(1.dp),
     barBackgroundColor: Color = MaterialTheme.colorScheme.outlineVariant,
     barProgressColor: Color = MaterialTheme.colorScheme.primary,
-    instructionTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+    instructionTextStyle: TextStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
     instructionColor: Color = MaterialTheme.colorScheme.onSurface
 ) {
     val progressFraction = (step.coerceIn(0, totalSteps - 1)).toFloat() / (totalSteps - 1).coerceAtLeast(1)
@@ -45,7 +46,7 @@ fun StepProgressIndicator(
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Text(
             text = instruction,

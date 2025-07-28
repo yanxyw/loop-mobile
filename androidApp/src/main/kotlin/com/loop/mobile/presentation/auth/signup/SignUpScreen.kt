@@ -97,7 +97,7 @@ fun SignUpScreen(navController: NavController, signUpViewModel: SignUpViewModel,
                         else -> ""
                     }
                 )
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(12.dp))
             }
 
             when (state.step) {
@@ -125,6 +125,10 @@ fun SignUpScreen(navController: NavController, signUpViewModel: SignUpViewModel,
                         keyboardType = KeyboardType.Password,
                         onImeAction = { focusManager.clearFocus() }
                     )
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    PasswordChecklist(signUpViewModel.passwordRequirements)
                 }
 
                 2 -> {

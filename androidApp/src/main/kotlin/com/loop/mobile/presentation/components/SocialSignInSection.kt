@@ -31,7 +31,7 @@ fun SocialSignInSection(
             )
             Text(
                 text = dividerText,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.outline,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )

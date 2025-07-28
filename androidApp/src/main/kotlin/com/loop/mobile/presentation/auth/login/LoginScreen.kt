@@ -113,7 +113,7 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                 onImeAction = { passwordFocusRequester.requestFocus() }
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             InputField(
                 value = state.password,
@@ -130,7 +130,7 @@ fun LoginScreen(navController: NavController, loginViewModel: LoginViewModel) {
                 focusRequester = passwordFocusRequester
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(22.dp))
 
             AppButton(
                 onClick = { loginViewModel.onIntent(LoginAction.OnLogin) },
